@@ -6,16 +6,22 @@ using System.Threading.Tasks;
 
 namespace Miniville
 {
+    /** Classe qui gère toute la partie interface homme-machine. */
     class HMICUI
     {
+        /** Référence du contrôleur de l'application. */
         private Game ctrl;
 
+        /** Le nombre de caractères à l'intérieur d'une carte.*/
         private int maxLength = 15;
+        /** Le nombre de lignes par carte.*/
         private int nbLines = 10;
+        /** La couleur actuelle d'écriture dans la console.*/
         private ConsoleColor writingColor = ConsoleColor.Gray;
 
+        /* WIP */
         private int WIPempty = 2;
-        bool[] cardEmpty = { true, true, false, true, false, false, false, false };
+        bool[] cardEmpty = { true, true, true, true, false, true, true, true };
         string[] cardActCost = { "1", "1", "2", "3", "4", "5", "5", "6" };
         ConsoleColor[] cardColors = { ConsoleColor.Cyan, ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Green,ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Cyan };
         string[] cardNames = { "Champs de blé", "Ferme", "Boulangerie", "Café", "Superette", "Forêt", "Restaurant", "Stade" };
@@ -24,29 +30,38 @@ namespace Miniville
         string[] cardDesc1 = { "Gagnez 1$" , "Gagnez 1$", "Gagnez 2$", "Volez 1$", "Gagnez 3$", "Gagnez 1$", "Volez 2$", "Gagnez 4$" };
         string[] cardDesc2 = { "S'active tout", "S'active tout", "S'active à", "S'active au", "S'active à", "S'active tout", "S'active au", "S'active tout"};
         string[] cardDesc3 = { " le temps", " le temps","votre tour", "tour adverse", "votre tour", "le temps", "tour adverse","le temps" };
+        /* WIP */
 
-
+        /** Constructeur de la classe
+         * <param name="_ctrl"> La référence du contrôleur. </param>
+         */
         public HMICUI(Game _ctrl)
         {
             ctrl = _ctrl;
             Console.WindowWidth = 145;
             Console.CursorVisible = false;
         }
-
+       
+        /** Méthode permettant de récupérer le choix de l'utilisateur.
+         * Utilise la méthode DisplayCardStacks pour afficher les piles de cartes.
+         * <param name="piles"> Le tableau des piles provenant du contrôleur. </param>
+         */
         public int Choose(/*, _Pile[] piles = new Pile[0];*/)
         {
             int selection = 0;
+            // On décale le curseur au démarrage si la première pile est 
             while (cardEmpty[selection])
-                        {
-                            if (selection - 1 <= cardNames.Length - 1) ++selection;
-                            else selection = 0;
-                        }
+            {
+                if (selection - 1 <= cardNames.Length - 1) ++selection;
+                else selection = 0;
+            }
 
+            // Variables relatives à la position du curseur.
             int cursorPositionX = 0;
             int cursorPositionY = 10;
             int cursorOffset = 8;
 
-            // Affichage du curseur en première position.
+            // Affichage du curseur.
             DisplayCardStacks(selection);
             cursorPositionX = cursorOffset + 18 * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
@@ -66,7 +81,7 @@ namespace Miniville
                         // On passe toutes les piles de cartes vides.
                         while (cardEmpty[selection])
                         {
-                            if (selection - 1 <= cardNames.Length - 1) ++selection;
+                            if (selection + 1 < cardNames.Length) ++selection;
                             else selection = 0;
                         }
                         break;
@@ -102,27 +117,37 @@ namespace Miniville
                 WriteInColor("/\\",ConsoleColor.White);
             }
             while (!choice);
+            // On renvoit le choix du joueur sous forme d'index.
             return selection;
         }
 
+        /** Méthode permettant d'afficher les cartes sur le plateau des deux joueurs. */
         public void DisplayCities()
         {
-
+            
         }
 
+        /** Méthode permettant d'afficher les piles de cartes.
+         * <param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
+         */
         private void DisplayCardStacks(int selection/*, _Pile[] piles*/)
         {
+            // Bords supérieurs et inférieurs de la carte.
             string sep = "+---------------+";
+            // espaces vides à l'intérieur de la carte.
             string space = "|               |";
 
             for (int i = 0; i < nbLines; i++)
             {
                 for (int j = 0; j < cardNames.Length; j++)
                 {
-                    if (cardEmpty[j]) writingColor = ConsoleColor.Gray;// WIP pile.nbCards
+                    // Si la pile est vide on écrit en gris.
+                    if (cardEmpty[j]) writingColor = ConsoleColor.Gray;
+                    // Sinon on récupère la couleur de la carte pour écrire.
                     else writingColor = cardColors[j];
                     Console.ForegroundColor = writingColor;
 
+                    // En fonction de la ligne actuelle.
                     switch (i)
                     {
                         case 0: Console.Write(sep); break;
@@ -196,16 +221,23 @@ namespace Miniville
                 Console.WriteLine();
             }
         }
-
+        /** Méthode permettant d'afficher le résultat d'un dé. 
+         * <param name="face"> La face du dé à afficher. </param>
+         */
         private void DisplayRoll(int face) { Console.Write($"+---+\n| {face} |\n +---+\n"); }
-
+        /** Méthode permettant d'écrire en couleur dans la console.
+         * <param name="toWrite"> La chaîne de caractère à écrire en couleur. </param>
+         * <param name="color"> La couleur avec laquelle écrire. </param>
+         */
         private void WriteInColor(string toWrite, ConsoleColor color)
         {
             Console.ForegroundColor = color;
             Console.Write(toWrite);
             Console.ForegroundColor = writingColor;
         }
-
+        /** Méthode permettant d'aligner une chaîne de caractère par rapport. 
+         * <param name="toAlign"> La chaîne de caractères à aligner. </param>
+         */
         private string AlignString(string toAlign)
         {
             if (toAlign.Length >= maxLength) return toAlign;
@@ -215,14 +247,5 @@ namespace Miniville
 
             return new string(' ', leftPadding) + toAlign + new string(' ', rightPadding);
         }
-
-        /*private int SelectionShift(int selection)
-        {
-            int newSelection = 0;
-            Console.WriteLine(cardEmpty[selection]);
-            
-            
-            return newSelection;
-        }*/
     }
 }
