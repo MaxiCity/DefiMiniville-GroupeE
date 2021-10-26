@@ -19,18 +19,7 @@ namespace Miniville
         /** La couleur actuelle d'écriture dans la console.*/
         private ConsoleColor writingColor = ConsoleColor.Gray;
 
-        /* WIP */
-        private int WIPempty = 2;
-        bool[] cardEmpty = { true, true, true, true, false, true, true, true };
-        string[] cardActCost = { "1", "1", "2", "3", "4", "5", "5", "6" };
-        ConsoleColor[] cardColors = { ConsoleColor.Cyan, ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Green,ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Cyan };
-        string[] cardNames = { "Champs de blé", "Ferme", "Boulangerie", "Café", "Superette", "Forêt", "Restaurant", "Stade" };
-        string[] cardGains = { "1", "1", "2", "1", "3", "1", "2", "4" };
-        string[] cardCosts = { "1", "2", "1", "2", "2", "2", "4", "6" };
-        string[] cardDesc1 = { "Gagnez 1$" , "Gagnez 1$", "Gagnez 2$", "Volez 1$", "Gagnez 3$", "Gagnez 1$", "Volez 2$", "Gagnez 4$" };
-        string[] cardDesc2 = { "S'active tout", "S'active tout", "S'active à", "S'active au", "S'active à", "S'active tout", "S'active au", "S'active tout"};
-        string[] cardDesc3 = { " le temps", " le temps","votre tour", "tour adverse", "votre tour", "le temps", "tour adverse","le temps" };
-        /* WIP */
+        
 
         /** Constructeur de la classe
          * <param name="_ctrl"> La référence du contrôleur. </param>
@@ -46,13 +35,13 @@ namespace Miniville
          * Utilise la méthode DisplayCardStacks pour afficher les piles de cartes.
          * <param name="piles"> Le tableau des piles provenant du contrôleur. </param>
          */
-        public int Choose(/*, _Pile[] piles = new Pile[0];*/)
+        public int Choose( Pile[] piles)
         {
             int selection = 0;
             // On décale le curseur au démarrage si la première pile est 
-            while (cardEmpty[selection])
+            while (piles[selection].nbCard > 0)
             {
-                if (selection - 1 <= cardNames.Length - 1) ++selection;
+                if (selection - 1 <= piles.Length) ++selection;
                 else selection = 0;
             }
 
@@ -62,7 +51,7 @@ namespace Miniville
             int cursorOffset = 8;
 
             // Affichage du curseur.
-            DisplayCardStacks(selection);
+            DisplayCardStacks(selection,piles);
             cursorPositionX = cursorOffset + 18 * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
             WriteInColor("/\\", ConsoleColor.White);
@@ -75,27 +64,27 @@ namespace Miniville
                 {
                     case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
-                        if (selection == cardNames.Length-1) selection = 0;
+                        if (selection == piles.Length - 1) selection = 0;
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         // On passe toutes les piles de cartes vides.
-                        while (cardEmpty[selection])
+                        while (piles[selection].nbCard > 0)
                         {
-                            if (selection + 1 < cardNames.Length) ++selection;
+                            if (selection + 1 < piles.Length) ++selection;
                             else selection = 0;
                         }
                         break;
 
                     case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
-                        if (selection == 0) selection = cardNames.Length-1;
+                        if (selection == 0) selection = piles.Length - 1;
                         // Sinon il passe simplement à gauche.
                         else selection -= 1;
                         // On passe toutes les piles de cartes vides.
-                        while (cardEmpty[selection])
+                        while (piles[selection].nbCard > 0)
                         {
                             if (selection - 1 >= 0) --selection;
-                            else selection = cardNames.Length - 1;
+                            else selection = piles.Length - 1;
                         }
                         break;
 
@@ -130,7 +119,7 @@ namespace Miniville
         /** Méthode permettant d'afficher les piles de cartes.
          * <param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
          */
-        private void DisplayCardStacks(int selection/*, _Pile[] piles*/)
+        private void DisplayCardStacks(int selection, Pile[] piles)
         {
             // Bords supérieurs et inférieurs de la carte.
             string sep = "+---------------+";
@@ -139,12 +128,12 @@ namespace Miniville
 
             for (int i = 0; i < nbLines; i++)
             {
-                for (int j = 0; j < cardNames.Length; j++)
+                for (int j = 0; j < piles.Length; j++)
                 {
                     // Si la pile est vide on écrit en gris.
-                    if (cardEmpty[j]) writingColor = ConsoleColor.Gray;
+                    if (piles[j].nbCard > 0) writingColor = ConsoleColor.Gray;
                     // Sinon on récupère la couleur de la carte pour écrire.
-                    else writingColor = cardColors[j];
+                    else writingColor = piles[j].card.color;
                     Console.ForegroundColor = writingColor;
 
                     // En fonction de la ligne actuelle.
@@ -152,31 +141,31 @@ namespace Miniville
                     {
                         case 0: Console.Write(sep); break;
                         case 1: // Coût d'activation par les dés.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(cardActCost[j]), ConsoleColor.White);
+                                WriteInColor(AlignString("" + piles[j].card.dieCondition), ConsoleColor.White);
                                 Console.Write($"|");
                             }
                             else Console.Write(space);
                             break;
                         case 2: // Coût et gain en pièces.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write($"| ");
-                                WriteInColor($"+{ cardGains[j]}", ConsoleColor.Yellow);
+                                WriteInColor($"+{ piles[j].card.moneyToEarn }", ConsoleColor.Yellow);
                                 Console.Write("        ");
-                                WriteInColor($" {cardCosts[j]}$", ConsoleColor.Yellow);
+                                WriteInColor($" { piles[j].card.cost }$", ConsoleColor.Yellow);
                                 Console.Write(" |");
                             }
                             else Console.Write(space);
                             break;
                         case 3: Console.Write(space); break;
                         case 4: // Nom de la carte.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(cardNames[j]), ConsoleColor.White);
+                                WriteInColor(AlignString(piles[j].card.name), ConsoleColor.White);
                                 Console.Write("|");
                             }
                             else
@@ -188,28 +177,28 @@ namespace Miniville
                             break;
                         case 5: Console.Write(space); break;
                         case 6: // Description de l'effet.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(cardDesc1[j]), ConsoleColor.Yellow);
+                                WriteInColor(AlignString(piles[j].card.description[0]), ConsoleColor.Yellow);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
                             break;
                         case 7: // Première ligne de l'activation.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(cardDesc2[j]), ConsoleColor.Gray);
+                                WriteInColor(AlignString(piles[j].card.description[1]), ConsoleColor.Gray);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
                             break;
                         case 8: // Deuxième ligne de l'activation.
-                            if (!cardEmpty[j])
+                            if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(cardDesc3[j]), ConsoleColor.Gray);
+                                WriteInColor(AlignString(piles[j].card.description[1]), ConsoleColor.Gray);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
