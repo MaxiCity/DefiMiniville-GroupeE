@@ -11,10 +11,6 @@ namespace Miniville
         private int pieces;
         private List<Card> city = new();
         #endregion
-
-        #region Constructor Card class
-        private Card card = new();
-        #endregion
         
         #region Player Methods
 
@@ -23,13 +19,14 @@ namespace Miniville
             city.Add(_carte);
         }
 
-        public void UpdateMoney(int earning)
+        private void UpdateMoney(int earning)
         {
-            pieces += card.moneyToEarn;
+            pieces += earning;
         }
 
         public int UseCards(bool doPlay, int dieResult)
         {
+            int steal = 0;
             int reward = 0;
             foreach (Card card in city)
             {
@@ -50,12 +47,14 @@ namespace Miniville
                             if (!doPlay)
                             {
                                 reward += card.moneyToEarn;
+                                steal += card.moneyToEarn;
                             }
                             break;
                     }
                 }
             }
-            return reward;
+            UpdateMoney(reward);
+            return steal;
         }
         
         #endregion
