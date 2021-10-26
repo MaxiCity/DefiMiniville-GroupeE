@@ -19,8 +19,6 @@ namespace Miniville
         /** La couleur actuelle d'écriture dans la console.*/
         private ConsoleColor writingColor = ConsoleColor.Gray;
 
-        
-
         /** Constructeur de la classe
          * <param name="_ctrl"> La référence du contrôleur. </param>
          */
@@ -39,7 +37,7 @@ namespace Miniville
         {
             int selection = 0;
             // On décale le curseur au démarrage si la première pile est 
-            while (piles[selection].nbCard > 0)
+            while (piles[selection].nbCard <= 0)
             {
                 if (selection - 1 <= piles.Length) ++selection;
                 else selection = 0;
@@ -68,7 +66,7 @@ namespace Miniville
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         // On passe toutes les piles de cartes vides.
-                        while (piles[selection].nbCard > 0)
+                        while (piles[selection].nbCard <= 0)
                         {
                             if (selection + 1 < piles.Length) ++selection;
                             else selection = 0;
@@ -81,7 +79,7 @@ namespace Miniville
                         // Sinon il passe simplement à gauche.
                         else selection -= 1;
                         // On passe toutes les piles de cartes vides.
-                        while (piles[selection].nbCard > 0)
+                        while (piles[selection].nbCard <= 0)
                         {
                             if (selection - 1 >= 0) --selection;
                             else selection = piles.Length - 1;
@@ -131,7 +129,7 @@ namespace Miniville
                 for (int j = 0; j < piles.Length; j++)
                 {
                     // Si la pile est vide on écrit en gris.
-                    if (piles[j].nbCard > 0) writingColor = ConsoleColor.Gray;
+                    if (piles[j].nbCard <= 0) writingColor = ConsoleColor.Gray;
                     // Sinon on récupère la couleur de la carte pour écrire.
                     else writingColor = piles[j].card.color;
                     Console.ForegroundColor = writingColor;
@@ -198,7 +196,7 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.description[1]), ConsoleColor.Gray);
+                                WriteInColor(AlignString(piles[j].card.description[2]), ConsoleColor.Gray);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
