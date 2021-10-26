@@ -14,7 +14,8 @@ namespace Miniville
         private ConsoleColor writingColor = ConsoleColor.Gray;
 
         string[] cardActCost = { "1", "1", "2", "3", "4", "5", "5", "6" };
-        ConsoleColor[] cardColors = { ConsoleColor.Cyan, ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Cyan };
+        ConsoleColor[] cardColors = { ConsoleColor.Cyan, ConsoleColor.Cyan, ConsoleColor.Green, ConsoleColor.Red, ConsoleColor.Green,
+                                      ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Cyan };
         string[] cardNames = { "Champs de blé", "Ferme", "Boulangerie", "Café", "Superette", "Forêt", "Restaurant", "Stade" };
         string[] cardGains = { "1", "1", "2", "1", "3", "1", "2", "4" };
         string[] cardCosts = { "1", "2", "1", "2", "2", "2", "4", "6" };
@@ -33,30 +34,44 @@ namespace Miniville
 
         public void DisplayCardStacks()
         {
-
             string sep = "+---------------+";
             string space = "|               |";
-            for(int i=0; i<cardNames.Length; i++)
-            {
-                //switch()
-                WriteInColor(sep, ConsoleColor.Red);
-                WriteInColor($"| ", ConsoleColor.Red);
-                WriteInColor(AlignString(cardActCost[i]),ConsoleColor.White);
-                WriteInColor($" |", ConsoleColor.Red);
-                // Gains et coût de la carte
-                Console.Write($"| ");
-                WriteInColor($"+{ cardGains[i]}",ConsoleColor.Yellow);
-                Console.Write("        ");
-                WriteInColor($" {cardCosts[i]}$",ConsoleColor.Yellow);
-                Console.WriteLine(" |");
-                Console.WriteLine(space);
 
-                // Nom de la carte
-                Console.WriteLine("|" + AlignString(cardNames[i]) + "|");
-                Console.WriteLine(space);
-                
+            for (int i = 0; i < cardNames.Length; i++)
+            {
+                for(int j=0; j< cardNames.Length; j++)
+                {
+                    switch(j)
+                    {
+                        case 0:
+                            writingColor = cardColors[i];
+                            Console.ForegroundColor = writingColor;
+                            Console.Write(sep);
+                            break;
+                        case 1:
+                            Console.Write("|");
+                            WriteInColor(AlignString(cardActCost[i]), ConsoleColor.White);
+                            Console.Write($"|");
+                            break;
+                        case 2:
+                            Console.Write($"| ");
+                            WriteInColor($"+{ cardGains[i]}", ConsoleColor.Yellow);
+                            Console.Write("        ");
+                            WriteInColor($" {cardCosts[i]}$", ConsoleColor.Yellow);
+                            Console.WriteLine(" |");
+                            Console.WriteLine(space);
+                            break;
+                        case 3:
+                            Console.Write("|");
+                            WriteInColor(AlignString(cardNames[i]), ConsoleColor.White);
+                            Console.WriteLine("|");
+                            Console.WriteLine(space);
+                            break;
+                        default: break;
+                    }
+                }
+                Console.WriteLine();
             }
-            
         }
 
         public void DisplayCity()

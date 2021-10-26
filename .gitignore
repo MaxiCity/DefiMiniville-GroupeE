@@ -3,8 +3,6 @@
 
 .vs/slnx.sqlite
 
-Miniville.csproj
-
 obj/project.assets.json
 
 obj/project.nuget.cache
@@ -48,3 +46,5 @@ bin/Debug/net5.0/Miniville.runtimeconfig.json
 bin/Debug/net5.0/ref/Miniville.dll
 
 obj/Debug/net5.0/
+
+.idea/.idea.Miniville/.idea/
