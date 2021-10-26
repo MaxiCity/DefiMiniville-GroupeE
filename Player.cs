@@ -19,7 +19,7 @@ namespace Miniville
         private int Pieces;
 
         /// <summary>
-        /// Main du joueur (List<Card>)
+        /// Terrain du joueur (List<Card>)
         /// </summary>
         private List<Card> City = new List<Card>();
         #endregion
@@ -57,7 +57,7 @@ namespace Miniville
         #region Player Methods
 
         /// <summary>
-        /// Ajoute la carte choisie à la main du joueur (city)
+        /// Ajoute la carte choisie au terrain du joueur (city)
         /// </summary>
         /// <param name="_carte">Instance de la classe Card</param>
         public void AddCard(Card _carte)
@@ -75,7 +75,7 @@ namespace Miniville
         }
 
         /// <summary>
-        /// Vérifie le tour actuelle, la couleur des cartes dans la main du joueur et les effets de ces dernières
+        /// Vérifie le tour actuel, la couleur des cartes sur le terrain du joueur et les effets de ces dernières
         /// </summary>
         /// <param name="doPlay">Tour du joueur ?</param>
         /// <param name="dieResult">Resultat du dé ?</param>
