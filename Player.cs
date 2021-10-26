@@ -30,8 +30,8 @@ namespace Miniville
         /// </summary>
         public string playerName
         {
-            get { return playerName;}
-            private set {playerName = PlayerName;} 
+            get { return PlayerName;}
+            private set {PlayerName = value;} 
         }
         
         /// <summary>
@@ -39,8 +39,8 @@ namespace Miniville
         /// </summary>
         public int pieces
         {
-            get { return pieces; }
-            private set { pieces = Pieces; }
+            get { return Pieces; }
+            private set { Pieces = value; }
         }
         
         /// <summary>
@@ -48,8 +48,8 @@ namespace Miniville
         /// </summary>
         public List<Card> city
         {
-            get { return city; }
-            private set { city = City; }
+            get { return City; }
+            private set { City = value; }
         }
 
         #endregion
@@ -62,7 +62,7 @@ namespace Miniville
         /// <param name="_carte">Instance de la classe Card</param>
         public void AddCard(Card _carte)
         {
-            City.Add(_carte);
+            city.Add(_carte);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Miniville
         /// <param name="earning">Revenu calculé par la méthode UseCards()</param>
         private void UpdateMoney(int earning)
         {
-            Pieces += earning;
+            pieces += earning;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Miniville
         {
             int steal = 0;
             int reward = 0;
-            foreach (Card card in City)
+            foreach (Card card in city)
             {
                 if (card.dieCondition == dieResult)
                 {
