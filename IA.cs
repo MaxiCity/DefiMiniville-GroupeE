@@ -5,12 +5,11 @@ namespace Miniville
 {
     public class IA
     {
-
         private string difficulty;
         public Player player;
         private Random random = new Random();
 
-        public IA(Game _game, string _difficulty, Player _player)
+        public IA(string _difficulty, Player _player)
         {
             
             difficulty = _difficulty;
