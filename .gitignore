@@ -19,8 +19,6 @@ obj/Debug/net5.0/Miniville.GeneratedMSBuildEditorConfig.editorconfig
 
 .vs/VSWorkspaceState.json
 
-Miniville.sln
-
 .vs/Miniville/v16/.suo
 
 obj/Debug/net5.0/.NETCoreApp,Version=v5.0.AssemblyAttributes.cs
@@ -32,3 +30,21 @@ obj/Debug/net5.0/Miniville.AssemblyInfoInputs.cache
 obj/Debug/net5.0/Miniville.assets.cache
 
 obj/Debug/net5.0/Miniville.csproj.AssemblyReference.cache
+
+.vs/Miniville/DesignTimeBuild/.dtbcache.v2
+
+bin/Debug/net5.0/Miniville.deps.json
+
+bin/Debug/net5.0/Miniville.dll
+
+bin/Debug/net5.0/Miniville.exe
+
+bin/Debug/net5.0/Miniville.pdb
+
+bin/Debug/net5.0/Miniville.runtimeconfig.dev.json
+
+bin/Debug/net5.0/Miniville.runtimeconfig.json
+
+bin/Debug/net5.0/ref/Miniville.dll
+
+obj/Debug/net5.0/
