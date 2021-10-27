@@ -260,16 +260,16 @@ namespace Miniville
             int playerTotal = 0;
             int IATotal = 0;
 
-            if(humanPlayer)
+            if (humanPlayer)
             {
                 playerTotal = actualPlayer[0] - otherPlayer[1];
                 IATotal = otherPlayer[0];
             }
             else
             {
-                IATotal = otherPlayer[0] - actualPlayer[1];
-                playerTotal = actualPlayer[0];
-            } 
+                playerTotal = otherPlayer[0];
+                IATotal = actualPlayer[0] - otherPlayer[1];
+            }
 
             // Message en rapport avec les gains et pertes du joueur.
             string entryMsg = "Durant ce tour, ";
