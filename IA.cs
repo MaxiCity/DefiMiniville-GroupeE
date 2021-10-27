@@ -16,10 +16,11 @@ namespace Miniville
             player = _player;
         }
 
-        public void IAPlay(Pile[] _piles)
+        public Card IAPlay(Pile[] _piles)
         {
             Card choosenCard = _piles[Choose(_piles)].Draw();
             player.AddCard(choosenCard);
+            return choosenCard;
         }
 
         public int Choose(Pile[] _piles)
@@ -38,7 +39,7 @@ namespace Miniville
                     possibleIndex.Add(i);
                 }
             }
-            //choisir un index aléatoire parmis ceux enregistrés
+            //choisir un index aléatoire parmi ceux enregistrés
             choice = possibleIndex[random.Next(possibleIndex.Count)];
             
             //Retourner le choix
