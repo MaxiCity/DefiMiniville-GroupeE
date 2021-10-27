@@ -17,7 +17,6 @@ namespace Miniville
         {
             Random rand = new Random();
             int face = rand.Next(1, nbFaces);
-            Console.WriteLine("résultat : {0}",face);
 
             return (face);
         }
