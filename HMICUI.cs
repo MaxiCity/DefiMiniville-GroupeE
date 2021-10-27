@@ -150,7 +150,6 @@ namespace Miniville
                         break;
 
                     case ConsoleKey.Delete: // Si le joueur ne souhaite pas piocher de carte.
-                        Console.Clear();
                         // On siginifie au contrôleur que le joueur n'a rien choisi.
                         selection = -1;
                         // On sort de la boucle.
@@ -158,7 +157,6 @@ namespace Miniville
                         break;
 
                     case ConsoleKey.Enter: // Le joueur a choisi une pile depuis laquelle piocher.
-                        Console.Clear();
                         // On sort de la boucle.
                         choice = true;
                         break;
@@ -169,12 +167,17 @@ namespace Miniville
                 Console.Write(new string(' ', 8*18));
 
                 // Nouvelle position du curseur sous la pile suivante.
-                cursorPositionX = 8 + 18 * selection; 
-                if(selection >= 0) Console.SetCursorPosition(cursorPositionX, cursorPositionY);
-                WriteInColor("/\\",ConsoleColor.White);
+                cursorPositionX = 8 + 18 * selection;
+                if (selection >= 0)
+                {
+                    Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                    WriteInColor("/\\", ConsoleColor.White);
+                }
             }
+
             while (!choice);
             // On renvoit le choix du joueur sous forme d'index.
+            Console.Clear();
             return selection;
         }
 
@@ -322,11 +325,19 @@ namespace Miniville
         /// <param name="card"> La carte piochée par l'IA. </param>
         public void DisplayIADraw(Card card)
         {
-            string determinant = "un ";
-            foreach (string name in femNames) if (card.name == name) determinant = "une ";
-            Console.Write("Ce tour ci, l'IA a choisi d'ajouter à sa ville " + determinant);
-            WriteInColor(card.name, card.color);
-            Console.WriteLine(".");
+            Console.Write("Ce tour ci, ");
+            WriteInColor("l'IA", ConsoleColor.DarkRed);
+
+            if (card != null)
+            {
+                string determinant = "un ";
+                foreach (string name in femNames) if (card.name == name) determinant = "une ";
+                Console.Write(" a choisi d'ajouter à sa ville " + determinant);
+                WriteInColor(card.name, card.color);
+                Console.WriteLine(".");
+            }
+            else Console.WriteLine(" a choisi de ne rien ajouter à sa ville.");
+            
         }
         ///<summary>Permettant d'afficher le message de fin de partie. </summary>
         ///<param name="win"> Un booléen spécifiant si le joueur a gagné. </param>
