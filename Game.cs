@@ -51,12 +51,36 @@ namespace Miniville
             
             #endregion
 
+            #region création joueur
+            
             Player player = new Player();
             player.city.Add(champsDeBlé);
             player.city.Add(boulangerie);
             player.UpdateMoney(3);
+
+            Player ia = new Player();
+            IA adversaire = new IA("aléatoire", ia);
+            adversaire.player.city.Add(champsDeBlé);
+            adversaire.player.city.Add(boulangerie);
+            adversaire.player.UpdateMoney(3);
             
-            
+            #endregion
+        }
+        /// <summary>
+        /// Fonction vérifiant la fin du jeu à 20 pièces
+        /// </summary>
+        /// <param name="actualPlayer"></param>
+        /// <returns>Bool qui si est true met fin au jeu</returns>
+        public bool EndGame(Player actualPlayer)
+        {
+            bool endGame = false;
+
+            if (actualPlayer.pieces >= 20)
+            {
+                endGame = true;
+            }
+
+            return(endGame);
         }
     }
 }
