@@ -1,4 +1,4 @@
-﻿namespace Miniville
+namespace Miniville
 {
     public class Pile
     {

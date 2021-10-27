@@ -250,6 +250,8 @@ namespace Miniville
                 Console.WriteLine("\n\n\n\n");
             }
             Console.WriteLine();
+            writingColor = ConsoleColor.Gray;
+            Console.ForegroundColor = writingColor;
         }
 
         ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
@@ -257,8 +259,8 @@ namespace Miniville
         ///<param name="IAResult"> les gains et vols de l'IA. </param>
         public void DisplayTurnResult(int[] actualPlayer, int[] otherPlayer, bool humanPlayer)
         {
-            int playerTotal = 0;
-            int IATotal = 0;
+            int playerTotal;
+            int IATotal;
 
             if (humanPlayer)
             {
@@ -343,8 +345,8 @@ namespace Miniville
         ///<param name="win"> Un booléen spécifiant si le joueur a gagné. </param>
         public void DisplayEndingMessage(bool win)
         {
-            if(win) foreach (string line in asciiEndMessage[0]) Console.WriteLine(line);
-            else foreach (string line in asciiEndMessage[1]) Console.WriteLine(line);
+            if(win) foreach (string line in asciiEndMessage[0]) WriteInColor(line + "\n",ConsoleColor.Green);
+            else foreach (string line in asciiEndMessage[1]) WriteInColor(line + "\n", ConsoleColor.Red);
         }
 
         ///<summary>Permet d'afficher les piles de cartes avec un curseur en dessous pour la sélection. </summary>
