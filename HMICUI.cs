@@ -14,10 +14,48 @@ namespace Miniville
 
         /** Le nombre de caractères à l'intérieur d'une carte.*/
         private int maxLength = 15;
-        /** Le nombre de lignes par carte.*/
+        /** Les nombres de lignes en fonction de la taille de l'aperçu de carte.*/
         private int nbLines = 10;
+        private int nbLinesCity = 5;
         /** La couleur actuelle d'écriture dans la console.*/
         private ConsoleColor writingColor = ConsoleColor.Gray;
+        /** La liste des noms féminins parmi les cartes. */
+        private string[] femNames = { "Ferme", "Forêt", "Superette", "Boulangerie" };
+
+        /** Les lignes qui composent les différentes faces d'un dé en ascii art. */
+        private List<string[]> asciiDiceFaces = new List<string[]>() { new string[] { "+-------+",
+                                                                                      "|       |",
+                                                                                      "|   o   |",
+                                                                                      "|       |",
+                                                                                      "+-------+"},
+                                                                       new string[] { "+-------+",
+                                                                                      "| o     |",
+                                                                                      "|       |",
+                                                                                      "|     o |",
+                                                                                      "+-------+"},
+                                                                       new string[] { "+-------+",
+                                                                                      "| o     |",
+                                                                                      "|   o   |",
+                                                                                      "|     o |",
+                                                                                      "+-------+"},
+                                                                       new string[] { "+-------+",
+                                                                                      "| o   o |",
+                                                                                      "|       |",
+                                                                                      "| o   o |",
+                                                                                      "+-------+"},
+                                                                       new string[] { "+-------+",
+                                                                                      "| o   o |",
+                                                                                      "|   o   |",
+                                                                                      "| o   o |",
+                                                                                      "+-------+"},
+                                                                       new string[] { "+-------+",
+                                                                                      "| o   o |",
+                                                                                      "| o   o |",
+                                                                                      "| o   o |",
+                                                                                      "+-------+"},
+
+
+        };
 
         /** Constructeur de la classe
          * <param name="_ctrl"> La référence du contrôleur. </param>
@@ -109,11 +147,76 @@ namespace Miniville
         }
 
         /** Méthode permettant d'afficher les cartes sur le plateau des deux joueurs. */
-        public void DisplayCities()
+        public void DisplayCities(Player[] players, int playerTurn, int dieRoll = 0)
         {
-            
+            string sep = "+-----+";
+            string space = "|     |";
+            for (int playerIndex = 1; playerIndex >= 0; playerIndex--)
+            {
+                for (int i = 0; i < nbLinesCity; i++)
+                {
+                    foreach (Card c in players[playerIndex].city)
+                    {
+                        writingColor = c.color;
+                        Console.ForegroundColor = writingColor;
+
+                        switch (i)
+                        {
+                            case 0: Console.Write(sep); break;
+                            case 1:
+                                if(dieRoll == c.dieCondition || dieRoll == 0)
+                                {
+                                    Console.Write("|  ");
+                                    WriteInColor($"{c.dieCondition}", ConsoleColor.White);
+                                    Console.Write("  |");
+                                }
+                                else Console.Write(space);
+                                break;
+                            case 2:
+                                if(dieRoll == c.dieCondition || dieRoll == 0)
+                                {
+                                    Console.Write("| ");
+                                    if (c.color.Equals(ConsoleColor.Red) && playerIndex == 1) WriteInColor($"-{c.moneyToEarn}$", ConsoleColor.Yellow);
+                                    else WriteInColor($"+{c.moneyToEarn}$", ConsoleColor.Yellow);
+                                    Console.Write(" |");
+                                }
+                                else Console.Write(space);
+                                break;
+                            case 3: Console.Write(space); break;
+                            case 4: Console.Write(sep); break;
+                        }
+                        Console.Write(" ");
+                    }
+                    if (playerIndex == playerTurn && dieRoll > 0)
+                    {
+                        writingColor = ConsoleColor.White;
+                        Console.ForegroundColor = writingColor;
+                        Console.Write("          " + asciiDiceFaces[dieRoll-1][i]);
+                    }
+                    if (i == nbLinesCity - 1 && playerIndex == 0 && playerTurn == 0)
+                    {
+                        writingColor = ConsoleColor.Gray;
+                        Console.ForegroundColor = writingColor;
+                        Console.Write("      Vos pièces : ");
+                        WriteInColor($"{players[0].pieces }$", ConsoleColor.Yellow);
+                    }
+                    Console.WriteLine();
+                }
+                Console.WriteLine("\n\n\n\n");
+            }
         }
 
+        public void DisplayEndingMessage(bool win)
+        {
+
+        }
+
+        public void DisplayTurnResult(Player[] players)
+        {
+            
+            Console.Write("Durant ce tour, l'IA a gagné ");
+        }
+       
         /** Méthode permettant d'afficher les piles de cartes.
          * <param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
          */
@@ -208,14 +311,19 @@ namespace Miniville
                 Console.WriteLine();
             }
         }
-        /** Méthode permettant d'afficher le résultat d'un dé. 
-         * <param name="face"> La face du dé à afficher. </param>
-         */
-        private void DisplayRoll(int face) { Console.Write($"+---+\n| {face} |\n +---+\n"); }
+        /** Méthode permettant d'affiche ce que l'IA a pioché. */
+        public void DisplayIADraw(Card card)
+        {
+            string determinant = "un ";
+            foreach (string name in femNames) if (card.name == name) determinant = "une ";
+            Console.Write("Ce tour ci, l'IA a choisi d'ajouter à sa ville " + determinant);
+            WriteInColor(card.name, card.color);
+            Console.WriteLine(".");
+        }
         /** Méthode permettant d'écrire en couleur dans la console.
-         * <param name="toWrite"> La chaîne de caractère à écrire en couleur. </param>
-         * <param name="color"> La couleur avec laquelle écrire. </param>
-         */
+        * <param name="toWrite"> La chaîne de caractère à écrire en couleur. </param>
+        * <param name="color"> La couleur avec laquelle écrire. </param>
+        */
         private void WriteInColor(string toWrite, ConsoleColor color)
         {
             Console.ForegroundColor = color;

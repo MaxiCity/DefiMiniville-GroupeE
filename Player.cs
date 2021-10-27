@@ -80,7 +80,7 @@ namespace Miniville
         /// <param name="doPlay">Tour du joueur ?</param>
         /// <param name="dieResult">Resultat du dé ?</param>
         /// <returns>Le total de pièces que le joueur vole à l'adversaire ce tour-ci (steal)</returns>
-        public int UseCards(bool doPlay, int dieResult)
+        public int[] UseCards(bool doPlay, int dieResult)
         {
             int steal = 0;
             int reward = 0;
@@ -110,7 +110,8 @@ namespace Miniville
                 }
             }
             UpdateMoney(reward);
-            return steal;
+            if (doPlay) return new int[] { reward };
+            return new int[] {reward, steal };
         }
         
         #endregion
