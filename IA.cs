@@ -5,28 +5,62 @@ namespace Miniville
 {
     public class IA
     {
-        private string difficulty;
+        private enum Difficulties
+        {
+            Random,
+            Greedy,
+            Buyer,
+        }
+
+        private Difficulties difficulty = Difficulties.Random;
+
         public Player player;
         private Random random = new Random();
 
-        public IA(string _difficulty, Player _player)
+        public IA(Player _player)
+        {
+            player = _player;
+        }
+        public IA(int _difficulty, Player _player)
         {
             
-            difficulty = _difficulty;
+            difficulty = (Difficulties)_difficulty;
             player = _player;
         }
 
         public Card IAPlay(Pile[] _piles)
         {
-            Card choosenCard = _piles[Choose(_piles)].Draw();
-            player.AddCard(choosenCard);
-            return choosenCard;
+            if (random.Next(1) == 1)
+            {
+                List<int> possiblePileIndex = SelectPossibleIndex(_piles);
+                if (possiblePileIndex.Count > 0)
+                {
+                    Card choosenCard = _piles[Choose(possiblePileIndex)].Draw();
+                    player.AddCard(choosenCard);
+                    return choosenCard;
+                }
+            }
+
+            return null;
         }
 
-        public int Choose(Pile[] _piles)
+        public int Choose(List<int> _possibleIndex)
         {
-            //Déclaration du choix et de la liste des choix possibles;
             int choice;
+
+            switch (difficulty)
+            {
+                default:
+                    //choisir un index aléatoire parmi ceux enregistrés
+                    choice = _possibleIndex[random.Next(_possibleIndex.Count)];
+                    break;
+            }
+            //Retourner le choix
+            return choice;
+        }
+
+        private List<int> SelectPossibleIndex(Pile[] _piles)
+        {
             List<int> possibleIndex = new List<int>();
             
             //On parcours les piles du tableau...
@@ -39,11 +73,8 @@ namespace Miniville
                     possibleIndex.Add(i);
                 }
             }
-            //choisir un index aléatoire parmi ceux enregistrés
-            choice = possibleIndex[random.Next(possibleIndex.Count)];
-            
-            //Retourner le choix
-            return choice;
+
+            return possibleIndex;
         }
     }
 }
