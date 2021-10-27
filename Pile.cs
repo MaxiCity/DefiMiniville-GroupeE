@@ -5,8 +5,8 @@
         //Carte de la pile
         public Card card { get; private set; }
         
-        //Nombre de carte de la pile, 8 par défaut;
-        public int nbCard { get; private set; } = 8;
+        //Nombre de carte de la pile, 6 par défaut;
+        public int nbCard { get; private set; } = 6;
 
         public Pile(Card _card)
         {
