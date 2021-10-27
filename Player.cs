@@ -69,7 +69,7 @@ namespace Miniville
         /// Mise à jour de l'argent du joueur (pieces)
         /// </summary>
         /// <param name="earning">Revenu calculé par la méthode UseCards()</param>
-        private void UpdateMoney(int earning)
+        public void UpdateMoney(int earning)
         {
             pieces += earning;
         }
