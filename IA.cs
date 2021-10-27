@@ -23,7 +23,6 @@ namespace Miniville
         }
         public IA(int _difficulty, Player _player)
         {
-            
             difficulty = (Difficulties)_difficulty;
             player = _player;
         }
@@ -32,10 +31,10 @@ namespace Miniville
         {
             if (random.Next(1) == 1)
             {
-                List<int> possiblePileIndex = SelectPossibleIndex(_piles);
+                List<Pile> possiblePileIndex = SelectPossiblePiles(_piles);
                 if (possiblePileIndex.Count > 0)
                 {
-                    Card choosenCard = _piles[Choose(possiblePileIndex)].Draw();
+                    Card choosenCard = Choose(possiblePileIndex).Draw();
                     player.AddCard(choosenCard);
                     return choosenCard;
                 }
@@ -44,37 +43,48 @@ namespace Miniville
             return null;
         }
 
-        public int Choose(List<int> _possibleIndex)
+        public Pile Choose(List<Pile> _possibleIndex)
         {
-            int choice;
+            Pile choice;
 
             switch (difficulty)
             {
                 default:
-                    //choisir un index aléatoire parmi ceux enregistrés
+                    //choisir une pile aléatoire parmi la liste des choix possibles
                     choice = _possibleIndex[random.Next(_possibleIndex.Count)];
                     break;
+                /*case Difficulties.Buyer:
+                    choice = Buyer(_possibleIndex);
+                    break;
+                case Difficulties.Greedy:
+                    choice = Greedy(_possibleIndex);
+                    break;*/
             }
             //Retourner le choix
             return choice;
         }
 
-        private List<int> SelectPossibleIndex(Pile[] _piles)
+        private List<Pile> SelectPossiblePiles(Pile[] _piles)
         {
-            List<int> possibleIndex = new List<int>();
+            List<Pile> possiblePile = new List<Pile>();
             
             //On parcours les piles du tableau...
-            for (int i = 0; i < _piles.Length; i++)
+            foreach (Pile pile in _piles)
             {
                 //Si la pile n'est pas vide et que le prix de la carte est inférieur à l'argent du joueur IA...
-                if (_piles[i].nbCard != 0 && _piles[i].card.cost <= player.pieces)
+                if (pile.nbCard != 0 && pile.card.cost <= player.pieces)
                 {
-                    //Ajouter l'index correspondant au choix possible
-                    possibleIndex.Add(i);
+                    //Ajouter la pile aux choix possibles
+                    possiblePile.Add(pile);
                 }
             }
-
-            return possibleIndex;
+            return possiblePile;
         }
+
+        /*private Pile Greedy(List<Pile> _possiblePile)
+        {
+            return null;
+        }*/
+        
     }
 }
