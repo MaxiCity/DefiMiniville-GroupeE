@@ -255,21 +255,21 @@ namespace Miniville
         ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
         ///<param name="playerResult"> les gains et vols du joueur. </param>
         ///<param name="IAResult"> les gains et vols de l'IA. </param>
-        public void DisplayTurnResult(int[] playerResult, int[] IAResult)
+        public void DisplayTurnResult(int[] actualPlayer, int[] otherPlayer, bool humanPlayer)
         {
             int playerTotal = 0;
             int IATotal = 0;
 
-            if (playerResult.Length > 1)
+            if(humanPlayer)
             {
-                IATotal = IAResult[0] - playerResult[1];
-                playerTotal = playerResult[0];
+                playerTotal = actualPlayer[0] - otherPlayer[1];
+                IATotal = otherPlayer[0];
             }
             else
             {
-                playerTotal = playerResult[0] - IAResult[1];
-                IATotal = IAResult[0];
-            }
+                IATotal = otherPlayer[0] - actualPlayer[1];
+                playerTotal = actualPlayer[0];
+            } 
 
             // Message en rapport avec les gains et pertes du joueur.
             string entryMsg = "Durant ce tour, ";
