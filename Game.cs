@@ -51,11 +51,11 @@ namespace Miniville
 
         #endregion
         
-        public Game(bool gamemode)
+        public Game()
         {
             display = new HMICUI(this);
 
-            if (gamemode)
+            //if (display.Choose())
             {
                 //Piles de cartes du jeu de base
                 List<Card> vanillaDeck = new()
@@ -169,8 +169,12 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
+            if (resultOtherPlayer[1] > players[actualPlayer].pieces)
+            {
+                players[otherplayer].UpdateMoney(-(resultOtherPlayer[1]-players[actualPlayer].pieces));
+                //resultOtherPlayer[1] = players[actualPlayer].pieces;
+            }
             players[actualPlayer].UpdateMoney(-resultOtherPlayer[1]);
-            
             //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé
             display.DisplayCities(players, actualPlayer, dieResult);
 
@@ -188,7 +192,7 @@ namespace Miniville
 
                 if (selection >= 0)
                 {
-                    Card choosedCard = cardsListe[selection];
+                    Card choosedCard = currentDeck[selection];
 
                     while (choosedCard.cost > players[0].pieces)
                     {
@@ -196,7 +200,7 @@ namespace Miniville
                         selection = display.Choose(piles, players[0]);
                         if (selection >= 0)
                         {
-                            choosedCard = cardsListe[selection];
+                            choosedCard = currentDeck[selection];
                         }
                         else
                         {
