@@ -165,10 +165,7 @@ namespace Miniville
                     while (choosedCard.cost > players[0].pieces)
                     {
                         Console.Clear();
-                        Console.WriteLine("Please choose a card that fit your city's budget.");
-                        Console.ReadLine();
-                        Console.Clear();
-                        selection = display.Choose(piles, players[0]);
+                        selection = display.Choose(piles, players[0], true);
                         if (selection >= 0)
                         {
                             choosedCard = cardsListe[selection];
