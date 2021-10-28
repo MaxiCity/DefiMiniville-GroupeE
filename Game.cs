@@ -164,8 +164,8 @@ namespace Miniville
 
                     while (choosedCard.cost > players[0].pieces)
                     {
-                        Console.Clear();
-                        selection = display.Choose(piles, players[0], true);
+                        selection = display.Choose(piles, players[0]);
+                        
                         if (selection >= 0)
                         {
                             choosedCard = cardsListe[selection];
