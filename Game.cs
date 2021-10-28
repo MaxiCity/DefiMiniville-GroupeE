@@ -52,7 +52,6 @@ namespace Miniville
 
         #endregion
 
-        
         public Game()
         {
             display = new HMICUI(this);
@@ -164,8 +163,8 @@ namespace Miniville
 
                     while (choosedCard.cost > players[0].pieces)
                     {
+                        Console.Clear();
                         selection = display.Choose(piles, players[0]);
-                        
                         if (selection >= 0)
                         {
                             choosedCard = cardsListe[selection];
@@ -182,14 +181,6 @@ namespace Miniville
                         players[0].city.Add(piles[selection].Draw());
                         players[0].UpdateMoney(-choosedCard.cost);
                     }
-                }   
-                
-                else 
-                { 
-                    Console.Clear(); 
-                    Console.WriteLine("It's good to save money too !");
-                    Console.ReadLine();
-                    Console.Clear();
                 }
             }
             

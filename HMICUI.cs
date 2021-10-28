@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Miniville
@@ -163,6 +164,14 @@ namespace Miniville
                     case ConsoleKey.Delete: // Si le joueur ne souhaite pas piocher de carte.
                         // On siginifie au contrôleur que le joueur n'a rien choisi.
                         selection = -1;
+                        int randEasterEgg = new Random().Next(0,10);
+                        if (randEasterEgg == 0)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("C'est bien d'être radin aussi !");
+                            Thread.Sleep(200);
+                        }
+
                         // On sort de la boucle.
                         choice = true;
                         break;
@@ -173,35 +182,38 @@ namespace Miniville
                         break;
                 }
                 Console.WriteLine();
-                if (humanPlayer.pieces < piles[selection].card.cost && selection >= 0)
+                if(selection >= 0)
                 {
-                    writingColor = ConsoleColor.Red;
-                    Console.ForegroundColor = writingColor;
-                    ErrorOverBudget(humanPlayer.pieces, piles[selection].card.cost);
-                }
-                else
-                {
-                    Console.SetCursorPosition(0, cursorPositionY + 2);
+                    if (humanPlayer.pieces < piles[selection].card.cost )
+                    {
+                        writingColor = ConsoleColor.Red;
+                        Console.ForegroundColor = writingColor;
+                        ErrorOverBudget(humanPlayer.pieces, piles[selection].card.cost);
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(0, cursorPositionY + 2);
+                        Console.Write(new string(' ', 8 * 18));
+                    }
+                    // Clear de la partie basse de l'affichage;
+
+                    Console.SetCursorPosition(0, cursorPositionY);
                     Console.Write(new string(' ', 8 * 18));
+                    Console.SetCursorPosition(0, cursorPositionY + 1);
+                    Console.Write(new string(' ', 8 * 18));
+
+
+                    // Nouvelle position du curseur sous la pile suivante.
+                    cursorPositionX = 8 + 18 * selection;
+                    if (selection >= 0)
+                    {
+                        Console.SetCursorPosition(cursorPositionX, cursorPositionY);
+                        WriteInColor("/\\", ConsoleColor.White);
+                        Console.SetCursorPosition(cursorPositionX, cursorPositionY + 1);
+                        WriteInColor(humanPlayer.pieces + "$".PadLeft(2, ' '), ConsoleColor.Yellow);
+                    }
                 }
-
-                // Clear de la partie basse de l'affichage;
-
-                Console.SetCursorPosition(0, cursorPositionY);
-                Console.Write(new string(' ', 8*18));
-                Console.SetCursorPosition(0, cursorPositionY+1);
-                Console.Write(new string(' ', 8 * 18));
                 
-
-                // Nouvelle position du curseur sous la pile suivante.
-                cursorPositionX = 8 + 18 * selection;
-                if (selection >= 0)
-                {
-                    Console.SetCursorPosition(cursorPositionX, cursorPositionY);
-                    WriteInColor("/\\", ConsoleColor.White);
-                    Console.SetCursorPosition(cursorPositionX, cursorPositionY+1);
-                    WriteInColor(humanPlayer.pieces+"$".PadLeft(2,' '), ConsoleColor.Yellow);
-                }
             }
             while (!choice);
             // On renvoit le choix du joueur sous forme d'index.

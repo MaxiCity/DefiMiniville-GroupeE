@@ -30,7 +30,7 @@ namespace Miniville
         public Card IAPlay(Pile[] _piles)
         {
             // 1/2 chances de ne pas tirer du tout
-            if (random.Next(2) == 1)
+            if (random.Next(4) != 1)
             {
                 //Récupération de la liste des piles possibles
                 List<Pile> possiblePiles = SelectPossiblePiles(_piles);
@@ -47,7 +47,6 @@ namespace Miniville
                     player.UpdateMoney(-choosenCard.cost);
                     
                     return choosenCard;
-                    
                 }
             }
 
