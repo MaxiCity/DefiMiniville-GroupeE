@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Miniville
 {
@@ -46,7 +43,7 @@ namespace Miniville
         /// <summary>
         /// int indiquant l'index du joueur dont ce n'est pas le tour
         /// </summary>
-        int otherplayer = 0;
+        int otherplayer;
 
         /// <summary>
         /// bool arrêtant la boucle de jeu
@@ -99,7 +96,7 @@ namespace Miniville
         /// <summary>
         /// Méthode créant les cartes, les piles, les joueurs, donnant les cartes de départ
         /// </summary>
-        public void startGame()
+        private void startGame()
         {
             #region création joueur
 
@@ -131,7 +128,7 @@ namespace Miniville
             return;
         }
         //Un tour de joueur
-        public void PlayNextTurn(Player[] players)
+        private void PlayNextTurn(Player[] players)
         {
             actualPlayer = actualPlayer == 0 ? 1 : 0;
             otherplayer = otherplayer == 1 ? 0 : 1;
@@ -159,10 +156,11 @@ namespace Miniville
             if (actualPlayer == 0)
             {
                 int selection = display.Choose(piles,players[0]);
-                Card choosedCart = cardsListe[selection];
-                
+
                 if (selection >= 0) 
                 { 
+                    Card choosedCart = cardsListe[selection];
+                    
                     while (choosedCart.cost > players[0].pieces)
                     {
                         
@@ -180,11 +178,12 @@ namespace Miniville
                     players[0].city.Add(piles[selection].Draw());
                     players[0].UpdateMoney(-choosedCart.cost);
                 }
-                else if (selection <= -1) 
+                else 
                 { 
                     Console.Clear(); 
                     Console.WriteLine("It's good to save money too !");
                     Console.ReadLine();
+                    Console.Clear();
                 }
             }
             
@@ -206,7 +205,7 @@ namespace Miniville
             return;
         }
 
-        public void RunGame()
+        private void RunGame()
         {
             while (endGame == false)
             {
@@ -241,7 +240,7 @@ namespace Miniville
         /// </summary>
         /// <param name="actualPlayer"></param>
         /// <returns>Bool qui si est true met fin au jeu</returns>
-        public bool EndGame(Player actualPlayer)
+        private bool EndGame(Player actualPlayer)
         {
             if (actualPlayer.pieces >= 20)
             {
