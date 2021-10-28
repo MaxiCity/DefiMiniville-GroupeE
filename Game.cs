@@ -190,11 +190,6 @@ namespace Miniville
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
-
-                if (cardChoice != null)
-                {
-                    players[1].city.Add(cardChoice);
-                }
             }
 
             //Affichage des villes des deux joueurs
