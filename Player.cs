@@ -71,7 +71,7 @@ namespace Miniville
         /// <param name="earning">Revenu calculé par la méthode UseCards()</param>
         public void UpdateMoney(int earning)
         {
-            pieces += earning;
+            pieces = Math.Max(0, pieces+earning);
         }
 
         /// <summary>

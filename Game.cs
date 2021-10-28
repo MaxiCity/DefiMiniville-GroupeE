@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Miniville
 {
@@ -45,7 +42,7 @@ namespace Miniville
         /// <summary>
         /// int indiquant l'index du joueur dont ce n'est pas le tour
         /// </summary>
-        int otherplayer = 0;
+        int otherplayer;
 
         /// <summary>
         /// bool arrêtant la boucle de jeu
@@ -53,7 +50,6 @@ namespace Miniville
         private bool endGame;
 
         #endregion
-
         
         public Game(bool gamemode)
         {
@@ -128,7 +124,7 @@ namespace Miniville
         /// <summary>
         /// Méthode créant les cartes, les piles, les joueurs, donnant les cartes de départ
         /// </summary>
-        public void startGame()
+        private void startGame()
         {
             #region création joueur
 
@@ -160,7 +156,7 @@ namespace Miniville
             return;
         }
         //Un tour de joueur
-        public void PlayNextTurn(Player[] players)
+        private void PlayNextTurn()
         {
             actualPlayer = actualPlayer == 0 ? 1 : 0;
             otherplayer = otherplayer == 1 ? 0 : 1;
@@ -173,7 +169,7 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
-            players[otherplayer].UpdateMoney(-resultOtherPlayer[1]);
+            players[actualPlayer].UpdateMoney(-resultOtherPlayer[1]);
             
             //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé
             display.DisplayCities(players, actualPlayer, dieResult);
@@ -185,19 +181,41 @@ namespace Miniville
             //Affiche et permet de choisir parmi toutes les piles
 
             Card cardChoice = null; 
+            
             if (actualPlayer == 0)
             {
-                int selection = display.Choose(piles);
-                
+                int selection = display.Choose(piles,players[0]);
+
                 if (selection >= 0)
                 {
-                    players[0].city.Add(piles[selection].Draw());
+                    Card choosedCard = cardsListe[selection];
+
+                    while (choosedCard.cost > players[0].pieces)
+                    {
+                        Console.Clear();
+                        selection = display.Choose(piles, players[0]);
+                        if (selection >= 0)
+                        {
+                            choosedCard = cardsListe[selection];
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    }
+
+                    if (selection >= 0)
+                    {
+                        players[0].city.Add(piles[selection].Draw());
+                        players[0].UpdateMoney(-choosedCard.cost);
+                    }
                 }
             }
+            
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
-
                 if (cardChoice != null)
                 {
                     players[1].city.Add(cardChoice);
@@ -212,14 +230,13 @@ namespace Miniville
             return;
         }
 
-        public void RunGame()
+        private void RunGame()
         {
             while (endGame == false)
             {
                 //On lance le tour du joueur 
-                PlayNextTurn(players);
-                EndGame(players[0]);
-            
+                PlayNextTurn();
+
                 if (EndGame(players[0]))
                 {
                     display.DisplayEndingMessage(true);
@@ -228,9 +245,8 @@ namespace Miniville
                 }
             
                 //playnextturn IA
-                PlayNextTurn(players);
-                EndGame(players[1]);
-            
+                PlayNextTurn();
+               
                 if (EndGame(players[1]))
                 {
                     display.DisplayEndingMessage(false);
@@ -247,7 +263,7 @@ namespace Miniville
         /// </summary>
         /// <param name="actualPlayer"></param>
         /// <returns>Bool qui si est true met fin au jeu</returns>
-        public bool EndGame(Player actualPlayer)
+        private bool EndGame(Player actualPlayer)
         {
             if (actualPlayer.pieces >= 20)
             {
