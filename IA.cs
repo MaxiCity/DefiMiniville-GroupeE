@@ -29,14 +29,23 @@ namespace Miniville
 
         public Card IAPlay(Pile[] _piles)
         {
+            // 1/2 chances de ne pas tirer du tout
             if (random.Next(2) == 1)
             {
-                List<Pile> possiblePileIndex = SelectPossiblePiles(_piles);
-                if (possiblePileIndex.Count > 0)
+                //Récupération de la liste des piles possibles
+                List<Pile> possiblePiles = SelectPossiblePiles(_piles);
+                //S'il y a au moins une pile disponible...
+                if (possiblePiles.Count > 0)
                 {
-                    Card choosenCard = Choose(possiblePileIndex).Draw();
+                    //Piocher la carte
+                    Card choosenCard = Choose(possiblePiles).Draw();
+                    
+                    //L'ajouter au joueur IA
                     player.AddCard(choosenCard);
+                    
+                    //Ajuster son argent
                     player.UpdateMoney(-choosenCard.cost);
+                    
                     return choosenCard;
                     
                 }
