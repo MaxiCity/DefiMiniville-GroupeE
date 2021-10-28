@@ -94,7 +94,7 @@ namespace Miniville
         ///<summary> Permet de récupérer l'index de la pile choisie par l'utilisateur. </summary>
         ///<param name="piles">Le tableau des piles provenant du contrôleur. </param>
         ///<returns> L'index de la pile choisie par le joueur. </returns>
-        public int Choose( Pile[] piles)
+        public int Choose( Pile[] piles, Player humanPlayer)
         {
             int selection = 0;
             // On décale le curseur au démarrage si la première pile est vide.
@@ -165,6 +165,8 @@ namespace Miniville
                 // Clear de la partie basse de l'affichage;
                 Console.SetCursorPosition(0, cursorPositionY);
                 Console.Write(new string(' ', 8*18));
+                Console.SetCursorPosition(0, cursorPositionY+1);
+                Console.Write(new string(' ', 8 * 18));
 
                 // Nouvelle position du curseur sous la pile suivante.
                 cursorPositionX = 8 + 18 * selection;
@@ -172,6 +174,8 @@ namespace Miniville
                 {
                     Console.SetCursorPosition(cursorPositionX, cursorPositionY);
                     WriteInColor("/\\", ConsoleColor.White);
+                    Console.SetCursorPosition(cursorPositionX, cursorPositionY+1);
+                    WriteInColor(humanPlayer.pieces+"$".PadLeft(2,' '), ConsoleColor.Yellow);
                 }
             }
 
@@ -446,7 +450,7 @@ namespace Miniville
             }
             writingColor = ConsoleColor.Gray;
             Console.ForegroundColor = writingColor;
-            Console.WriteLine("\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
+            Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
         }
 
         #region Méthodes utilitaires
