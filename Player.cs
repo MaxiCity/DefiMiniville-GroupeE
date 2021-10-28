@@ -49,7 +49,7 @@ namespace Miniville
         public List<Card> city
         {
             get { return City; }
-            private set { City = value; }
+            set { City = value; }
         }
 
         #endregion

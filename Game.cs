@@ -154,7 +154,8 @@ namespace Miniville
             Console.Clear();
 
             //Affiche et permet de choisir parmi toutes les piles
-            
+
+            Card cardChoice = null; 
             if (actualPlayer == 0)
             {
                 int selection = display.Choose(piles);
@@ -166,8 +167,8 @@ namespace Miniville
             }
             else if (actualPlayer == 1)
             {
-                Card cardChoice = adversaire.IAPlay(piles);
-                display.DisplayIADraw(cardChoice);
+                cardChoice = adversaire.IAPlay(piles);
+
                 if (cardChoice != null)
                 {
                     players[1].city.Add(cardChoice);
@@ -176,6 +177,7 @@ namespace Miniville
 
             //Affichage des villes des deux joueurs
             display.DisplayCities(players);
+            display.DisplayIADraw(cardChoice);
             Console.ReadLine();
             Console.Clear();
             return;

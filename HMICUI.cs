@@ -339,6 +339,8 @@ namespace Miniville
                 Console.WriteLine(".");
             }
             else Console.WriteLine(" a choisi de ne rien ajouter à sa ville.");
+
+            Console.WriteLine();
             
         }
         ///<summary>Permettant d'afficher le message de fin de partie. </summary>
