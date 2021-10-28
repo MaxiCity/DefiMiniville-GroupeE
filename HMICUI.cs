@@ -248,8 +248,18 @@ namespace Miniville
                     {
                         writingColor = ConsoleColor.Gray;
                         Console.ForegroundColor = writingColor;
-                        Console.Write("      Vos pièces : ");
-                        WriteInColor($"{players[0].pieces }$", ConsoleColor.Yellow);
+                        if (playerTurn == playerIndex)
+                        {
+                            Console.Write("      Vos pièces : ");
+                            WriteInColor($"{players[0].pieces }$", ConsoleColor.Yellow);
+                        }
+                        else
+                        {
+                            Console.Write("      Les pièces adverses : ");
+                            WriteInColor($"{players[1].pieces }$", ConsoleColor.Yellow);
+                        }
+
+                        
                     }
                     Console.WriteLine();
                 }
