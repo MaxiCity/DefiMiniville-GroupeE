@@ -158,13 +158,36 @@ namespace Miniville
             Card cardChoice = null; 
             if (actualPlayer == 0)
             {
-                int selection = display.Choose(piles);
+                int selection = display.Choose(piles,players[0]);
+                Card choosedCart = cardsListe[selection];
                 
-                if (selection >= 0)
-                {
+                if (selection >= 0) 
+                { 
+                    while (choosedCart.cost > players[0].pieces)
+                    {
+                        
+                        if (choosedCart.cost > players[0].pieces)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Please choose a card that fit your city's budget."); 
+                            Console.ReadLine(); 
+                            Console.Clear();
+                            selection = display.Choose(piles, players[0]);
+                            choosedCart = cardsListe[selection];
+                        }
+                    }
+                    
                     players[0].city.Add(piles[selection].Draw());
+                    players[0].UpdateMoney(-choosedCart.cost);
+                }
+                else if (selection <= -1) 
+                { 
+                    Console.Clear(); 
+                    Console.WriteLine("It's good to save money too !");
+                    Console.ReadLine();
                 }
             }
+            
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
