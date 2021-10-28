@@ -94,7 +94,7 @@ namespace Miniville
         ///<summary> Permet de récupérer l'index de la pile choisie par l'utilisateur. </summary>
         ///<param name="piles">Le tableau des piles provenant du contrôleur. </param>
         ///<returns> L'index de la pile choisie par le joueur. </returns>
-        public int Choose( Pile[] piles, Player humanPlayer, bool errorBudget = true)
+        public int Choose( Pile[] piles, Player humanPlayer)
         {
             int selection = 0;
             // On décale le curseur au démarrage si la première pile est vide.
@@ -110,7 +110,7 @@ namespace Miniville
             int cursorOffset = 8;
 
             // Affichage du curseur.
-            DisplayCardStacks(selection,piles,errorBudget);
+            DisplayCardStacks(selection,piles);
             cursorPositionX = cursorOffset + 18 * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
             WriteInColor("/\\", ConsoleColor.White);
@@ -163,19 +163,26 @@ namespace Miniville
                         choice = true;
                         break;
                 }
-
-                if (errorBudget)
+                Console.WriteLine();
+                if (humanPlayer.pieces < piles[selection].card.cost)
                 {
                     writingColor = ConsoleColor.Red;
                     Console.ForegroundColor = writingColor;
-                    ErrorOverBudget(humanPlayer.pieces,piles[selection].card.cost);
+                    ErrorOverBudget(humanPlayer.pieces, piles[selection].card.cost);
+                }
+                else
+                {
+                    Console.SetCursorPosition(0, cursorPositionY + 2);
+                    Console.Write(new string(' ', 8 * 18));
                 }
 
                 // Clear de la partie basse de l'affichage;
+
                 Console.SetCursorPosition(0, cursorPositionY);
                 Console.Write(new string(' ', 8*18));
                 Console.SetCursorPosition(0, cursorPositionY+1);
                 Console.Write(new string(' ', 8 * 18));
+                
 
                 // Nouvelle position du curseur sous la pile suivante.
                 cursorPositionX = 8 + 18 * selection;
@@ -187,8 +194,8 @@ namespace Miniville
                     WriteInColor(humanPlayer.pieces+"$".PadLeft(2,' '), ConsoleColor.Yellow);
                 }
                 
+            
             }
-
             while (!choice);
             // On renvoit le choix du joueur sous forme d'index.
             Console.Clear();
@@ -378,7 +385,7 @@ namespace Miniville
         ///<summary>Permet d'afficher les piles de cartes avec un curseur en dessous pour la sélection. </summary>
         ///<param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
         ///<param name="piles"> Un tableau contenant toutes les piles de cartes. </param>
-        private void DisplayCardStacks(int selection, Pile[] piles, bool errorBudget )
+        private void DisplayCardStacks(int selection, Pile[] piles)
         {
             // Bords supérieurs et inférieurs de la carte.
             string sep = "+---------------+";
