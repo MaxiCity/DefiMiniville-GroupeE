@@ -114,6 +114,8 @@ namespace Miniville
             cursorPositionX = cursorOffset + 18 * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
             WriteInColor("/\\", ConsoleColor.White);
+            Console.SetCursorPosition(cursorPositionX, cursorPositionY + 1);
+            WriteInColor(humanPlayer.pieces + "$".PadLeft(2, ' '), ConsoleColor.Yellow);
 
             bool choice = false;
             
@@ -242,7 +244,7 @@ namespace Miniville
                         Console.ForegroundColor = writingColor;
                         Console.Write("          " + asciiDiceFaces[dieRoll-1][i]);
                     }
-                    if (i == nbLinesCity - 1 && playerTurn == playerIndex && dieRoll == 0)
+                    if (i == nbLinesCity - 1 && dieRoll == 0)
                     {
                         writingColor = ConsoleColor.Gray;
                         Console.ForegroundColor = writingColor;
