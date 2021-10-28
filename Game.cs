@@ -177,7 +177,7 @@ namespace Miniville
 
             //Affichage des villes des deux joueurs
             display.DisplayCities(players);
-            display.DisplayIADraw(cardChoice);
+            if(actualPlayer == 1) display.DisplayIADraw(cardChoice);
             Console.ReadLine();
             Console.Clear();
             return;
