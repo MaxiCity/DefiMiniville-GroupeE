@@ -128,7 +128,7 @@ namespace Miniville
             return;
         }
         //Un tour de joueur
-        private void PlayNextTurn(Player[] players)
+        private void PlayNextTurn()
         {
             actualPlayer = actualPlayer == 0 ? 1 : 0;
             otherplayer = otherplayer == 1 ? 0 : 1;
@@ -141,7 +141,7 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
-            players[otherplayer].UpdateMoney(-resultOtherPlayer[1]);
+            players[actualPlayer].UpdateMoney(-resultOtherPlayer[1]);
             
             //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé
             display.DisplayCities(players, actualPlayer, dieResult);
@@ -210,9 +210,8 @@ namespace Miniville
             while (endGame == false)
             {
                 //On lance le tour du joueur 
-                PlayNextTurn(players);
-                EndGame(players[0]);
-            
+                PlayNextTurn();
+
                 if (EndGame(players[0]))
                 {
                     display.DisplayEndingMessage(true);
@@ -221,9 +220,8 @@ namespace Miniville
                 }
             
                 //playnextturn IA
-                PlayNextTurn(players);
-                EndGame(players[1]);
-            
+                PlayNextTurn();
+               
                 if (EndGame(players[1]))
                 {
                     display.DisplayEndingMessage(false);
