@@ -153,31 +153,37 @@ namespace Miniville
             //Affiche et permet de choisir parmi toutes les piles
 
             Card cardChoice = null; 
+            
             if (actualPlayer == 0)
             {
                 int selection = display.Choose(piles,players[0]);
 
-                if (selection >= 0) 
-                { 
-                    Card choosedCart = cardsListe[selection];
-                    
-                    while (choosedCart.cost > players[0].pieces)
+                if (selection >= 0)
+                {
+                    Card choosedCard = cardsListe[selection];
+
+                    while (choosedCard.cost > players[0].pieces)
                     {
+                        selection = display.Choose(piles, players[0]);
                         
-                        if (choosedCart.cost > players[0].pieces)
+                        if (selection >= 0)
                         {
-                            Console.Clear();
-                            Console.WriteLine("Please choose a card that fit your city's budget."); 
-                            Console.ReadLine(); 
-                            Console.Clear();
-                            selection = display.Choose(piles, players[0]);
-                            choosedCart = cardsListe[selection];
+                            choosedCard = cardsListe[selection];
                         }
+                        else
+                        {
+                            break;
+                        }
+
                     }
-                    
-                    players[0].city.Add(piles[selection].Draw());
-                    players[0].UpdateMoney(-choosedCart.cost);
-                }
+
+                    if (selection >= 0)
+                    {
+                        players[0].city.Add(piles[selection].Draw());
+                        players[0].UpdateMoney(-choosedCard.cost);
+                    }
+                }   
+                
                 else 
                 { 
                     Console.Clear(); 
