@@ -109,6 +109,15 @@ namespace Miniville
             int cursorPositionY = 10;
             int cursorOffset = 8;
 
+            if (humanPlayer.pieces < piles[selection].card.cost && selection >= 0)
+            {
+                writingColor = ConsoleColor.Red;
+                Console.ForegroundColor = writingColor;
+                Console.SetCursorPosition(cursorPositionX, 12);
+                ErrorOverBudget(humanPlayer.pieces, piles[selection].card.cost);
+                Console.SetCursorPosition(0, 0);
+            }
+
             // Affichage du curseur.
             DisplayCardStacks(selection,piles);
             cursorPositionX = cursorOffset + 18 * selection;
@@ -164,7 +173,7 @@ namespace Miniville
                         break;
                 }
                 Console.WriteLine();
-                if (humanPlayer.pieces < piles[selection].card.cost)
+                if (humanPlayer.pieces < piles[selection].card.cost && selection >= 0)
                 {
                     writingColor = ConsoleColor.Red;
                     Console.ForegroundColor = writingColor;
@@ -193,8 +202,6 @@ namespace Miniville
                     Console.SetCursorPosition(cursorPositionX, cursorPositionY+1);
                     WriteInColor(humanPlayer.pieces+"$".PadLeft(2,' '), ConsoleColor.Yellow);
                 }
-                
-            
             }
             while (!choice);
             // On renvoit le choix du joueur sous forme d'index.
@@ -432,7 +439,12 @@ namespace Miniville
                                 WriteInColor(AlignString(piles[j].card.description[0]), ConsoleColor.Yellow);
                                 Console.Write("|");
                             }
-                            else Console.Write(space);
+                            else
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString("Empty"));
+                                Console.Write("|");
+                            }
                             break;
                         case 5: // Deuxième ligne de l'activation.
                             if (piles[j].nbCard > 0)
@@ -460,6 +472,7 @@ namespace Miniville
                                 WriteInColor($" { piles[j].card.cost }$", ConsoleColor.Yellow);
                                 Console.Write("            |");
                             }
+                            else Console.Write(space);
                             break;
                         case 9: Console.Write(sep); break;
                     }
