@@ -14,12 +14,11 @@ namespace Miniville
         /// display pour afficher et gérer le jeu
         /// </summary>
         HMICUI display;
-        
-        
+
         /// <summary>
-        /// //Liste des cartes du jeu
+        /// //Liste des cartes du jeu selon le gamemode choisi
         /// </summary>
-        List<Card> cardsListe = new List<Card>();
+        private List<Card> currentDeck;
         
         /// <summary>
         /// Piles des cartes à acheter
@@ -56,42 +55,72 @@ namespace Miniville
         #endregion
 
         
-        public Game()
+        public Game(bool gamemode)
         {
             display = new HMICUI(this);
-            
-            Card champsDeBlé = new Card("Champs de blé", 1, 1, 1, ConsoleColor.Cyan);
-            cardsListe.Add(champsDeBlé);
 
-            Card ferme = new Card("Ferme", 1, 1, 2, ConsoleColor.Cyan);
-            cardsListe.Add(ferme);
-            
-            Card boulangerie = new Card("Boulangerie", 2, 2, 1, ConsoleColor.Green);
-            cardsListe.Add(boulangerie);
-            
-            Card café = new Card("Café", 1, 3, 2, ConsoleColor.Red);
-            cardsListe.Add(café);
+            if (gamemode)
+            {
+                //Piles de cartes du jeu de base
+                List<Card> vanillaDeck = new()
+                {
+                    new Card("Champs de blé", 1, new int[]{1}, 1, ConsoleColor.Cyan),
 
-            Card superette = new Card("Superette", 3, 4, 2, ConsoleColor.Green);
-            cardsListe.Add(superette);
-            
-            Card forêt = new Card("Forêt", 1, 5, 2, ConsoleColor.Cyan);
-            cardsListe.Add(forêt);
-            
-            Card restaurant = new Card("Restaurant", 2, 5, 4, ConsoleColor.Red);
-            cardsListe.Add(restaurant);
-            
-            Card stade = new Card("Stade", 4, 6, 6, ConsoleColor.Cyan);
-            cardsListe.Add(stade);
-            
+                    new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
+
+                    new Card("Boulangerie", 2, new int[]{2}, 1, ConsoleColor.Green),
+
+                    new Card("Café", 1, new int[]{3}, 2, ConsoleColor.Red),
+
+                    new Card("Superette", 3, new int[]{4}, 2, ConsoleColor.Green),
+
+                    new Card("Forêt", 1, new int[]{5}, 2, ConsoleColor.Cyan),
+
+                    new Card("Restaurant", 2, new int[]{5}, 4, ConsoleColor.Red),
+
+                    new Card("Stade", 4, new int[]{6}, 6, ConsoleColor.Cyan),
+                };
+                
+                currentDeck = vanillaDeck;
+            }
+            else
+            {
+                List<Card> customDeck = new()
+                {
+                    new Card("Champs de blé", 1, new int[]{1}, 1, ConsoleColor.Cyan),
+
+                    new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
+
+                    new Card("Boulangerie", 2, new int[]{2}, 1, ConsoleColor.Green),
+
+                    new Card("Stade", 4, new int[]{3}, 6, ConsoleColor.Red),
+
+                    new Card("Superette", 3, new int[]{4}, 2, ConsoleColor.Green),
+
+                    new Card("Forêt", 1, new int[]{5}, 2, ConsoleColor.Cyan),
+
+                    new Card("Restaurant", 2, new int[]{5}, 4, ConsoleColor.Red),
+                    
+                    new Card("Café", 1, new int[]{6,7}, 2, ConsoleColor.Red),
+                    
+                    new Card("PMU", 3,new int[]{8,9}, 6, ConsoleColor.Green),
+                    
+                    new Card("Strip-Club", 5,new int[]{10,11},8, ConsoleColor.Red),
+                    
+                    new Card("Konbini", 5, new int[]{12},7,ConsoleColor.Cyan),
+                };
+
+                currentDeck = customDeck;
+            }
             //Création du tableau des piles de carte
-            piles = new Pile[cardsListe.Count];
+            piles = new Pile[currentDeck.Count];
 
             //Création de piles pour chaque carte et ajout dans le tableau
             for (int i = 0; i < piles.Length; i++)
             {
-                piles[i] = new Pile(cardsListe[i]);
+                piles[i] = new Pile(currentDeck[i]);
             }
+            
             
             startGame();
         }
@@ -104,16 +133,16 @@ namespace Miniville
             #region création joueur
 
             Player player = new Player();
-            player.city.Add(cardsListe[0]);
-            player.city.Add(cardsListe[2]);
+            player.city.Add(currentDeck[0]);
+            player.city.Add(currentDeck[2]);
             player.UpdateMoney(3);
             players[0] = player;
             
             
             Player ia = new Player();
             adversaire = new IA(ia);
-            adversaire.player.city.Add(cardsListe[0]);
-            adversaire.player.city.Add(cardsListe[2]);
+            adversaire.player.city.Add(currentDeck[0]);
+            adversaire.player.city.Add(currentDeck[2]);
             adversaire.player.UpdateMoney(3);
             players[1] = ia;
             

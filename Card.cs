@@ -11,7 +11,7 @@ namespace  Miniville
         public int moneyToEarn { get; private set; }
         
         //Résultat à obtenir au dé
-        public int dieCondition { get; private set; }
+        public int[] dieCondition { get; private set; }
         
         //Prix de la carte
         public int cost { get; private set; }
@@ -22,7 +22,7 @@ namespace  Miniville
         //Description de la carte(répartie dans un tableau afin de la segmenter)
         public string[] description { get; private set; } = new string[3];
 
-        public Card(string _name, int _moneyToEarn, int _dieCondition, int _cost, ConsoleColor _color)
+        public Card(string _name, int _moneyToEarn, int[] _dieCondition, int _cost, ConsoleColor _color)
         {
             name = _name;
             moneyToEarn = _moneyToEarn;
