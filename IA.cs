@@ -29,18 +29,20 @@ namespace Miniville
 
         public Card IAPlay(Pile[] _piles)
         {
-            if (random.Next(1) == 1)
+            if (random.Next(2) == 1)
             {
                 List<Pile> possiblePileIndex = SelectPossiblePiles(_piles);
                 if (possiblePileIndex.Count > 0)
                 {
                     Card choosenCard = Choose(possiblePileIndex).Draw();
                     player.AddCard(choosenCard);
+                    player.UpdateMoney(-choosenCard.cost);
                     return choosenCard;
+                    
                 }
             }
 
-            return null;
+                return null;
         }
 
         public Pile Choose(List<Pile> _possibleIndex)
