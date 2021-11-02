@@ -58,6 +58,7 @@ namespace Miniville
         public Game()
         {
             display = new HMICUI(this);
+
             gamemode = display.ChooseMenu(0) == 0;
             if (gamemode)
             {
@@ -97,6 +98,7 @@ namespace Miniville
             }
 
             difficulty = display.ChooseMenu(1);
+
             winCondition = display.ChooseMenu(2);
             //Création du tableau des piles de carte
             piles = new Pile[currentDeck.Count];
@@ -106,7 +108,8 @@ namespace Miniville
             {
                 piles[i] = new Pile(currentDeck[i]);
             }
-            
+
+            Console.Clear();
             startGame();
         }
         

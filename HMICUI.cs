@@ -364,10 +364,14 @@ namespace Miniville
                                 if (show)
                                 {
                                     Console.Write("|");
-                                    if (c.dieCondition[0] == c.dieCondition[1]) WriteInColor($"  {c.dieCondition[0]}  ", ConsoleColor.White);
+                                    if (c.dieCondition[0] == c.dieCondition[1])
+                                    {
+                                        if (c.dieCondition[0] < 10) Console.Write(" ");
+                                        WriteInColor($" {c.dieCondition[0]}  ", ConsoleColor.White);
+                                    }
                                     else
                                     {
-                                        if(c.dieCondition[0] < 10) Console.Write(" ");
+                                        if (c.dieCondition[0] < 10) Console.Write(" ");
                                         WriteInColor($"{c.dieCondition[0]}-{c.dieCondition[1]}", ConsoleColor.White);
                                         if (c.dieCondition[1] < 10) Console.Write(" ");
                                     }
