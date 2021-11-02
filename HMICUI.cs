@@ -274,7 +274,7 @@ namespace Miniville
         ///<param name="players"> Un tableau contenant tous les joueurs. </param>
         ///<param name="playerTurn"> L'index du joueur à qui c'est le tour. </param>
         ///<param name="dieRoll"> le résultat du lancé de dé, si il n'est pas spécifié c'est qu'on souhaite tout afficher. </param>
-        public void DisplayCities(Player[] players, int playerTurn = 0, int dieRoll = 0)
+        public void DisplayCities(Player[] players, int playerTurn = 0, int dieRoll = 0, int[] dieRolls = null)
         {
             string sep = "+-----+";
             string space = "|     |";
@@ -291,8 +291,8 @@ namespace Miniville
                         
                         // Condition selon laquelle on montre l'effet d'une carte ou non.
                         show = dieRoll == 0 ||
-                              (dieRoll == c.dieCondition[0] || dieRoll == c.dieCondition[1] && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) || c.color.Equals(ConsoleColor.Cyan))
-                              || (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
+                              (dieRoll == c.dieCondition[0] || dieRoll == c.dieCondition[1] && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
+                              || c.color.Equals(ConsoleColor.Cyan))|| (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
                         
                         switch (i)
                         {
@@ -326,7 +326,14 @@ namespace Miniville
                     {
                         writingColor = ConsoleColor.White;
                         Console.ForegroundColor = writingColor;
-                        Console.Write("          " + asciiDiceFaces[dieRoll-1][i]);
+
+                        if (dieRolls[1] != 0)
+                        {
+                            Console.Write("          " + asciiDiceFaces[dieRolls[0] - 1][i]);
+                            Console.Write("  " + asciiDiceFaces[dieRolls[1] - 1][i]);
+                        }
+                        else Console.Write("          " + asciiDiceFaces[dieRoll - 1][i]);
+
                     }
                     if (i == nbLinesCity - 1 && dieRoll == 0)
                     {
@@ -450,7 +457,6 @@ namespace Miniville
             if(win) foreach (string line in asciiEndMessage[0]) WriteInColor(line + "\n",ConsoleColor.Green);
             else foreach (string line in asciiEndMessage[1]) WriteInColor(line + "\n", ConsoleColor.Red);
         }
-
         ///<summary>Permet d'afficher les piles de cartes avec un curseur en dessous pour la sélection. </summary>
         ///<param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
         ///<param name="piles"> Un tableau contenant toutes les piles de cartes. </param>
@@ -547,6 +553,67 @@ namespace Miniville
             writingColor = ConsoleColor.Gray;
             Console.ForegroundColor = writingColor;
             Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
+        }
+
+        public int ChooseNbDice()
+        {
+            int selection = 1;
+            bool choice = false;
+            // Enregistrement de la touche pressée par l'utilisateur.
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Combien de dés voulez vous lancer ?");
+                DisplayDiceChoices(selection);
+                ConsoleKeyInfo keyPressed = Console.ReadKey();
+                switch (keyPressed.Key)
+                {
+                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                        // Si le curseur est tout à droite il revient en première position à gauche.
+                        if (selection == 2) selection = 1;
+                        // Sinon il passe simplement à droite.
+                        else selection += 1;
+                        break;
+
+                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                        // Si le curseur est tout à gauche il va en dernière position à droite.
+                        if (selection == 1) selection = 2;
+                        // Sinon il passe simplement à gauche.
+                        else selection -= 1;
+                        break;
+
+                    case ConsoleKey.Enter: // Le joueur a choisi une pile depuis laquelle piocher.
+                        // On sort de la boucle.
+                        choice = true;
+                        break;
+                }
+            }
+            while (!choice);
+
+            return selection;
+        }
+
+        private void DisplayDiceChoices(int selection)
+        {
+            for (int i = 0; i < asciiDiceFaces[0].Length; i++)
+            {
+                if(selection == 1) WriteInColor(asciiDiceFaces[0][i], ConsoleColor.Green);
+                else Console.Write(asciiDiceFaces[0][i]);
+
+                Console.Write("  |  ");
+
+                if (selection == 2)
+                {
+                    WriteInColor(asciiDiceFaces[0][i], ConsoleColor.Green);
+                    WriteInColor("  " + asciiDiceFaces[1][i], ConsoleColor.Green);
+                }
+                else
+                {
+                    Console.Write(asciiDiceFaces[0][i]);
+                    Console.Write("  " + asciiDiceFaces[1][i]);
+                }
+                Console.WriteLine();
+            }
         }
 
         #region Affichage des menus

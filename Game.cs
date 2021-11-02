@@ -49,13 +49,15 @@ namespace Miniville
         /// </summary>
         private bool endGame;
 
+        private bool gamemode;
+
         #endregion
         
         public Game()
         {
             display = new HMICUI(this);
-
-            if (display.ChooseMenu(0) == 0)
+            gamemode = display.ChooseMenu(0) == 0;
+            if (gamemode)
             {
                 //Piles de cartes du jeu de base
                 List<Card> vanillaDeck = new()
@@ -99,7 +101,6 @@ namespace Miniville
             {
                 piles[i] = new Pile(currentDeck[i]);
             }
-            
             
             startGame();
         }
@@ -145,9 +146,24 @@ namespace Miniville
             otherplayer = otherplayer == 1 ? 0 : 1;
 
             bool humanPlayer = actualPlayer == 0;
+            int dieResult;
+            int[] dieRolls;
+            if (gamemode) dieRolls = null;
+            else dieRolls = new int[2];
+            
+            if(gamemode) dieResult = Die.Lancer();
+            else
+            {
+                int nbDice; 
+                if (actualPlayer == 0) nbDice = display.ChooseNbDice();
+                else nbDice = 2;
 
+                for (int i = 0; i < nbDice; i++) dieRolls[i] = Die.Lancer();
+                dieResult = dieRolls[0] + dieRolls[1];
+            }
+            Console.Clear();
+            Console.WriteLine(dieRolls);
             //Début du tour lancer de dés
-            int dieResult = Die.Lancer();
 
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
@@ -155,11 +171,10 @@ namespace Miniville
             if (resultOtherPlayer[1] > players[actualPlayer].pieces)
             {
                 players[otherplayer].UpdateMoney(-(resultOtherPlayer[1]-players[actualPlayer].pieces));
-                //resultOtherPlayer[1] = players[actualPlayer].pieces;
             }
             players[actualPlayer].UpdateMoney(-resultOtherPlayer[1]);
-            //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé
-            display.DisplayCities(players, actualPlayer, dieResult);
+            //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé.
+            display.DisplayCities(players, actualPlayer, dieResult, dieRolls);
 
             display.DisplayTurnResult(resultActualPlayer, resultOtherPlayer, humanPlayer);
             Console.ReadLine();
@@ -218,7 +233,7 @@ namespace Miniville
 
         private void RunGame()
         {
-            while (endGame == false)
+            while (!endGame)
             {
                 //On lance le tour du joueur 
                 PlayNextTurn();
