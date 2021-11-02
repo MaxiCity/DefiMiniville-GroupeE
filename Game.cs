@@ -170,6 +170,7 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
+            
             if (resultOtherPlayer[1] > players[actualPlayer].pieces)
             {
                 players[otherplayer].UpdateMoney(-(resultOtherPlayer[1]-players[actualPlayer].pieces));
@@ -219,10 +220,6 @@ namespace Miniville
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
-                if (cardChoice != null)
-                {
-                    players[1].city.Add(cardChoice);
-                }
             }
 
             //Affichage des villes des deux joueurs

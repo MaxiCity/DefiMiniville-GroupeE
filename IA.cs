@@ -27,6 +27,30 @@ namespace Miniville
             player = _player;
         }
 
+        public int IANbDice()
+        {
+            int nbOneDiceCard = 0;
+            int nbTwoDiceCard = 0;
+
+            foreach (Card card in player.city)
+            {
+                foreach (int i in card.dieCondition)
+                {
+                    if (i<7)
+                    {
+                        nbOneDiceCard++;
+                    }
+                    else
+                    {
+                        nbTwoDiceCard++;
+                    }
+                }
+            }
+
+            int nbDice = nbOneDiceCard < nbTwoDiceCard ? 2 : 1;
+            return nbDice;
+        }
+
         public Card IAPlay(Pile[] _piles)
         {
             // 1/2 chances de ne pas tirer du tout
