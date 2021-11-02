@@ -10,7 +10,7 @@ namespace Miniville
     /** Classe qui gère toute la partie interface homme-machine. */
     class HMICUI
     {
-        #region attributs
+        #region Attributs
         ///<summary> Référence du contrôleur de l'application. </summary>
         private Game ctrl;
         ///<summary> Le nom du joueur à aff </summary>
@@ -83,7 +83,8 @@ namespace Miniville
                                                                                       "$$    $$/ $$       |$$ |    $$    $$ |$$ |  $$  $$/ $$       |",
                                                                                       "$$$$$$$/   $$$$$$$/ $$/      $$$$$$$/ $$/    $$$$/   $$$$$$$/"}
         };
-        #endregion attributs
+
+        #endregion Attributs
 
         /// <summary> Enregistre la référence du contrôleur et initialise la taille de la console. </summary>
         /// <param name="_ctrl"> La référence au contrôleur. </param>
@@ -128,14 +129,14 @@ namespace Miniville
                 {
                     case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
-                        if (selection == nbItems) selection = 0;
+                        if (selection == nbItems-1) selection = 0;
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         break;
 
                     case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
-                        if (selection == 0) selection = nbItems;
+                        if (selection == 0) selection = nbItems-1;
                         // Sinon il passe simplement à gauche.
                         else selection -= 1;
                         break;
@@ -252,12 +253,12 @@ namespace Miniville
                         Console.SetCursorPosition(0, cursorPositionY + 2);
                         Console.Write(new string(' ', cursorOffset * totalLength));
                     }
-                    // Clear de la partie basse de l'affichage;
 
+                    // Clear de la partie basse de l'affichage;
                     Console.SetCursorPosition(0, cursorPositionY);
-                    Console.Write(new string(' ', cursorOffset * totalLength));
+                    Console.Write(new string(' ', piles.Length * totalLength));
                     Console.SetCursorPosition(0, cursorPositionY + 1);
-                    Console.Write(new string(' ', cursorOffset * totalLength));
+                    Console.Write(new string(' ', piles.Length * totalLength));
 
 
                     // Nouvelle position du curseur sous la pile suivante.
@@ -407,8 +408,6 @@ namespace Miniville
                             Console.Write("      Les pièces adverses : ");
                             WriteInColor($"{players[1].pieces }$", ConsoleColor.Yellow);
                         }
-
-                        
                     }
                     Console.WriteLine();
                 }
@@ -518,7 +517,7 @@ namespace Miniville
         }
 
         #endregion Affichage de cartes
-
+        
         #region Affichage de messages
 
         ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
@@ -729,6 +728,8 @@ namespace Miniville
             } 
         }
 
+        /// <summary> Permet d'afficher le menu de choix de la difficulté. </summary>
+        /// <param name="selection"> Le menu actuellement sélectionné. </param>
         private void DisplayDifficultyMenu(int selection)
         {
             string sep = "+---------------------+";
