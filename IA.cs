@@ -8,8 +8,8 @@ namespace Miniville
         private enum Difficulties
         {
             Random,
-            Greedy,
-            Buyer,
+            Safe,
+            Offensive,
         }
 
         private Difficulties difficulty = Difficulties.Random;
@@ -29,52 +29,63 @@ namespace Miniville
 
         public int IANbDice()
         {
-            int nbOneDiceCard = 0;
-            int nbTwoDiceCard = 0;
-
-            foreach (Card card in player.city)
+            int oneDiceScore = 0;
+            int twoDiceScore = 0;
+            int nbDice;
+            
+            //Si la difficulté est random, choisir aléatoirement entre 1 ou 2 dé
+            if (difficulty == Difficulties.Random)
             {
-                foreach (int i in card.dieCondition)
+                nbDice = random.Next(1, 3);
+            }
+            else
+            {
+                foreach (Card card in player.city)
                 {
-                    if (i<7)
+                    foreach (int i in card.dieCondition)
                     {
-                        nbOneDiceCard++;
-                    }
-                    else
-                    {
-                        nbTwoDiceCard++;
+                        
+                        //Si inférieur 
+                        if (i < 7)
+                        {
+                            //Si la difficulté est offensive, prendre en compte le gain pour le score du choix
+                            oneDiceScore += difficulty == Difficulties.Offensive ? card.moneyToEarn : 1;
+                        }
+                        else
+                        {
+                            twoDiceScore += difficulty == Difficulties.Offensive ? card.moneyToEarn : 1;
+                        }
                     }
                 }
+                nbDice = oneDiceScore > twoDiceScore ? 1 : 2; 
             }
-
-            int nbDice = nbOneDiceCard < nbTwoDiceCard ? 2 : 1;
             return nbDice;
         }
 
         public Card IAPlay(Pile[] _piles)
         {
-            // 1/2 chances de ne pas tirer du tout
-            if (random.Next(4) != 1)
+            //Récupération de la liste des piles possibles
+            List<Pile> possiblePiles = SelectPossiblePiles(_piles);
+            
+            //S'il y a au moins une pile disponible...
+            if (possiblePiles.Count > 0)
             {
-                //Récupération de la liste des piles possibles
-                List<Pile> possiblePiles = SelectPossiblePiles(_piles);
-                //S'il y a au moins une pile disponible...
-                if (possiblePiles.Count > 0)
+                //Piocher la carte
+                Card choosenCard = Choose(possiblePiles).Draw();
+
+                if (choosenCard != null)
                 {
-                    //Piocher la carte
-                    Card choosenCard = Choose(possiblePiles).Draw();
-                    
                     //L'ajouter au joueur IA
                     player.AddCard(choosenCard);
                     
                     //Ajuster son argent
                     player.UpdateMoney(-choosenCard.cost);
-                    
-                    return choosenCard;
                 }
+                return choosenCard;
             }
-
-                return null;
+            
+            //Sinon, renvoyer null
+            return null;
         }
 
         public Pile Choose(List<Pile> _possibleIndex)
@@ -84,6 +95,12 @@ namespace Miniville
             switch (difficulty)
             {
                 default:
+                    
+                    //1 chance sur 4 de ne rien retourner
+                    if (random.Next(0,4) == 0)
+                    {
+                        return null;
+                    }
                     //choisir une pile aléatoire parmi la liste des choix possibles
                     choice = _possibleIndex[random.Next(_possibleIndex.Count)];
                     break;
