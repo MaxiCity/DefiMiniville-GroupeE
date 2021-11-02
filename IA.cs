@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Miniville
 {
     public class IA
     {
-        private enum Difficulties
+        private enum PlayStyle
         {
             Random,
             Safe,
             Offensive,
         }
 
-        private Difficulties difficulty = Difficulties.Random;
+        private PlayStyle difficulty = PlayStyle.Safe;
 
         public Player player;
         private Random random = new Random();
@@ -23,7 +24,7 @@ namespace Miniville
         }
         public IA(int _difficulty, Player _player)
         {
-            difficulty = (Difficulties)_difficulty;
+            difficulty = (PlayStyle)_difficulty;
             player = _player;
         }
 
@@ -34,7 +35,7 @@ namespace Miniville
             int nbDice;
             
             //Si la difficulté est random, choisir aléatoirement entre 1 ou 2 dé
-            if (difficulty == Difficulties.Random)
+            if (difficulty == PlayStyle.Random)
             {
                 nbDice = random.Next(1, 3);
             }
@@ -49,11 +50,11 @@ namespace Miniville
                         if (i < 7)
                         {
                             //Si la difficulté est offensive, prendre en compte le gain pour le score du choix
-                            oneDiceScore += difficulty == Difficulties.Offensive ? card.moneyToEarn : 1;
+                            oneDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                         else
                         {
-                            twoDiceScore += difficulty == Difficulties.Offensive ? card.moneyToEarn : 1;
+                            twoDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                     }
                 }
@@ -70,47 +71,87 @@ namespace Miniville
             //S'il y a au moins une pile disponible...
             if (possiblePiles.Count > 0)
             {
-                //Piocher la carte
-                Card choosenCard = Choose(possiblePiles).Draw();
-
-                if (choosenCard != null)
+                //Choisir une pile
+                Pile choosenPile = Choose(possiblePiles);
+                
+                //Si la pile n'est pas null...
+                if (choosenPile != null)
                 {
+                    //Piocher la carte
+                    Card choosenCard = choosenPile.Draw();
+
                     //L'ajouter au joueur IA
                     player.AddCard(choosenCard);
                     
                     //Ajuster son argent
                     player.UpdateMoney(-choosenCard.cost);
+                    
+                    return choosenCard;
                 }
-                return choosenCard;
             }
-            
             //Sinon, renvoyer null
             return null;
         }
 
-        public Pile Choose(List<Pile> _possibleIndex)
+        public Pile Choose(List<Pile> _possiblePiles)
         {
-            Pile choice;
+            Pile choice = null;
 
             switch (difficulty)
             {
                 default:
-                    
-                    //1 chance sur 4 de ne rien retourner
-                    if (random.Next(0,4) == 0)
+                    //1 chance sur 4 de ne rien piocher du tout
+                    if (random.Next(0,4)==0)
                     {
                         return null;
                     }
+                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
                     //choisir une pile aléatoire parmi la liste des choix possibles
-                    choice = _possibleIndex[random.Next(_possibleIndex.Count)];
+                    
                     break;
-                /*case Difficulties.Buyer:
-                    choice = Buyer(_possibleIndex);
+                case PlayStyle.Safe:
+                    //Si on a plus de 13 pièces, économiser
+                    if (player.pieces > 13)
+                    {
+                        return null;
+                    }
+                    
+                    foreach (Pile pile in _possiblePiles)
+                    {
+                        foreach (int i in pile.card.dieCondition)
+                        {
+                            //Si on ne couvre pas le lancé de dé, choisir cette pile
+                            //(Choisira la dernière pile dont on ne couvre pas la valeur)
+                            if (CoveredDiceRoll()[i] == 0)
+                                choice = pile;
+                        }
+                    }
                     break;
-                case Difficulties.Greedy:
-                    choice = Greedy(_possibleIndex);
-                    break;*/
+                
+                case PlayStyle.Offensive:
+                    //Si on a plus de 17 pièces, économiser
+                    if (player.pieces > 17)
+                    {
+                        return null;
+                    }
+                    foreach (Pile pile in _possiblePiles)
+                    {
+                        foreach (int i in pile.card.dieCondition)
+                        {
+                            //Si on ne couvre pas le lancé de dé, choisir cette pile
+                            //(Retourne directement cette pile)
+                            if (CoveredDiceRoll()[i-1] == 0)
+                            {
+                                choice = pile;
+                                return choice;
+                            }
+                        }
+                    }
+                    //S'il n'y a pas eu de retour précédent, acheter une carte aléatoire
+                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
+                    break;
             }
+            
             //Retourner le choix
             return choice;
         }
@@ -132,10 +173,22 @@ namespace Miniville
             return possiblePile;
         }
 
-        /*private Pile Greedy(List<Pile> _possiblePile)
+        private int[] CoveredDiceRoll()
         {
-            return null;
-        }*/
-        
+            int[] coveredDiceRoll = new int[12];
+            foreach (Card card in player.city)
+            {
+                foreach (int i in card.dieCondition)
+                {
+                    coveredDiceRoll[i - 1]++;
+                }
+            }
+
+            foreach (int i in coveredDiceRoll)
+            {
+                Console.Write($"{i} ");
+            }
+            return coveredDiceRoll;
+        }
     }
 }
