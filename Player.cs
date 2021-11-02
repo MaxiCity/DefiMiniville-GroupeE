@@ -86,7 +86,7 @@ namespace Miniville
             int reward = 0;
             foreach (Card card in city)
             {
-                if (card.dieCondition == dieResult)
+                if (card.dieCondition.Contains(dieResult))
                 {
                     switch (card.color)
                     {
