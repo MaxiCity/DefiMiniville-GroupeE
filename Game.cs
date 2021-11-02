@@ -152,8 +152,7 @@ namespace Miniville
             bool humanPlayer = actualPlayer == 0;
             int dieResult;
             int[] dieRolls;
-            if (gamemode) dieRolls = null;
-            else dieRolls = new int[2];
+            dieRolls = new int[2];
             
             if(gamemode) dieResult = Die.Lancer();
             else
