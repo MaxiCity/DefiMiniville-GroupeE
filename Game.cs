@@ -50,8 +50,8 @@ namespace Miniville
         private bool endGame;
 
         private bool gamemode;
-
         public int difficulty { get; private set; }
+        public int winCondition { get; private set; }
 
         #endregion
         
@@ -97,6 +97,7 @@ namespace Miniville
             }
 
             difficulty = display.ChooseMenu(1);
+            winCondition = display.ChooseMenu(2);
             //Création du tableau des piles de carte
             piles = new Pile[currentDeck.Count];
 
