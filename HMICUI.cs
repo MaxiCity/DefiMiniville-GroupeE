@@ -95,38 +95,47 @@ namespace Miniville
             Console.CursorVisible = false;
         }
 
+        #region Interaction
+
         /// <summary> Permet de récupérer l'index correspondant au choix dans le menu. </summary>
         /// <returns> L'index correspondant au choix du menu. </returns>
         public int ChooseMenu(int menuId)
         {
             int selection = 0;
-            bool choice = false;
+            int nbItems = 0;
 
+            bool choice = false;
             do
             {
                 Console.Clear();
                 switch (menuId)
                 {
                     // Choix du mode de jeu.
-                    case 0: DisplayGamemodeMenu(selection); break;
+                    case 0: 
+                        DisplayGamemodeMenu(selection);
+                        nbItems = 2;
+                        break;
                     // Choix de la difficulté de l'IA.
-                    case 1: break;
+                    case 1: DisplayDifficultyMenu(selection);
+                        nbItems = 3;
+                        break;
                     // Choix des conditions de victoire.
                     case 2: break;
                 }
+
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
                     case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
-                        if (selection == 2) selection = 0;
+                        if (selection == nbItems) selection = 0;
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         break;
 
                     case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
-                        if (selection == 0) selection = 2;
+                        if (selection == 0) selection = nbItems;
                         // Sinon il passe simplement à gauche.
                         else selection -= 1;
                         break;
@@ -140,7 +149,6 @@ namespace Miniville
 
             return selection;
         }
-
         ///<summary> Permet de récupérer l'index de la pile choisie par l'utilisateur. </summary>
         ///<param name="piles">Le tableau des piles provenant du contrôleur. </param>
         ///<returns> L'index de la pile choisie par le joueur. </returns>
@@ -269,6 +277,56 @@ namespace Miniville
             Console.Clear();
             return selection;
         }
+        /// <summary> Permet de récupérer le nombre de dé que souhaite lancer le joueur. </summary>
+        /// <returns> Le nombre de dés à lancer. </returns>
+        public int ChooseNbDice()
+        {
+            int selection = 1;
+            bool choice = false;
+            // Enregistrement de la touche pressée par l'utilisateur.
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Combien de dés voulez vous lancer ?");
+                DisplayDiceChoices(selection);
+                ConsoleKeyInfo keyPressed = Console.ReadKey();
+                switch (keyPressed.Key)
+                {
+                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                        // Si le curseur est tout à droite il revient en première position à gauche.
+                        if (selection == 2) selection = 1;
+                        // Sinon il passe simplement à droite.
+                        else selection += 1;
+                        break;
+
+                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                        // Si le curseur est tout à gauche il va en dernière position à droite.
+                        if (selection == 1) selection = 2;
+                        // Sinon il passe simplement à gauche.
+                        else selection -= 1;
+                        break;
+
+                    case ConsoleKey.Enter: // Le joueur a choisi une pile depuis laquelle piocher.
+                        // On sort de la boucle.
+                        choice = true;
+                        break;
+                }
+            }
+            while (!choice);
+
+            return selection;
+        }
+        /// <summary> Permet de récupérer le nom du joueur. </summary>
+        public void ChooseName()
+        {
+            Console.Write("Comment souhaitez vous que l'on vous appelle ? :");
+            WriteInColor(" ", ConsoleColor.Blue);
+            playerName = Console.ReadLine();
+        }
+
+        #endregion Interaction
+
+        #region Affichage de cartes
 
         ///<summary> Permet d'afficher les cartes sur le plateau des deux joueurs. </summary>
         ///<param name="players"> Un tableau contenant tous les joueurs. </param>
@@ -361,102 +419,6 @@ namespace Miniville
             Console.ForegroundColor = writingColor;
         }
 
-        ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
-        ///<param name="playerResult"> les gains et vols du joueur. </param>
-        ///<param name="IAResult"> les gains et vols de l'IA. </param>
-        public void DisplayTurnResult(int[] actualPlayer, int[] otherPlayer, bool humanPlayer)
-        {
-            int playerTotal;
-            int IATotal;
-
-            if (humanPlayer)
-            {
-                playerTotal = actualPlayer[0] - otherPlayer[1];
-                IATotal = otherPlayer[0];
-            }
-            else
-            {
-                playerTotal = otherPlayer[0];
-                IATotal = actualPlayer[0] - otherPlayer[1];
-            }
-
-            // Message en rapport avec les gains et pertes du joueur.
-            string entryMsg = "Durant ce tour, ";
-            string msg;
-
-            if (playerTotal == 0)
-            {
-                Console.Write(entryMsg);
-                WriteInColor(playerName, ConsoleColor.Blue);
-                Console.WriteLine(" n'a rien gagné ni perdu. ");
-            }
-            else
-            {
-                if (playerTotal > 0) msg = " a gagné ";
-                else msg = " a perdu ";
-
-                Console.Write(entryMsg);
-                WriteInColor(playerName, ConsoleColor.Blue);
-                Console.Write(msg);
-                WriteInColor(playerTotal + "$", ConsoleColor.Yellow);
-                Console.WriteLine(".");
-            }
-
-            // Message en rapport avec les gains et pertes de l'IA.
-            entryMsg = "Et, ";
-            if (IATotal == 0)
-            {
-                Console.Write(entryMsg);
-                WriteInColor("l'IA", ConsoleColor.DarkRed);
-                Console.WriteLine(" n'a rien gagné ni perdu. ");
-            }
-            else
-            {
-                if (IATotal > 0) msg = " a gagné ";
-                else msg = " a perdu";
-
-                Console.Write(entryMsg);
-                WriteInColor("l'IA", ConsoleColor.DarkRed);
-                Console.Write(msg);
-                WriteInColor((""+IATotal).Replace('-',' ') + "$", ConsoleColor.Yellow);
-                Console.WriteLine(".");
-            }
-        }
-
-        /// <summary> Permet de récupérer le nom du joueur. </summary>
-        public void ChooseName()
-        {
-            Console.Write("Comment souhaitez vous que l'on vous appelle ? :");
-            WriteInColor(" ", ConsoleColor.Blue);
-            playerName = Console.ReadLine();
-        }
-        /// <summary> Permet d'afficher ce que l'IA </summary>
-        /// <param name="card"> La carte piochée par l'IA. </param>
-        public void DisplayIADraw(Card card)
-        {
-            Console.Write("Ce tour ci, ");
-            WriteInColor("l'IA", ConsoleColor.DarkRed);
-
-            if (card != null)
-            {
-                string determinant = "un ";
-                foreach (string name in femNames) if (card.name == name) determinant = "une ";
-                Console.Write(" a choisi d'ajouter à sa ville " + determinant);
-                WriteInColor(card.name, card.color);
-                Console.WriteLine(".");
-            }
-            else Console.WriteLine(" a choisi de ne rien ajouter à sa ville.");
-
-            Console.WriteLine();
-            
-        }
-        ///<summary>Permettant d'afficher le message de fin de partie. </summary>
-        ///<param name="win"> Un booléen spécifiant si le joueur a gagné. </param>
-        public void DisplayEndingMessage(bool win)
-        {
-            if(win) foreach (string line in asciiEndMessage[0]) WriteInColor(line + "\n",ConsoleColor.Green);
-            else foreach (string line in asciiEndMessage[1]) WriteInColor(line + "\n", ConsoleColor.Red);
-        }
         ///<summary>Permet d'afficher les piles de cartes avec un curseur en dessous pour la sélection. </summary>
         ///<param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
         ///<param name="piles"> Un tableau contenant toutes les piles de cartes. </param>
@@ -485,7 +447,7 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                if(piles[j].card.dieCondition[0] == piles[j].card.dieCondition[1]) WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "]"), ConsoleColor.White);
+                                if (piles[j].card.dieCondition[0] == piles[j].card.dieCondition[1]) WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "]"), ConsoleColor.White);
                                 else WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "-" + piles[j].card.dieCondition[1] + "]"), ConsoleColor.White);
                                 Console.Write($"|");
 
@@ -555,49 +517,111 @@ namespace Miniville
             Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
         }
 
-        public int ChooseNbDice()
+        #endregion Affichage de cartes
+
+        #region Affichage de messages
+
+        ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
+        ///<param name="playerResult"> les gains et vols du joueur. </param>
+        ///<param name="IAResult"> les gains et vols de l'IA. </param>
+        public void DisplayTurnResult(int[] actualPlayer, int[] otherPlayer, bool humanPlayer)
         {
-            int selection = 1;
-            bool choice = false;
-            // Enregistrement de la touche pressée par l'utilisateur.
-            do
+            int playerTotal;
+            int IATotal;
+
+            if (humanPlayer)
             {
-                Console.Clear();
-                Console.WriteLine("Combien de dés voulez vous lancer ?");
-                DisplayDiceChoices(selection);
-                ConsoleKeyInfo keyPressed = Console.ReadKey();
-                switch (keyPressed.Key)
-                {
-                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
-                        // Si le curseur est tout à droite il revient en première position à gauche.
-                        if (selection == 2) selection = 1;
-                        // Sinon il passe simplement à droite.
-                        else selection += 1;
-                        break;
-
-                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
-                        // Si le curseur est tout à gauche il va en dernière position à droite.
-                        if (selection == 1) selection = 2;
-                        // Sinon il passe simplement à gauche.
-                        else selection -= 1;
-                        break;
-
-                    case ConsoleKey.Enter: // Le joueur a choisi une pile depuis laquelle piocher.
-                        // On sort de la boucle.
-                        choice = true;
-                        break;
-                }
+                playerTotal = actualPlayer[0] - otherPlayer[1];
+                IATotal = otherPlayer[0];
             }
-            while (!choice);
+            else
+            {
+                playerTotal = otherPlayer[0];
+                IATotal = actualPlayer[0] - otherPlayer[1];
+            }
 
-            return selection;
+            // Message en rapport avec les gains et pertes du joueur.
+            string entryMsg = "Durant ce tour, ";
+            string msg;
+
+            if (playerTotal == 0)
+            {
+                Console.Write(entryMsg);
+                WriteInColor(playerName, ConsoleColor.Blue);
+                Console.WriteLine(" n'a rien gagné ni perdu. ");
+            }
+            else
+            {
+                if (playerTotal > 0) msg = " a gagné ";
+                else msg = " a perdu ";
+
+                Console.Write(entryMsg);
+                WriteInColor(playerName, ConsoleColor.Blue);
+                Console.Write(msg);
+                WriteInColor(playerTotal + "$", ConsoleColor.Yellow);
+                Console.WriteLine(".");
+            }
+
+            // Message en rapport avec les gains et pertes de l'IA.
+            entryMsg = "Et, ";
+            if (IATotal == 0)
+            {
+                Console.Write(entryMsg);
+                WriteInColor("l'IA", ConsoleColor.DarkRed);
+                Console.WriteLine(" n'a rien gagné ni perdu. ");
+            }
+            else
+            {
+                if (IATotal > 0) msg = " a gagné ";
+                else msg = " a perdu";
+
+                Console.Write(entryMsg);
+                WriteInColor("l'IA", ConsoleColor.DarkRed);
+                Console.Write(msg);
+                WriteInColor((""+IATotal).Replace('-',' ') + "$", ConsoleColor.Yellow);
+                Console.WriteLine(".");
+            }
         }
 
+        /// <summary> Permet d'afficher ce que l'IA </summary>
+        /// <param name="card"> La carte piochée par l'IA. </param>
+        public void DisplayIADraw(Card card)
+        {
+            Console.Write("Ce tour ci, ");
+            WriteInColor("l'IA", ConsoleColor.DarkRed);
+
+            if (card != null)
+            {
+                string determinant = "un ";
+                foreach (string name in femNames) if (card.name == name) determinant = "une ";
+                Console.Write(" a choisi d'ajouter à sa ville " + determinant);
+                WriteInColor(card.name, card.color);
+                Console.WriteLine(".");
+            }
+            else Console.WriteLine(" a choisi de ne rien ajouter à sa ville.");
+
+            Console.WriteLine();
+            
+        }
+        ///<summary>Permettant d'afficher le message de fin de partie. </summary>
+        ///<param name="win"> Un booléen spécifiant si le joueur a gagné. </param>
+        public void DisplayEndingMessage(bool win)
+        {
+            if(win) foreach (string line in asciiEndMessage[0]) WriteInColor(line + "\n",ConsoleColor.Green);
+            else foreach (string line in asciiEndMessage[1]) WriteInColor(line + "\n", ConsoleColor.Red);
+        }
+
+        #endregion Affichage de messages
+
+        #region Affichage des menus
+
+        /// <summary> Permet d'afficher le menu de sélection du nombre de dés. </summary>
+        /// <param name="selection"> Le choix actuellement sélectionné. </param>
         private void DisplayDiceChoices(int selection)
         {
             for (int i = 0; i < asciiDiceFaces[0].Length; i++)
             {
-                if(selection == 1) WriteInColor(asciiDiceFaces[0][i], ConsoleColor.Green);
+                if (selection == 1) WriteInColor(asciiDiceFaces[0][i], ConsoleColor.Green);
                 else Console.Write(asciiDiceFaces[0][i]);
 
                 Console.Write("  |  ");
@@ -616,7 +640,6 @@ namespace Miniville
             }
         }
 
-        #region Affichage des menus
         /// <summary> Permet d'afficher le menu du choix du mode de jeu. </summary>
         /// <param name="selection"> Le menu actuel sélectionné. </param>
         private void DisplayGamemodeMenu(int selection)
@@ -706,13 +729,13 @@ namespace Miniville
             } 
         }
 
-        private void DisplayDifficultyMenus(int selection)
+        private void DisplayDifficultyMenu(int selection)
         {
             string sep = "+---------------------+";
             string space = "|                     |";
             for (int i = 0; i < 10; i++)
             {
-                for (int j = 0; j < 2; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     if (selection == j)
                     {
@@ -741,56 +764,93 @@ namespace Miniville
                             else
                             {
                                 Console.Write("|    ");
-                                if (selection == j) WriteInColor("  Difficile   ", ConsoleColor.Yellow);
-                                else Console.Write("  Difficile   ");
+                                if (selection == j) WriteInColor("  Difficile  ", ConsoleColor.Yellow);
+                                else Console.Write("  Difficile  ");
                                 Console.Write("    |");
                             }
                             break;
                         case 2: Console.Write(sep); break;
                         case 3:
-                            if (j == 0)
+                            if (j == 0) Console.Write(space);
+                            else if(j == 1)
                             {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("Mode de jeu sans", ConsoleColor.White);
-                                else Console.Write("Mode de jeu sans");
-                                Console.Write("  |");
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("   L'IA aura un    ", ConsoleColor.White);
+                                else Console.Write("   L'IA aura un    ");
+                                Console.Write(" |");
                             }
                             else
                             {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("Mode de jeu avec", ConsoleColor.White);
-                                else Console.Write("Mode de jeu avec");
-                                Console.Write("  |");
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor(" L'IA sera capable ", ConsoleColor.White);
+                                else Console.Write(" L'IA sera capable ");
+                                Console.Write(" |");
                             }
                             break;
                         case 4:
                             if (j == 0)
                             {
-                                Console.Write("|     ");
-                                if (selection == j) WriteInColor("aucun bonus.", ConsoleColor.White);
-                                else Console.Write("aucun bonus.");
-                                Console.Write("    |");
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("   L'IA fera des   ", ConsoleColor.White);
+                                else Console.Write("   L'IA fera des   ");
+                                Console.Write(" |");
+                            }
+                            else if (j == 1)
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("comportement qui ne", ConsoleColor.White);
+                                else Console.Write("comportement qui ne");
+                                Console.Write(" |");
                             }
                             else
                             {
                                 Console.Write("| ");
-                                if (selection == j) WriteInColor("de nouvelles cartes", ConsoleColor.White);
-                                else Console.Write("de nouvelles cartes");
+                                if (selection == j) WriteInColor(" de s'adapter à la ", ConsoleColor.White);
+                                else Console.Write(" de s'adapter à la ");
                                 Console.Write(" |");
                             }
                             break;
-
                         case 5:
-                            if (j == 0) Console.Write(space);
+                            if (j == 0)
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor(" choix aléatoires. ", ConsoleColor.White);
+                                else Console.Write(" choix aléatoires. ");
+                                Console.Write(" |");
+                            }
+                            else if(j == 1)
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor(" changera pas tout ", ConsoleColor.White);
+                                else Console.Write(" changera pas tout ");
+                                Console.Write(" |");
+                            }
                             else
                             {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("et un dé en plus.", ConsoleColor.White);
-                                else Console.Write("et un dé en plus.");
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor(" situation afin de ", ConsoleColor.White);
+                                else Console.Write(" situation afin de ");
                                 Console.Write(" |");
                             }
                             break;
-                        case 6: Console.Write(sep); break;
+                        case 6:
+                            if (j == 0) Console.Write(space);
+                            else if (j == 1)
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("  au long du jeu.  ", ConsoleColor.White);
+                                else Console.Write("  au long du jeu.  ");
+                                Console.Write(" |");
+                            }
+                            else
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor(" gérer vos actions ", ConsoleColor.White);
+                                else Console.Write(" gérer vos actions ");
+                                Console.Write(" |");
+                            }
+                            break;
+                        case 7: Console.Write(sep); break;
                     }
                     writingColor = ConsoleColor.Gray;
                     Console.ForegroundColor = writingColor;
@@ -799,9 +859,11 @@ namespace Miniville
                 Console.WriteLine();
             }
         }
+
         #endregion Affichage des menus
 
         #region Méthodes utilitaires
+
         /// <summary> Permet d'éfficher un message au joueur pour lui indiquer qu'il ne peut pas acheter la carte. </summary>
         /// <param name="playerCoin"> Les pièces du joueur. </param>
         /// <param name="cardCost"> Le coût de la carte. </param>
@@ -831,6 +893,7 @@ namespace Miniville
 
             return new string(' ', leftPadding) + toAlign + new string(' ', rightPadding);
         }
+
         #endregion Méthodes utilitaires
     }
 }

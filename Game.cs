@@ -51,6 +51,8 @@ namespace Miniville
 
         private bool gamemode;
 
+        public int difficulty { get; private set; }
+
         #endregion
         
         public Game()
@@ -93,6 +95,8 @@ namespace Miniville
 
                 currentDeck = customDeck;
             }
+
+            difficulty = display.ChooseMenu(1);
             //Création du tableau des piles de carte
             piles = new Pile[currentDeck.Count];
 
