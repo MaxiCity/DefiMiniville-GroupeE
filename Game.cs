@@ -81,7 +81,7 @@ namespace Miniville
                 List<Card> customDeck = new()
                 {
                     new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
-                    new Card("Boulangerie", 2, new int[] { 2, 2 }, 1, ConsoleColor.Green),
+                    new Card("Boulangerie", 2, new int[] { 2,2 }, 1, ConsoleColor.Green),
                     new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
                     new Card("Superette", 3, new int[] { 4, 4 }, 2, ConsoleColor.Green),
                     new Card("Forêt", 1, new int[] { 5, 5 }, 2, ConsoleColor.Cyan),
@@ -160,7 +160,7 @@ namespace Miniville
             {
                 int nbDice; 
                 if (actualPlayer == 0) nbDice = display.ChooseNbDice();
-                else nbDice = 2;
+                else nbDice = adversaire.IANbDice();
 
                 for (int i = 0; i < nbDice; i++) dieRolls[i] = Die.Lancer();
                 dieResult = dieRolls[0] + dieRolls[1];
@@ -171,6 +171,7 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
+
             int stealDifference = resultOtherPlayer[1]-players[actualPlayer].pieces;
             
             //Si on vole plus que ce que le joueur a...
@@ -179,7 +180,7 @@ namespace Miniville
                 //On retire ce supplément
                 players[otherplayer].UpdateMoney(-(stealDifference));
                 resultOtherPlayer[0] -= stealDifference;
-                
+
                 //On diminue la quantité volée
                 resultOtherPlayer[1] -= stealDifference;
             }
@@ -195,6 +196,10 @@ namespace Miniville
             display.DisplayTurnResult(resultActualPlayer, resultOtherPlayer, humanPlayer);
             Console.ReadLine();
             Console.Clear();
+            if (EndGame(players[actualPlayer]) || EndGame(players[otherplayer]))
+            {
+                return;
+            }
 
             //Affiche et permet de choisir parmi toutes les piles
 
