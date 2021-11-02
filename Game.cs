@@ -125,7 +125,7 @@ namespace Miniville
             
             
             Player ia = new Player();
-            adversaire = new IA(ia);
+            adversaire = new IA(ia,difficulty);
             adversaire.player.city.Add(currentDeck[0]);
             adversaire.player.city.Add(currentDeck[1]);
             adversaire.player.UpdateMoney(3);

@@ -22,7 +22,7 @@ namespace Miniville
         {
             player = _player;
         }
-        public IA(int _difficulty, Player _player)
+        public IA(Player _player, int _difficulty)
         {
             difficulty = (PlayStyle)_difficulty;
             player = _player;
@@ -96,7 +96,7 @@ namespace Miniville
         public Pile Choose(List<Pile> _possiblePiles)
         {
             Pile choice = null;
-
+            
             switch (difficulty)
             {
                 default:
@@ -105,13 +105,13 @@ namespace Miniville
                     {
                         return null;
                     }
-                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
                     //choisir une pile aléatoire parmi la liste des choix possibles
-                    
+                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
                     break;
+                
                 case PlayStyle.Safe:
                     //Si on a plus de 13 pièces, économiser
-                    if (player.pieces > 13)
+                    if (player.pieces > 14)
                     {
                         return null;
                     }
@@ -122,8 +122,10 @@ namespace Miniville
                         {
                             //Si on ne couvre pas le lancé de dé, choisir cette pile
                             //(Choisira la dernière pile dont on ne couvre pas la valeur)
-                            if (CoveredDiceRoll()[i] == 0)
-                                choice = pile;
+                            if (CoveredDiceRoll()[i-1] == 0)
+                            {
+                                return pile;
+                            }
                         }
                     }
                     break;
@@ -142,11 +144,15 @@ namespace Miniville
                             //(Retourne directement cette pile)
                             if (CoveredDiceRoll()[i-1] == 0)
                             {
-                                choice = pile;
-                                return choice;
+                                return pile;
                             }
                         }
                     }
+                    if (random.Next(0,2)==0)
+                    {
+                        return null;
+                    }
+                    
                     //S'il n'y a pas eu de retour précédent, acheter une carte aléatoire
                     choice = _possiblePiles[random.Next(_possiblePiles.Count)];
                     break;
@@ -182,11 +188,6 @@ namespace Miniville
                 {
                     coveredDiceRoll[i - 1]++;
                 }
-            }
-
-            foreach (int i in coveredDiceRoll)
-            {
-                Console.Write($"{i} ");
             }
             return coveredDiceRoll;
         }
