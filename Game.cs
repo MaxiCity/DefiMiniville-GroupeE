@@ -165,7 +165,6 @@ namespace Miniville
                 dieResult = dieRolls[0] + dieRolls[1];
             }
             Console.Clear();
-            Console.WriteLine(dieRolls);
             //Début du tour lancer de dés
 
             //Résolution des effets de cartes

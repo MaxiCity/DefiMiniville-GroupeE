@@ -333,7 +333,7 @@ namespace Miniville
         ///<param name="players"> Un tableau contenant tous les joueurs. </param>
         ///<param name="playerTurn"> L'index du joueur à qui c'est le tour. </param>
         ///<param name="dieRoll"> le résultat du lancé de dé, si il n'est pas spécifié c'est qu'on souhaite tout afficher. </param>
-        public void DisplayCities(Player[] players, int playerTurn = 0, int dieRoll = 0, int[] dieRolls = null)
+        public void DisplayCities(Player[] players, int playerTurn = 0, int dieResult = 0, int[] dieRolls = null)
         {
             string sep = "+-----+";
             string space = "|     |";
@@ -349,8 +349,8 @@ namespace Miniville
                         Console.ForegroundColor = writingColor;
                         
                         // Condition selon laquelle on montre l'effet d'une carte ou non.
-                        show = dieRoll == 0 ||
-                              (dieRoll == c.dieCondition[0] || dieRoll == c.dieCondition[1] && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
+                        show = dieResult == 0 ||
+                              ((dieResult == c.dieCondition[0] || dieResult == c.dieCondition[1]) && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
                               || c.color.Equals(ConsoleColor.Cyan))|| (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
                         
                         switch (i)
@@ -381,7 +381,7 @@ namespace Miniville
                         }
                         Console.Write(" ");
                     }
-                    if (playerIndex == playerTurn && dieRoll > 0)
+                    if (playerIndex == playerTurn && dieResult > 0)
                     {
                         writingColor = ConsoleColor.White;
                         Console.ForegroundColor = writingColor;
@@ -391,10 +391,10 @@ namespace Miniville
                             Console.Write("          " + asciiDiceFaces[dieRolls[0] - 1][i]);
                             Console.Write("  " + asciiDiceFaces[dieRolls[1] - 1][i]);
                         }
-                        else Console.Write("          " + asciiDiceFaces[dieRoll - 1][i]);
+                        else Console.Write("          " + asciiDiceFaces[dieResult - 1][i]);
 
                     }
-                    if (i == nbLinesCity - 1 && dieRoll == 0)
+                    if (i == nbLinesCity - 1 && dieResult == 0)
                     {
                         writingColor = ConsoleColor.Gray;
                         Console.ForegroundColor = writingColor;
