@@ -171,12 +171,24 @@ namespace Miniville
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
             int[] resultOtherPlayer = players[otherplayer].UseCards(false, dieResult);
+            int stealDifference = resultOtherPlayer[1]-players[actualPlayer].pieces;
             
-            if (resultOtherPlayer[1] > players[actualPlayer].pieces)
+            //Si on vole plus que ce que le joueur a...
+            if (stealDifference > 0)
             {
-                players[otherplayer].UpdateMoney(-(resultOtherPlayer[1]-players[actualPlayer].pieces));
+                //On retire ce supplément
+                players[otherplayer].UpdateMoney(-(stealDifference));
+                resultOtherPlayer[0] -= stealDifference;
+                
+                //On diminue la quantité volée
+                resultOtherPlayer[1] -= stealDifference;
             }
+            
+            //On retire ce qui a été volé au joueur
             players[actualPlayer].UpdateMoney(-resultOtherPlayer[1]);
+            
+ 
+            
             //Affiche les villes des joueurs selon qui est le joueur actuelle et le résultat du dé.
             display.DisplayCities(players, actualPlayer, dieResult, dieRolls);
 
