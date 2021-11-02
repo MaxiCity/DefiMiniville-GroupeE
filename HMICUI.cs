@@ -291,7 +291,7 @@ namespace Miniville
                         
                         // Condition selon laquelle on montre l'effet d'une carte ou non.
                         show = dieRoll == 0 ||
-                              (dieRoll == c.dieCondition && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) || c.color.Equals(ConsoleColor.Cyan))
+                              (dieRoll == c.dieCondition[0] || dieRoll == c.dieCondition[1] && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) || c.color.Equals(ConsoleColor.Cyan))
                               || (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
                         
                         switch (i)
@@ -300,9 +300,10 @@ namespace Miniville
                             case 1:
                                 if (show)
                                 {
-                                    Console.Write("|  ");
-                                    WriteInColor($"{c.dieCondition}", ConsoleColor.White);
-                                    Console.Write("  |");
+                                    Console.Write("| ");
+                                    if(c.dieCondition[0] == c.dieCondition[1]) WriteInColor($" {c.dieCondition[0]} ", ConsoleColor.White);
+                                    else WriteInColor($"{c.dieCondition[0]}-{c.dieCondition[1]}", ConsoleColor.White);
+                                    Console.Write(" |");
                                 }
                                 else Console.Write(space);
                                 break;
@@ -478,8 +479,10 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString("[" + piles[j].card.dieCondition + "]"), ConsoleColor.White);
+                                if(piles[j].card.dieCondition[0] == piles[j].card.dieCondition[1]) WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "]"), ConsoleColor.White);
+                                else WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "-" + piles[j].card.dieCondition[1] + "]"), ConsoleColor.White);
                                 Console.Write($"|");
+
                             }
                             else Console.Write(space);
                             break;
@@ -741,7 +744,6 @@ namespace Miniville
             WriteInColor(cardCost - playerCoin + "$", ConsoleColor.Yellow);
             Console.WriteLine(" pour qu'il soit dans votre budget.");
         }
-
         ///<summary> Permet d'écrire en couleur dans la console. </summary>
         ///<param name="toWrite"> La chaîne de caractère à écrire en couleur. </param>
         ///<param name="color"> La couleur avec laquelle écrire. </param>
@@ -751,7 +753,6 @@ namespace Miniville
             Console.Write(toWrite);
             Console.ForegroundColor = writingColor;
         }
-
         ///<summary> Permet d'aligner une chaîne de caractère par rapport. </summary>
         ///<param name="toAlign"> La chaîne de caractères à aligner. </param>
         private string AlignString(string toAlign)

@@ -54,28 +54,20 @@ namespace Miniville
         public Game()
         {
             display = new HMICUI(this);
-            display.ChooseMenu(0);
 
-            //if (display.Choose())
+            if (display.ChooseMenu(0) == 0)
             {
                 //Piles de cartes du jeu de base
                 List<Card> vanillaDeck = new()
                 {
-                    new Card("Champs de blé", 1, new int[]{1}, 1, ConsoleColor.Cyan),
-
-                    new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
-
-                    new Card("Boulangerie", 2, new int[]{2}, 1, ConsoleColor.Green),
-
-                    new Card("Café", 1, new int[]{3}, 2, ConsoleColor.Red),
-
-                    new Card("Superette", 3, new int[]{4}, 2, ConsoleColor.Green),
-
-                    new Card("Forêt", 1, new int[]{5}, 2, ConsoleColor.Cyan),
-
-                    new Card("Restaurant", 2, new int[]{5}, 4, ConsoleColor.Red),
-
-                    new Card("Stade", 4, new int[]{6}, 6, ConsoleColor.Cyan),
+                    new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
+                    new Card("Boulangerie", 2, new int[] { 2, 2 }, 1, ConsoleColor.Green),
+                    new Card("Ferme", 1, new int[]{1,1} , 2, ConsoleColor.Cyan),
+                    new Card("Café", 1, new int[]{3,3}, 2, ConsoleColor.Red),
+                    new Card("Superette", 3, new int[]{4,4}, 2, ConsoleColor.Green),
+                    new Card("Forêt", 1, new int[]{5,5}, 2, ConsoleColor.Cyan),
+                    new Card("Restaurant", 2, new int[]{5,5}, 4, ConsoleColor.Red),
+                    new Card("Stade", 4, new int[]{6,6}, 6, ConsoleColor.Cyan),
                 };
                 
                 currentDeck = vanillaDeck;
@@ -84,27 +76,17 @@ namespace Miniville
             {
                 List<Card> customDeck = new()
                 {
-                    new Card("Champs de blé", 1, new int[]{1}, 1, ConsoleColor.Cyan),
-
+                    new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
+                    new Card("Boulangerie", 2, new int[] { 2, 2 }, 1, ConsoleColor.Green),
                     new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
-
-                    new Card("Boulangerie", 2, new int[]{2}, 1, ConsoleColor.Green),
-
-                    new Card("Stade", 4, new int[]{3}, 6, ConsoleColor.Red),
-
-                    new Card("Superette", 3, new int[]{4}, 2, ConsoleColor.Green),
-
-                    new Card("Forêt", 1, new int[]{5}, 2, ConsoleColor.Cyan),
-
-                    new Card("Restaurant", 2, new int[]{5}, 4, ConsoleColor.Red),
-                    
-                    new Card("Café", 1, new int[]{6,7}, 2, ConsoleColor.Red),
-                    
-                    new Card("PMU", 3,new int[]{8,9}, 6, ConsoleColor.Green),
-                    
-                    new Card("Strip-Club", 5,new int[]{10,11},8, ConsoleColor.Red),
-                    
-                    new Card("Konbini", 5, new int[]{12},7,ConsoleColor.Cyan),
+                    new Card("Superette", 3, new int[] { 4, 4 }, 2, ConsoleColor.Green),
+                    new Card("Forêt", 1, new int[] { 5, 5 }, 2, ConsoleColor.Cyan),
+                    new Card("Café", 1, new int[] { 6, 7 }, 2, ConsoleColor.Red),
+                    new Card("Restaurant", 2, new int[] { 5, 5 }, 4, ConsoleColor.Red),
+                    new Card("Stade", 4, new int[]{3,3}, 6, ConsoleColor.Cyan),
+                    new Card("PMU", 3, new int[] { 8, 9 }, 6, ConsoleColor.Green),
+                    new Card("Konbini", 5, new int[] { 12, 12 }, 7, ConsoleColor.Cyan),
+                    new Card("Strip-Club", 5, new int[] { 10, 11 }, 8, ConsoleColor.Red),
                 };
 
                 currentDeck = customDeck;
@@ -131,7 +113,7 @@ namespace Miniville
 
             Player player = new Player();
             player.city.Add(currentDeck[0]);
-            player.city.Add(currentDeck[2]);
+            player.city.Add(currentDeck[1]);
             player.UpdateMoney(3);
             players[0] = player;
             
@@ -139,7 +121,7 @@ namespace Miniville
             Player ia = new Player();
             adversaire = new IA(ia);
             adversaire.player.city.Add(currentDeck[0]);
-            adversaire.player.city.Add(currentDeck[2]);
+            adversaire.player.city.Add(currentDeck[1]);
             adversaire.player.UpdateMoney(3);
             players[1] = ia;
             
@@ -207,7 +189,6 @@ namespace Miniville
                         {
                             break;
                         }
-
                     }
 
                     if (selection >= 0)
