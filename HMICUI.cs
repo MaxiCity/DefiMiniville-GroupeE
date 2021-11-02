@@ -17,7 +17,9 @@ namespace Miniville
         private string playerName;
 
         ///<summary> Le nombre de caractères à l'intérieur d'une carte. </summary>
-        private int maxLength = 15;
+        private const int innerLength = 15;
+        ///<summary> Le nombre de caractères composant une carte. </summary>
+        private const int totalLength = 18;
         ///<summary> Les nombres de lignes lorsqu'on affiche les piles de cartes. </summary>
         private int nbLines = 10;
         ///<summary> Les nombres de lignes lorsqu'on affiche les villes. </summary>
@@ -88,8 +90,55 @@ namespace Miniville
         public HMICUI(Game _ctrl)
         {
             ctrl = _ctrl;
-            Console.WindowWidth = 145;
+            // 18 est
+            Console.WindowWidth = 18*11;
             Console.CursorVisible = false;
+        }
+
+        /// <summary> Permet de récupérer l'index correspondant au choix dans le menu. </summary>
+        /// <returns> L'index correspondant au choix du menu. </returns>
+        public int ChooseMenu(int menuId)
+        {
+            int selection = 0;
+            bool choice = false;
+
+            do
+            {
+                Console.Clear();
+                switch (menuId)
+                {
+                    // Choix du mode de jeu.
+                    case 0: DisplayGamemodeMenu(selection); break;
+                    // Choix de la difficulté de l'IA.
+                    case 1: break;
+                    // Choix des conditions de victoire.
+                    case 2: break;
+                }
+                ConsoleKeyInfo keyPressed = Console.ReadKey();
+                switch (keyPressed.Key)
+                {
+                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                        // Si le curseur est tout à droite il revient en première position à gauche.
+                        if (selection == 2) selection = 0;
+                        // Sinon il passe simplement à droite.
+                        else selection += 1;
+                        break;
+
+                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                        // Si le curseur est tout à gauche il va en dernière position à droite.
+                        if (selection == 0) selection = 2;
+                        // Sinon il passe simplement à gauche.
+                        else selection -= 1;
+                        break;
+                    case ConsoleKey.Enter: // Le joueur a choisi une pile depuis laquelle piocher.
+                        // On sort de la boucle.
+                        choice = true;
+                        break;
+                }
+            }
+            while (!choice);
+
+            return selection;
         }
 
         ///<summary> Permet de récupérer l'index de la pile choisie par l'utilisateur. </summary>
@@ -121,7 +170,7 @@ namespace Miniville
 
             // Affichage du curseur.
             DisplayCardStacks(selection,piles);
-            cursorPositionX = cursorOffset + 18 * selection;
+            cursorPositionX = cursorOffset + totalLength * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
             WriteInColor("/\\", ConsoleColor.White);
             Console.SetCursorPosition(cursorPositionX, cursorPositionY + 1);
@@ -193,18 +242,18 @@ namespace Miniville
                     else
                     {
                         Console.SetCursorPosition(0, cursorPositionY + 2);
-                        Console.Write(new string(' ', 8 * 18));
+                        Console.Write(new string(' ', cursorOffset * totalLength));
                     }
                     // Clear de la partie basse de l'affichage;
 
                     Console.SetCursorPosition(0, cursorPositionY);
-                    Console.Write(new string(' ', 8 * 18));
+                    Console.Write(new string(' ', cursorOffset * totalLength));
                     Console.SetCursorPosition(0, cursorPositionY + 1);
-                    Console.Write(new string(' ', 8 * 18));
+                    Console.Write(new string(' ', cursorOffset * totalLength));
 
 
                     // Nouvelle position du curseur sous la pile suivante.
-                    cursorPositionX = 8 + 18 * selection;
+                    cursorPositionX = cursorOffset + totalLength * selection;
                     if (selection >= 0)
                     {
                         Console.SetCursorPosition(cursorPositionX, cursorPositionY);
@@ -497,6 +546,195 @@ namespace Miniville
             Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
         }
 
+        #region Affichage des menus
+        /// <summary> Permet d'afficher le menu du choix du mode de jeu. </summary>
+        /// <param name="selection"> Le menu actuel sélectionné. </param>
+        private void DisplayGamemodeMenu(int selection)
+        {
+            string sep = "+---------------------+";
+            string space = "|                     |";
+            for (int i=0; i<10; i++)
+            {
+                for(int j=0; j<2; j++)
+                {
+                    if (selection == j)
+                    {
+                        writingColor = ConsoleColor.Green;
+                        Console.ForegroundColor = writingColor;
+                    }
+
+                    switch (i)
+                    {
+                        case 0: Console.Write(sep); break;
+                        case 1:
+                            if (j == 0)
+                            {
+                                Console.Write("|    ");
+                                if (selection == j) WriteInColor("Mode Standard", ConsoleColor.Yellow);
+                                else Console.Write("Mode Standard");
+                                Console.Write("    |");
+                            }
+                            else
+                            {
+                                Console.Write("|  ");
+                                if (selection == j) WriteInColor("Mode Personnalisé", ConsoleColor.Yellow);
+                                else Console.Write("Mode Personnalisé");
+                                Console.Write("  |");
+                            }
+                            break;
+                        case 2: Console.Write(sep); break;
+                        case 3:
+                            if (j == 0)
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("Mode de jeu sans", ConsoleColor.White);
+                                else Console.Write("Mode de jeu sans");
+                                Console.Write("  |");
+                            }
+                            else
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("Mode de jeu avec", ConsoleColor.White);
+                                else Console.Write("Mode de jeu avec");
+                                Console.Write("  |");
+                            }
+                            break;
+                        case 4:
+                            if (j == 0)
+                            {
+                                Console.Write("|     ");
+                                if (selection == j) WriteInColor("aucun bonus.", ConsoleColor.White);
+                                else Console.Write("aucun bonus.");
+                                Console.Write("    |");
+                            }
+                            else
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("de nouvelles cartes", ConsoleColor.White);
+                                else Console.Write("de nouvelles cartes");
+                                Console.Write(" |");
+                            }
+                            break;
+
+                        case 5:
+                            if (j == 0) Console.Write(space);
+                            else
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("et un dé en plus.", ConsoleColor.White);
+                                else Console.Write("et un dé en plus.");
+                                Console.Write(" |");
+                            }
+                            break;
+                        case 6: Console.Write(sep); break;
+                    }
+                    writingColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = writingColor;
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            } 
+        }
+
+        private void DisplayDifficultyMenus(int selection)
+        {
+            string sep = "+---------------------+";
+            string space = "|                     |";
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    if (selection == j)
+                    {
+                        writingColor = ConsoleColor.Green;
+                        Console.ForegroundColor = writingColor;
+                    }
+
+                    switch (i)
+                    {
+                        case 0: Console.Write(sep); break;
+                        case 1:
+                            if (j == 0)
+                            {
+                                Console.Write("|    ");
+                                if (selection == j) WriteInColor("   Facile    ", ConsoleColor.Yellow);
+                                else Console.Write("   Facile    ");
+                                Console.Write("    |");
+                            }
+                            else if (j == 1)
+                            {
+                                Console.Write("|    ");
+                                if (selection == j) WriteInColor("    Moyen    ", ConsoleColor.Yellow);
+                                else Console.Write("    Moyen    ");
+                                Console.Write("    |");
+                            }
+                            else
+                            {
+                                Console.Write("|    ");
+                                if (selection == j) WriteInColor("  Difficile   ", ConsoleColor.Yellow);
+                                else Console.Write("  Difficile   ");
+                                Console.Write("    |");
+                            }
+                            break;
+                        case 2: Console.Write(sep); break;
+                        case 3:
+                            if (j == 0)
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("Mode de jeu sans", ConsoleColor.White);
+                                else Console.Write("Mode de jeu sans");
+                                Console.Write("  |");
+                            }
+                            else
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("Mode de jeu avec", ConsoleColor.White);
+                                else Console.Write("Mode de jeu avec");
+                                Console.Write("  |");
+                            }
+                            break;
+                        case 4:
+                            if (j == 0)
+                            {
+                                Console.Write("|     ");
+                                if (selection == j) WriteInColor("aucun bonus.", ConsoleColor.White);
+                                else Console.Write("aucun bonus.");
+                                Console.Write("    |");
+                            }
+                            else
+                            {
+                                Console.Write("| ");
+                                if (selection == j) WriteInColor("de nouvelles cartes", ConsoleColor.White);
+                                else Console.Write("de nouvelles cartes");
+                                Console.Write(" |");
+                            }
+                            break;
+
+                        case 5:
+                            if (j == 0) Console.Write(space);
+                            else
+                            {
+                                Console.Write("|   ");
+                                if (selection == j) WriteInColor("et un dé en plus.", ConsoleColor.White);
+                                else Console.Write("et un dé en plus.");
+                                Console.Write(" |");
+                            }
+                            break;
+                        case 6: Console.Write(sep); break;
+                    }
+                    writingColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = writingColor;
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+        }
+        #endregion Affichage des menus
+
+        #region Méthodes utilitaires
+        /// <summary> Permet d'éfficher un message au joueur pour lui indiquer qu'il ne peut pas acheter la carte. </summary>
+        /// <param name="playerCoin"> Les pièces du joueur. </param>
+        /// <param name="cardCost"> Le coût de la carte. </param>
         private void ErrorOverBudget(int playerCoin, int cardCost)
         {
             Console.Write(" Vous ne pouvez pas acheter ce bâtiment, il vous manque ");
@@ -504,7 +742,6 @@ namespace Miniville
             Console.WriteLine(" pour qu'il soit dans votre budget.");
         }
 
-        #region Méthodes utilitaires
         ///<summary> Permet d'écrire en couleur dans la console. </summary>
         ///<param name="toWrite"> La chaîne de caractère à écrire en couleur. </param>
         ///<param name="color"> La couleur avec laquelle écrire. </param>
@@ -514,14 +751,15 @@ namespace Miniville
             Console.Write(toWrite);
             Console.ForegroundColor = writingColor;
         }
+
         ///<summary> Permet d'aligner une chaîne de caractère par rapport. </summary>
         ///<param name="toAlign"> La chaîne de caractères à aligner. </param>
         private string AlignString(string toAlign)
         {
-            if (toAlign.Length >= maxLength) return toAlign;
+            if (toAlign.Length >= innerLength) return toAlign;
 
-            int leftPadding = (maxLength - toAlign.Length) / 2;
-            int rightPadding = maxLength - toAlign.Length - leftPadding;
+            int leftPadding = (innerLength - toAlign.Length) / 2;
+            int rightPadding = innerLength - toAlign.Length - leftPadding;
 
             return new string(' ', leftPadding) + toAlign + new string(' ', rightPadding);
         }

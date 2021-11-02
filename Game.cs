@@ -55,7 +55,7 @@ namespace Miniville
         public Game()
         {
             display = new HMICUI(this);
-            
+            display.ChooseMenu(0);
             Card champsDeBlé = new Card("Champs de blé", 1, 1, 1, ConsoleColor.Cyan);
             cardsListe.Add(champsDeBlé);
 
