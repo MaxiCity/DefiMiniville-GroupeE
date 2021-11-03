@@ -7,6 +7,9 @@ namespace  Miniville
         ///<summary> Nom de la carte. </summary>
         public string name{ get; private set; }
 
+        /// <summary> Les lignes qui composent l'artwork en ascii art de la carte. </summary>
+        public string[] artwork { get; private set; }
+
         ///<summary> Argent rapporté par la carte lors de son utilisation. <summary>
         public int moneyToEarn { get; private set; }
 
@@ -28,9 +31,10 @@ namespace  Miniville
         /// <param name="_dieCondition"> La valeur du dé qui active l'effet de la carte. </param>
         /// <param name="_cost"> Le coût de la carte. </param>
         /// <param name="_color"> La couleur de la carte. </param>
-        public Card(string _name, int _moneyToEarn, int[] _dieCondition, int _cost, ConsoleColor _color)
+        public Card(string _name, string[] _artwork, int _moneyToEarn, int[] _dieCondition, int _cost, ConsoleColor _color)
         {
             name = _name;
+            artwork = _artwork;
             moneyToEarn = _moneyToEarn;
             dieCondition = _dieCondition;
             cost = _cost;

@@ -21,7 +21,7 @@ namespace Miniville
         ///<summary> Le nombre de caractères composant une carte. </summary>
         private const int totalLength = 18;
         ///<summary> Les nombres de lignes lorsqu'on affiche les piles de cartes. </summary>
-        private int nbLines = 10;
+        private int nbLines = 14;
         ///<summary> Les nombres de lignes lorsqu'on affiche les villes. </summary>
         private int nbLinesCity = 5;
         ///<summary> La couleur actuelle d'écriture dans la console. </summary>
@@ -64,25 +64,52 @@ namespace Miniville
 
         };
         ///<summary> Les lignes qui composent les deux messages de fin. </summary>
-        private List<string[]> asciiEndMessage = new List<string[]>() { new string[] {" __     __  __              __                __",
-                                                                                      "/  |   /  |/  |            /  |              /  |",
-                                                                                      "$$ |   $$ |$$/   _______  _$$ |_     ______  $$/   ______    ______  ",
-                                                                                      "$$ |   $$ |/  | /       |/ $$   |   /      \\ /  | /      \\  /      \\ ",
-                                                                                      "$$  \\ /$$/ $$ |/$$$$$$$/ $$$$$$/   /$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |",
-                                                                                      " $$  /$$/  $$ |$$ |        $$ | __ $$ |  $$ |$$ |$$ |  $$/ $$    $$ |",
-                                                                                      "  $$ $$/   $$ |$$ \\_____   $$ |/  |$$ \\__$$ |$$ |$$ |      $$$$$$$$/",
-                                                                                      "   $$$/    $$ |$$       |  $$  $$/ $$    $$/ $$ |$$ |      $$       |",
-                                                                                      "    $/     $$/  $$$$$$$/    $$$$/   $$$$$$/  $$/ $$/        $$$$$$$/ "},
-                                                                        new string[] {" _______              ______           __    __",
-                                                                                      "/       \\            /      \\         /  |  /  |",
-                                                                                      "$$$$$$$  |  ______  /$$$$$$  |______  $$/  _$$ |_     ______  ",
-                                                                                      "$$ |  $$ | /      \\ $$ |_ $$//      \\ /  |/ $$   |   /      \\ ",
-                                                                                      "$$ |  $$ |/$$$$$$  |$$   |   $$$$$$  |$$ |$$$$$$/   /$$$$$$  |",
-                                                                                      "$$ |  $$ |$$    $$ |$$$$/    /    $$ |$$ |  $$ | __ $$    $$ |",
-                                                                                      "$$ |__$$ |$$$$$$$$/ $$ |    /$$$$$$$ |$$ |  $$ |/  |$$$$$$$$/",
-                                                                                      "$$    $$/ $$       |$$ |    $$    $$ |$$ |  $$  $$/ $$       |",
-                                                                                      "$$$$$$$/   $$$$$$$/ $$/      $$$$$$$/ $$/    $$$$/   $$$$$$$/"}
+        private List<string[]> asciiEndMessage = new List<string[]>() { new string[] {@" __     __  __              __                __",
+                                                                                      @"/  |   /  |/  |            /  |              /  |",
+                                                                                      @"$$ |   $$ |$$/   _______  _$$ |_     ______  $$/   ______    ______  ",
+                                                                                      @"$$ |   $$ |/  | /       |/ $$   |   /      \ /  | /      \  /      \ ",
+                                                                                      @"$$  \ /$$/ $$ |/$$$$$$$/ $$$$$$/   /$$$$$$  |$$ |/$$$$$$  |/$$$$$$  |",
+                                                                                      @" $$  /$$/  $$ |$$ |        $$ | __ $$ |  $$ |$$ |$$ |  $$/ $$    $$ |",
+                                                                                      @"  $$ $$/   $$ |$$ \_____   $$ |/  |$$ \__$$ |$$ |$$ |      $$$$$$$$/",
+                                                                                      @"   $$$/    $$ |$$       |  $$  $$/ $$    $$/ $$ |$$ |      $$       |",
+                                                                                      @"    $/     $$/  $$$$$$$/    $$$$/   $$$$$$/  $$/ $$/        $$$$$$$/ "},
+                                                                        new string[] {@" _______              ______           __    __",
+                                                                                      @"/       \            /      \         /  |  /  |",
+                                                                                      @"$$$$$$$  |  ______  /$$$$$$  |______  $$/  _$$ |_     ______  ",
+                                                                                      @"$$ |  $$ | /      \ $$ |_ $$//      \ /  |/ $$   |   /      \ ",
+                                                                                      @"$$ |  $$ |/$$$$$$  |$$   |   $$$$$$  |$$ |$$$$$$/   /$$$$$$  |",
+                                                                                      @"$$ |  $$ |$$    $$ |$$$$/    /    $$ |$$ |  $$ | __ $$    $$ |",
+                                                                                      @"$$ |__$$ |$$$$$$$$/ $$ |    /$$$$$$$ |$$ |  $$ |/  |$$$$$$$$/",
+                                                                                      @"$$    $$/ $$       |$$ |    $$    $$ |$$ |  $$  $$/ $$       |",
+                                                                                      @"$$$$$$$/   $$$$$$$/ $$/      $$$$$$$/ $$/    $$$$/   $$$$$$$/"}
         };
+        /// <summary> Les lignes qui composent le titre du jeu. </summary>
+        private string[] asciiTitle = new string[] {@"  __       __                      __         ______   __    __              ",
+                                                    @"/  \     /  |                    /  |       /      \ /  |  /  |              ",
+                                                    @"$$  \   /$$ |  ______   __    __ $$/       /$$$$$$  |$$/  _$$ |_    __    __ ",
+                                                    @"$$$  \ /$$$ | /      \ /  \  /  |/  |      $$ |  $$/ /  |/ $$   |  /  |  /  |",
+                                                    @"$$$$  /$$$$ | $$$$$$  |$$  \/$$/ $$ |      $$ |      $$ |$$$$$$/   $$ |  $$ |",
+                                                    @"$$ $$ $$/$$ | /    $$ | $$  $$<  $$ |      $$ |   __ $$ |  $$ | __ $$ |  $$ |",
+                                                    @"$$ |$$$/ $$ |/$$$$$$$ | /$$$$  \ $$ |      $$ \__/  |$$ |  $$ |/  |$$ \__$$ |",
+                                                    @"$$ | $/  $$ |$$    $$ |/$$/ $$  |$$ |      $$    $$/ $$ |  $$  $$/ $$    $$ |",
+                                                    @"$$/      $$/  $$$$$$$/ $$/   $$/ $$/        $$$$$$/  $$/    $$$$/   $$$$$$$ |",
+                                                    @"                                                                   /  \__$$ |",
+                                                    @"                                                                   $$    $$/ ",
+                                                    @"                                                                    $$$$$$/  "};
+        /// <summary> Les lignes qui composent la description des règles. </summary>
+        private string[] ruleLines = new string[] { "Le but de MaxiCity est de construire une ville qui soit rentable.",
+                                                    "Le joueur qui atteint un nombre de pièces donné en premier gagne la partie.",
+                                                    "Le nombre de pièce changera en fonction de la longueur de jeu souhaitée et la",
+                                                    "partie pourra être plus difficile en fonction de l'adversaire IA choisi.", " ",
+                                                    "Pour faire fortune dans l'immobilier, chaque joueur va pouvoir acheter des",
+                                                    "bâtiments avec des pièces sous forme de cartes qu'il ajoutera à sa ville tout",
+                                                    "au long de la partie. Ces bâtiments produiront des pièces lorsque leur valeur",
+                                                    "de dé sera activée, c'est à dire quand le dé de l'un des joueur tombe sur la ",
+                                                    "face égale à cette valeur.", " ",
+                                                    "Il existe plusieurs types de cartes, les types étant indiqués par la couleur",
+                                                    "de la carte. Les cartes vertes s'activent uniquement avec vos dés pendant",
+                                                    "votre tour, les rouges uniquement pendant le tour de votre adversaire et les",
+                                                    "bleues peuvent être activées à tous les tours.", " " };
 
         #endregion Attributs
 
@@ -91,12 +118,16 @@ namespace Miniville
         public HMICUI(Game _ctrl)
         {
             ctrl = _ctrl;
-            // 18 est
-            Console.WindowWidth = 18*11;
+            Console.BufferWidth = totalLength * 11;
+            Console.WindowWidth = totalLength * 11;
+            Console.BufferHeight = 50;
+            Console.WindowHeight = 50;
+            
+            
             Console.CursorVisible = false;
         }
-
-        #region Interaction
+        
+        #region Interaction 
 
         /// <summary> Permet de récupérer l'index correspondant au choix dans le menu. </summary>
         /// <returns> L'index correspondant au choix du menu. </returns>
@@ -112,9 +143,9 @@ namespace Miniville
                 case 0: items = new List<string[]>() { new string[] {"    Mode Standard    ", "   Mode de jeu sans  ", "     aucun bonus.    ", "                     "},
                                                        new string[] {"  Mode Personnalisé  ", "   Mode de jeu avec  ", " de nouvelles cartes ", "  et un dé en plus.  "}};
                     break;
-                case 1: items = new List<string[]>() { new string[] {"        Facile       ", "                     ", "    L'IA fera des    ", "  choix aléatoires.  ", "                     "},
-                                                       new string[] {"        Normal       ", "     L'IA aura un    ", " comportement qui ne ", "  changera pas tout  ", "   au long du jeu.   "},
-                                                       new string[] {"       Difficile     ", "  L'IA sera capable  ", "  de s'adapter à la  ", "  situation afin de  ", "  gérer vos actions. "}, };
+                case 1: items = new List<string[]>() { new string[] {"   Adversaire Billy  ", "                     ", "    Billy fait des   ", "  choix aléatoires.  ", "                     "},
+                                                       new string[] {" Adversaire Gertrude ", " Gertrude tentera de ", "  limiter ses achats ", " et de garder toute  ", "     sa fortune.     "},
+                                                       new string[] {" Adversaire Donatien ", "  Donatien achètera  ", "   dès qu'il pourra  ", " et essaiera d'avoir ", "  toutes les cartes. "}};
                     break;
                 case 2: items = new List<string[]>() { new string[] {"        Rapide       ", "                     ", " Pour gagner il faut ", "  avoir amassé 10$.  ", "                     "},
                                                        new string[] {"        Normal       ", "                     ", " Pour gagner il faut ", "  avoir amassé 20$.  ", "                     "},
@@ -171,7 +202,7 @@ namespace Miniville
 
             // Variables relatives à la position du curseur.
             int cursorPositionX = 0;
-            int cursorPositionY = 10;
+            int cursorPositionY = 14;
             int cursorOffset = 8;
 
             if (humanPlayer.pieces < piles[selection].card.cost && selection >= 0)
@@ -184,7 +215,7 @@ namespace Miniville
             }
 
             // Affichage du curseur.
-            DisplayCardStacks(selection,piles);
+            DisplayCardStacks(piles);
             cursorPositionX = cursorOffset + totalLength * selection;
             Console.SetCursorPosition(cursorPositionX, cursorPositionY);
             WriteInColor("/\\", ConsoleColor.White);
@@ -333,6 +364,8 @@ namespace Miniville
 
         #endregion Interaction
 
+        #region Affichage des cartes
+
         ///<summary> Permet d'afficher les cartes sur le plateau des deux joueurs. </summary>
         ///<param name="players"> Un tableau contenant tous les joueurs. </param>
         ///<param name="playerTurn"> L'index du joueur à qui c'est le tour. </param>
@@ -342,9 +375,20 @@ namespace Miniville
             string sep = "+-----+";
             string space = "|     |";
 
-            bool show = false;
+            bool show;
             for (int playerIndex = 1; playerIndex >= 0; playerIndex--)
             {
+                // Si on doit afficher la ville de l'IA.
+                if(playerIndex == 0)
+                {
+                    for(int i=0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    {
+                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
                 for (int i = 0; i < nbLinesCity; i++)
                 {
                     foreach (Card c in players[playerIndex].city)
@@ -356,7 +400,6 @@ namespace Miniville
                         show = dieResult == 0 ||
                               ((dieResult == c.dieCondition[0] || dieResult == c.dieCondition[1]) && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
                               || c.color.Equals(ConsoleColor.Cyan))|| (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
-                        
                         switch (i)
                         {
                             case 0: Console.Write(sep); break;
@@ -380,6 +423,11 @@ namespace Miniville
                                 else Console.Write(space);
                                 break;
                             case 2:
+                                Console.Write("| ");
+                                WriteInColor(c.name.Substring(0, 3), ConsoleColor.White);
+                                Console.Write(" |");
+                                break;
+                            case 3:
                                 if (show)
                                 {
                                     Console.Write("| ");
@@ -389,7 +437,6 @@ namespace Miniville
                                 }
                                 else Console.Write(space);
                                 break;
-                            case 3: Console.Write(space); break;
                             case 4: Console.Write(sep); break;
                         }
                         Console.Write(" ");
@@ -424,6 +471,16 @@ namespace Miniville
                     }
                     Console.WriteLine();
                 }
+                // Si on doit afficher la ville de l'IA.
+                if (playerIndex == 1)
+                {
+                    for (int i = 0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    {
+                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        Console.WriteLine();
+                    }
+                }
+
                 Console.WriteLine("\n\n\n\n");
             }
             Console.WriteLine();
@@ -434,7 +491,7 @@ namespace Miniville
         ///<summary>Permet d'afficher les piles de cartes avec un curseur en dessous pour la sélection. </summary>
         ///<param name="selection"> l'endroit actuel où le curseur doit être affiché. </param>
         ///<param name="piles"> Un tableau contenant toutes les piles de cartes. </param>
-        private void DisplayCardStacks(int selection, Pile[] piles)
+        private void DisplayCardStacks(Pile[] piles)
         {
             // Bords supérieurs et inférieurs de la carte.
             string sep = "+---------------+";
@@ -459,8 +516,8 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                if (piles[j].card.dieCondition[0] == piles[j].card.dieCondition[1]) WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "]"), ConsoleColor.White);
-                                else WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "-" + piles[j].card.dieCondition[1] + "]"), ConsoleColor.White);
+                                if (piles[j].card.dieCondition[0] == piles[j].card.dieCondition[1]) WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "]", innerLength), ConsoleColor.White);
+                                else WriteInColor(AlignString("[" + piles[j].card.dieCondition[0] + "-" + piles[j].card.dieCondition[1] + "]", innerLength), ConsoleColor.White);
                                 Console.Write($"|");
 
                             }
@@ -470,46 +527,82 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.name), ConsoleColor.White);
+                                WriteInColor(AlignString(piles[j].card.name, innerLength),ConsoleColor.White);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
                             break;
-                        case 3: Console.Write(space); break;
-                        case 4: // Description de l'effet.
+                        case 3: // 1ère ligne d'artwork.
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.description[0]), ConsoleColor.Yellow);
+                                Console.Write(AlignString(piles[j].card.artwork[0], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 4:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[1], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 5:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[2], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 6:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[3], innerLength));
                                 Console.Write("|");
                             }
                             else
                             {
                                 Console.Write("|");
-                                Console.Write(AlignString("Empty"));
+                                Console.Write(AlignString("Empty", innerLength), innerLength);
                                 Console.Write("|");
                             }
-                            break;
-                        case 5: // Deuxième ligne de l'activation.
-                            if (piles[j].nbCard > 0)
-                            {
-                                Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.description[1]), ConsoleColor.Gray);
-                                Console.Write("|");
-                            }
-                            else Console.Write(space);
-                            break;
-                        case 6: // Deuxième ligne de l'activation.
-                            if (piles[j].nbCard > 0)
-                            {
-                                Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.description[2]), ConsoleColor.Gray);
-                                Console.Write("|");
-                            }
-                            else Console.Write(space);
                             break;
                         case 7: Console.Write(space); break;
-                        case 8:
+                        case 8: // Description de l'effet.
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                WriteInColor(AlignString(piles[j].card.description[0], innerLength), ConsoleColor.Yellow);
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 9: // Deuxième ligne de l'activation.
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                WriteInColor(AlignString(piles[j].card.description[1], innerLength), ConsoleColor.Gray);
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 10: // Deuxième ligne de l'activation.
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                WriteInColor(AlignString(piles[j].card.description[2], innerLength), ConsoleColor.Gray);
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 11: Console.Write(space); break;
+                        case 12:
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
@@ -518,7 +611,7 @@ namespace Miniville
                             }
                             else Console.Write(space);
                             break;
-                        case 9: Console.Write(sep); break;
+                        case 13: Console.Write(sep); break;
                     }
                     Console.Write(" ");
                 }
@@ -528,9 +621,51 @@ namespace Miniville
             Console.ForegroundColor = writingColor;
             Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
         }
-        
+
+        #endregion Affichage des cartes
+
         #region Affichage de messages
 
+        public void DisplayTitle()
+        {
+            int longestLength = 0;
+            foreach (string line in asciiTitle) if (longestLength < line.Length) longestLength = line.Length;
+            string sep = "+" + new string('-', longestLength + 2) + "+";
+
+            string[] authorNames = { "ALAIN Arthur", "COMETTO Émile", " PINEDA Joris", "THIRIOT Virgile" };
+
+            writingColor = ConsoleColor.White;
+            Console.ForegroundColor = writingColor;
+
+            Console.WriteLine(sep);
+            foreach(string line in asciiTitle)
+            {
+                Console.Write("| ");
+                WriteInColor(line, ConsoleColor.Yellow);
+                Console.WriteLine(" |");
+            }
+            Console.WriteLine(sep);
+            Console.Write("|");
+            foreach(string name in authorNames)
+            {
+                WriteInColor(AlignString(name, longestLength/4), ConsoleColor.Magenta);
+                Console.Write("|");
+            }
+            Console.WriteLine("\n" + sep);
+
+            Console.WriteLine("| " + AlignString(" ", longestLength) + " |");
+            foreach (string line in ruleLines)
+            {
+                Console.Write("| ");
+                WriteInColor(AlignString(line, longestLength), ConsoleColor.White);
+                Console.WriteLine(" |");
+            }
+            Console.WriteLine(sep);
+            Console.Write("| ");
+            WriteInColor(AlignString("Appuyez sur Entrer pour continuer ->", longestLength), ConsoleColor.Yellow);
+            Console.WriteLine(" |");
+            Console.WriteLine(sep);
+        }
         ///<summary>Permet d'afficher de manière textuelle les résultats d'un tour. </summary>
         ///<param name="playerResult"> les gains et vols du joueur. </param>
         ///<param name="IAResult"> les gains et vols de l'IA. </param>
@@ -713,12 +848,12 @@ namespace Miniville
         }
         ///<summary> Permet d'aligner une chaîne de caractère par rapport. </summary>
         ///<param name="toAlign"> La chaîne de caractères à aligner. </param>
-        private string AlignString(string toAlign)
+        private string AlignString(string toAlign, int length)
         {
-            if (toAlign.Length >= innerLength) return toAlign;
+            if (toAlign.Length >= length) return toAlign;
 
-            int leftPadding = (innerLength - toAlign.Length) / 2;
-            int rightPadding = innerLength - toAlign.Length - leftPadding;
+            int leftPadding = (length - toAlign.Length) / 2;
+            int rightPadding = length - toAlign.Length - leftPadding;
 
             return new string(' ', leftPadding) + toAlign + new string(' ', rightPadding);
         }

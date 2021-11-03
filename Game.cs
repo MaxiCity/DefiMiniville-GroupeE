@@ -12,6 +12,51 @@ namespace Miniville
         /// </summary>
         HMICUI display;
 
+        private List<string[]> asciiArtworks = new List<string[]>(){ new string[]{"       ", //0 : Champ de blé.
+                                                                                  "       ",
+                                                                                  "   ,,. ",
+                                                                                  "|{;||)|"},
+                                                                     new string[]{"    __ ", //1 : Boulangerie.
+                                                                                  "  __|| ",
+                                                                                 @" /Pain\",
+                                                                                  " [()__]"},
+                                                                     new string[]{"       ", //2 : Ferme.
+                                                                                  " __ ( )",
+                                                                                 @"/  \| |",
+                                                                                  "|__||_|"},
+                                                                     new string[]{"       ", //3 : Café.
+                                                                                  "_______",
+                                                                                  "|_Café|",
+                                                                                  "|)[___]"},
+                                                                     new string[]{" _____ ", //4 : Superette.
+                                                                                 @"/  $  \",
+                                                                                  "|-+   |",
+                                                                                  "|_]___|"},
+                                                                     new string[]{"   _   ", //5 : Forêt.
+                                                                                  " _{ }_ ",
+                                                                                  "{ }|{ }",
+                                                                                  " | | | "},
+                                                                     new string[]{" _____ ", //6 : Stade.
+                                                                                  "(Stade)",
+                                                                                 @"\  _  /",
+                                                                                  "|_(_)_|"},
+                                                                     new string[]{" _____ ", //7 : PMU.
+                                                                                 @"/ PMU \",
+                                                                                  "| +-+ |",
+                                                                                  "|_|_|_|"},
+                                                                     new string[]{"       ", //8 : Restaurant.
+                                                                                  "_______",
+                                                                                  "|Resto|",
+                                                                                  "|nTn_[|"},
+                                                                     new string[]{"    ___", //9 : Konbini.
+                                                                                  "____|7|",
+                                                                                  "|___  |",
+                                                                                  "|[|]__|"},
+                                                                     new string[]{" _____ ", //10 : Strip-club.
+                                                                                 @"/Strip\",
+                                                                                  "|___$_|",
+                                                                                  "|[|___|"}};
+
         /// <summary>
         /// //Liste des cartes du jeu selon le gamemode choisi
         /// </summary>
@@ -26,7 +71,7 @@ namespace Miniville
         /// Tableau des joueurs
         /// </summary>
         private Player[] players = new Player[2];
-        
+
         /// <summary>
         /// Déclaration de l'adversaire IA
         /// </summary>
@@ -71,20 +116,24 @@ namespace Miniville
         {
             display = new HMICUI(this);
 
+            display.DisplayTitle();
+            Console.ReadLine();
+            Console.Clear();
+
             gamemode = display.ChooseMenu(0) == 0;
             if (gamemode)
             {
                 //liste de cartes du jeu de base
                 List<Card> vanillaDeck = new()
                 {
-                    new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
-                    new Card("Boulangerie", 2, new int[] { 2, 2 }, 1, ConsoleColor.Green),
-                    new Card("Ferme", 1, new int[]{1,1} , 2, ConsoleColor.Cyan),
-                    new Card("Café", 1, new int[]{3,3}, 2, ConsoleColor.Red),
-                    new Card("Superette", 3, new int[]{4,4}, 2, ConsoleColor.Green),
-                    new Card("Forêt", 1, new int[]{5,5}, 2, ConsoleColor.Cyan),
-                    new Card("Restaurant", 2, new int[]{5,5}, 4, ConsoleColor.Red),
-                    new Card("Stade", 4, new int[]{6,6}, 6, ConsoleColor.Cyan),
+                    new Card("Champs de blé", asciiArtworks[0], 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
+                    new Card("Boulangerie", asciiArtworks[1], 2, new int[] { 2, 2 }, 1, ConsoleColor.Green),
+                    new Card("Ferme", asciiArtworks[2], 1, new int[]{1,1} , 2, ConsoleColor.Cyan),
+                    new Card("Café", asciiArtworks[3], 1, new int[]{3,3}, 2, ConsoleColor.Red),
+                    new Card("Superette", asciiArtworks[4], 3, new int[]{4,4}, 2, ConsoleColor.Green),
+                    new Card("Forêt", asciiArtworks[5], 1, new int[]{5,5}, 2, ConsoleColor.Cyan),
+                    new Card("Restaurant", asciiArtworks[8], 2, new int[]{5,5}, 4, ConsoleColor.Red),
+                    new Card("Stade", asciiArtworks[6], 4, new int[]{6,6}, 6, ConsoleColor.Cyan),
                 };
                 
                 currentDeck = vanillaDeck;
@@ -94,17 +143,17 @@ namespace Miniville
                 //Liste des cartes custom
                 List<Card> customDeck = new()
                 {
-                    new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
-                    new Card("Boulangerie", 2, new int[] { 2,2 }, 1, ConsoleColor.Green),
-                    new Card("Ferme", 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
-                    new Card("Superette", 3, new int[] { 4, 4 }, 2, ConsoleColor.Green),
-                    new Card("Forêt", 1, new int[] { 5, 5 }, 2, ConsoleColor.Cyan),
-                    new Card("Café", 1, new int[] { 6, 7 }, 2, ConsoleColor.Red),
-                    new Card("Restaurant", 2, new int[] { 5, 5 }, 4, ConsoleColor.Red),
-                    new Card("Stade", 4, new int[]{3,3}, 6, ConsoleColor.Cyan),
-                    new Card("PMU", 3, new int[] { 8, 9 }, 6, ConsoleColor.Green),
-                    new Card("Konbini", 5, new int[] { 12, 12 }, 7, ConsoleColor.Cyan),
-                    new Card("Strip-Club", 5, new int[] { 10, 11 }, 8, ConsoleColor.Red),
+                    new Card("Champs de blé", asciiArtworks[0], 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
+                    new Card("Boulangerie", asciiArtworks[1], 2, new int[] { 2,2 }, 1, ConsoleColor.Green),
+                    new Card("Ferme", asciiArtworks[2], 1, new int[]{1,2} , 2, ConsoleColor.Cyan),
+                    new Card("Superette", asciiArtworks[4], 3, new int[] { 4, 4 }, 2, ConsoleColor.Green),
+                    new Card("Forêt", asciiArtworks[5], 1, new int[] { 5, 5 }, 2, ConsoleColor.Cyan),
+                    new Card("Café", asciiArtworks[3], 1, new int[] { 6, 7 }, 2, ConsoleColor.Red),
+                    new Card("Restaurant", asciiArtworks[8], 2, new int[] { 5, 5 }, 4, ConsoleColor.Red),
+                    new Card("Stade", asciiArtworks[6], 4, new int[]{3,3}, 6, ConsoleColor.Cyan),
+                    new Card("PMU", asciiArtworks[7], 3, new int[] { 8, 9 }, 6, ConsoleColor.Green),
+                    new Card("Konbini", asciiArtworks[9], 5, new int[] { 12, 12 }, 7, ConsoleColor.Cyan),
+                    new Card("Strip-Club", asciiArtworks[10], 5, new int[] { 10, 11 }, 8, ConsoleColor.Red),
                 };
 
                 currentDeck = customDeck;
