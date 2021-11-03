@@ -16,7 +16,7 @@ namespace Miniville
         }
 
         /// <summary> Le comportement actuel de l'IA. </summary>
-        private PlayStyle difficulty = PlayStyle.Safe;
+        private PlayStyle style = PlayStyle.Safe;
         /// <summary> La référence aux informations de player de l'IA. </summary>
         public Player player;
         private Random random = new Random();
@@ -29,10 +29,10 @@ namespace Miniville
         }
         /// <summary>  Le constructeur de l'IA. </summary>
         /// <param name="_player"> Le joueur que va contrôler l'IA. </param>
-        /// <param name="_difficulty"> Le niveau de difficulté qui donnera le comportement de l'IA pendant la partie. </param>
-        public IA(Player _player, int _difficulty)
+        /// <param name="_style"> Le niveau de difficulté qui donnera le comportement de l'IA pendant la partie. </param>
+        public IA(Player _player, int _style)
         {
-            difficulty = (PlayStyle)_difficulty;
+            style = (PlayStyle)_style;
             player = _player;
         }
 
@@ -45,7 +45,7 @@ namespace Miniville
             int nbDice;
             
             //Si la difficulté est random, choisir aléatoirement entre 1 ou 2 dé
-            if (difficulty == PlayStyle.Random)
+            if (style == PlayStyle.Random)
             {
                 nbDice = random.Next(1, 3);
             }
@@ -60,11 +60,11 @@ namespace Miniville
                         if (i < 7)
                         {
                             //Si la difficulté est offensive, prendre en compte le gain pour le score du choix
-                            oneDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
+                            oneDiceScore += style == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                         else
                         {
-                            twoDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
+                            twoDiceScore += style == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                     }
                 }
@@ -113,7 +113,7 @@ namespace Miniville
         {
             Pile choice = null;
             
-            switch (difficulty)
+            switch (style)
             {
                 default:
                     //1 chance sur 4 de ne rien piocher du tout
