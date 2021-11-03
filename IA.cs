@@ -4,8 +4,10 @@ using System.Linq;
 
 namespace Miniville
 {
+    /** Classe qui gère les comportements et les choix du joueur IA. */
     public class IA
     {
+        /// <summary> Différents comportements que peux prendre l'IA. </summary>
         private enum PlayStyle
         {
             Random,
@@ -13,21 +15,29 @@ namespace Miniville
             Offensive,
         }
 
-        private PlayStyle difficulty = PlayStyle.Safe;
-
+        /// <summary> Le comportement actuel de l'IA. </summary>
+        private PlayStyle style = PlayStyle.Safe;
+        /// <summary> La référence aux informations de player de l'IA. </summary>
         public Player player;
         private Random random = new Random();
 
+        /// <summary>  </summary>
+        /// <param name="_player"> Le joueur que va contrôler l'IA. </param>
         public IA(Player _player)
         {
             player = _player;
         }
-        public IA(Player _player, int _difficulty)
+        /// <summary>  Le constructeur de l'IA. </summary>
+        /// <param name="_player"> Le joueur que va contrôler l'IA. </param>
+        /// <param name="_style"> Le niveau de difficulté qui donnera le comportement de l'IA pendant la partie. </param>
+        public IA(Player _player, int _style)
         {
-            difficulty = (PlayStyle)_difficulty;
+            style = (PlayStyle)_style;
             player = _player;
         }
 
+        /// <summary> Représente le choix de l'IA de lancer 1 ou 2 dés. </summary>
+        /// <returns> Le nombre de dé que l'IA va lancer. </returns>
         public int IANbDice()
         {
             int oneDiceScore = 0;
@@ -35,7 +45,7 @@ namespace Miniville
             int nbDice;
             
             //Si la difficulté est random, choisir aléatoirement entre 1 ou 2 dé
-            if (difficulty == PlayStyle.Random)
+            if (style == PlayStyle.Random)
             {
                 nbDice = random.Next(1, 3);
             }
@@ -50,11 +60,11 @@ namespace Miniville
                         if (i < 7)
                         {
                             //Si la difficulté est offensive, prendre en compte le gain pour le score du choix
-                            oneDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
+                            oneDiceScore += style == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                         else
                         {
-                            twoDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
+                            twoDiceScore += style == PlayStyle.Offensive ? card.moneyToEarn : 1;
                         }
                     }
                 }
@@ -63,6 +73,9 @@ namespace Miniville
             return nbDice;
         }
 
+        /// <summary> Représente la pioche et l'achat des cartes. </summary>
+        /// <param name="_piles"> La liste des piles de cartes. </param>
+        /// <returns> La carte qui a été piochée. </returns>
         public Card IAPlay(Pile[] _piles)
         {
             //Récupération de la liste des piles possibles
@@ -93,11 +106,14 @@ namespace Miniville
             return null;
         }
 
+        /// <summary> Représente le choix de l'IA parmi les piles disponibles. </summary>
+        /// <param name="_possiblePiles"> La liste des piles dans lesquelles l'IA peut piocher. </param>
+        /// <returns> La pile choisie par l'IA pour piocher. </returns>
         public Pile Choose(List<Pile> _possiblePiles)
         {
             Pile choice = null;
             
-            switch (difficulty)
+            switch (style)
             {
                 default:
                     //1 chance sur 4 de ne rien piocher du tout
@@ -162,6 +178,9 @@ namespace Miniville
             return choice;
         }
 
+        /// <summary> Permet de savoir quelles piles sont actuellement disponible à la pioche pour l'IA. </summary>
+        /// <param name="_piles"> Toutes les piles de cartes. </param>
+        /// <returns> une liste des piles disponibles. </returns>
         private List<Pile> SelectPossiblePiles(Pile[] _piles)
         {
             List<Pile> possiblePile = new List<Pile>();
@@ -179,6 +198,8 @@ namespace Miniville
             return possiblePile;
         }
 
+        /// <summary> Permet de savoir quelles coûts d'activations sont présents sur les cartes de l'IA. </summary>
+        /// <returns> Un tableau contenant tous les coûts des cartes de l'IA. </returns>
         private int[] CoveredDiceRoll()
         {
             int[] coveredDiceRoll = new int[12];

@@ -4,24 +4,30 @@ namespace  Miniville
 {
     public class Card
     {
-        //Nom de la carte
+        ///<summary> Nom de la carte. </summary>
         public string name{ get; private set; }
-        
-        //Argent rapporté par la carte lors de son utilisation
+
+        ///<summary> Argent rapporté par la carte lors de son utilisation. <summary>
         public int moneyToEarn { get; private set; }
-        
-        //Résultat à obtenir au dé
+
+        ///<summary> Résultat à obtenir au dé pour activer l'effet. <summary>
         public int[] dieCondition { get; private set; }
-        
-        //Prix de la carte
+
+        ///<summary> Prix de la carte. </summary>
         public int cost { get; private set; }
-        
-        //Couleur de la carte
+
+        ///<summary> Couleur de la carte. </summary>
         public ConsoleColor color { get; private set; }
-        
-        //Description de la carte(répartie dans un tableau afin de la segmenter)
+
+        ///<summary> Description de la carte répartie dans un tableau afin de la segmenter pour les afficher lignes par lignes. </summary>
         public string[] description { get; private set; } = new string[3];
 
+        /// <summary> Constructeur de la carte, permet de savoir quel type de carte elle représente. </summary>
+        /// <param name="_name"> Le nom de la carte. </param>
+        /// <param name="_moneyToEarn"> L'argent que rapporte l'effet de la carte. </param>
+        /// <param name="_dieCondition"> La valeur du dé qui active l'effet de la carte. </param>
+        /// <param name="_cost"> Le coût de la carte. </param>
+        /// <param name="_color"> La couleur de la carte. </param>
         public Card(string _name, int _moneyToEarn, int[] _dieCondition, int _cost, ConsoleColor _color)
         {
             name = _name;
