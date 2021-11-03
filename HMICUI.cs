@@ -21,7 +21,7 @@ namespace Miniville
         ///<summary> Le nombre de caractères composant une carte. </summary>
         private const int totalLength = 18;
         ///<summary> Les nombres de lignes lorsqu'on affiche les piles de cartes. </summary>
-        private int nbLines = 10;
+        private int nbLines = 14;
         ///<summary> Les nombres de lignes lorsqu'on affiche les villes. </summary>
         private int nbLinesCity = 5;
         ///<summary> La couleur actuelle d'écriture dans la console. </summary>
@@ -202,7 +202,7 @@ namespace Miniville
 
             // Variables relatives à la position du curseur.
             int cursorPositionX = 0;
-            int cursorPositionY = 10;
+            int cursorPositionY = 14;
             int cursorOffset = 8;
 
             if (humanPlayer.pieces < piles[selection].card.cost && selection >= 0)
@@ -375,9 +375,20 @@ namespace Miniville
             string sep = "+-----+";
             string space = "|     |";
 
-            bool show = false;
+            bool show;
             for (int playerIndex = 1; playerIndex >= 0; playerIndex--)
             {
+                // Si on doit afficher la ville de l'IA.
+                if(playerIndex == 0)
+                {
+                    for(int i=0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    {
+                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine();
+                }
+
                 for (int i = 0; i < nbLinesCity; i++)
                 {
                     foreach (Card c in players[playerIndex].city)
@@ -389,7 +400,6 @@ namespace Miniville
                         show = dieResult == 0 ||
                               ((dieResult == c.dieCondition[0] || dieResult == c.dieCondition[1]) && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
                               || c.color.Equals(ConsoleColor.Cyan))|| (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
-                        
                         switch (i)
                         {
                             case 0: Console.Write(sep); break;
@@ -461,6 +471,16 @@ namespace Miniville
                     }
                     Console.WriteLine();
                 }
+                // Si on doit afficher la ville de l'IA.
+                if (playerIndex == 1)
+                {
+                    for (int i = 0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    {
+                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        Console.WriteLine();
+                    }
+                }
+
                 Console.WriteLine("\n\n\n\n");
             }
             Console.WriteLine();
@@ -507,17 +527,43 @@ namespace Miniville
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.name, innerLength), ConsoleColor.White);
+                                WriteInColor(AlignString(piles[j].card.name, innerLength),ConsoleColor.White);
                                 Console.Write("|");
                             }
                             else Console.Write(space);
                             break;
-                        case 3: Console.Write(space); break;
-                        case 4: // Description de l'effet.
+                        case 3: // 1ère ligne d'artwork.
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
-                                WriteInColor(AlignString(piles[j].card.description[0], innerLength), ConsoleColor.Yellow);
+                                Console.Write(AlignString(piles[j].card.artwork[0], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 4:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[1], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 5:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[2], innerLength));
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 6:
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                Console.Write(AlignString(piles[j].card.artwork[3], innerLength));
                                 Console.Write("|");
                             }
                             else
@@ -527,7 +573,17 @@ namespace Miniville
                                 Console.Write("|");
                             }
                             break;
-                        case 5: // Deuxième ligne de l'activation.
+                        case 7: Console.Write(space); break;
+                        case 8: // Description de l'effet.
+                            if (piles[j].nbCard > 0)
+                            {
+                                Console.Write("|");
+                                WriteInColor(AlignString(piles[j].card.description[0], innerLength), ConsoleColor.Yellow);
+                                Console.Write("|");
+                            }
+                            else Console.Write(space);
+                            break;
+                        case 9: // Deuxième ligne de l'activation.
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
@@ -536,7 +592,7 @@ namespace Miniville
                             }
                             else Console.Write(space);
                             break;
-                        case 6: // Deuxième ligne de l'activation.
+                        case 10: // Deuxième ligne de l'activation.
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
@@ -545,8 +601,8 @@ namespace Miniville
                             }
                             else Console.Write(space);
                             break;
-                        case 7: Console.Write(space); break;
-                        case 8:
+                        case 11: Console.Write(space); break;
+                        case 12:
                             if (piles[j].nbCard > 0)
                             {
                                 Console.Write("|");
@@ -555,7 +611,7 @@ namespace Miniville
                             }
                             else Console.Write(space);
                             break;
-                        case 9: Console.Write(sep); break;
+                        case 13: Console.Write(sep); break;
                     }
                     Console.Write(" ");
                 }
