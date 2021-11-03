@@ -106,27 +106,30 @@ namespace Miniville
             int nbItems = 0;
 
             bool choice = false;
+            List<string[]> items;
+            switch(menuId)
+            {
+                case 0: items = new List<string[]>() { new string[] {"    Mode Standard    ", "   Mode de jeu sans  ", "     aucun bonus.    ", "                     "},
+                                                       new string[] {"  Mode Personnalisé  ", "   Mode de jeu avec  ", " de nouvelles cartes ", "  et un dé en plus.  "}};
+                    break;
+                case 1: items = new List<string[]>() { new string[] {"        Facile       ", "                     ", "    L'IA fera des    ", "  choix aléatoires.  ", "                     "},
+                                                       new string[] {"        Normal       ", "     L'IA aura un    ", " comportement qui ne ", "  changera pas tout  ", "   au long du jeu.   "},
+                                                       new string[] {"       Difficile     ", "  L'IA sera capable  ", "  de s'adapter à la  ", "  situation afin de  ", "  gérer vos actions. "}, };
+                    break;
+                case 2: items = new List<string[]>() { new string[] {"        Rapide       ", "                     ", " Pour gagner il faut ", "  avoir amassé 10$.  ", "                     "},
+                                                       new string[] {"        Normal       ", "                     ", " Pour gagner il faut ", "  avoir amassé 20$.  ", "                     "},
+                                                       new string[] {"        Longue       ", "                     ", " Pour gagner il faut ", "  avoir amassé 30$.  ", "                     "},
+                                                       new string[] {"        Expert       ", " Pour gagner il faut ", " avoir amassé 20$ et ", "  avoir chaque type  ", "   de carte du jeu.  "}};
+            break;
+                default: items = new List<string[]>(); break;
+            }
+
+            nbItems = items.Count;
+
             do
             {
                 Console.Clear();
-                switch (menuId)
-                {
-                    // Choix du mode de jeu.
-                    case 0: 
-                        DisplayGamemodeMenu(selection);
-                        nbItems = 2;
-                        break;
-                    // Choix de la difficulté de l'IA.
-                    case 1: DisplayDifficultyMenu(selection);
-                        nbItems = 3;
-                        break;
-                    // Choix des conditions de victoire.
-                    case 2:
-                        DisplayWinConditionsMenu(selection);
-                        nbItems = 4; 
-                        break;
-                }
-
+                DisplayMenu(selection, items);
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
@@ -330,8 +333,6 @@ namespace Miniville
 
         #endregion Interaction
 
-        #region Affichage de cartes
-
         ///<summary> Permet d'afficher les cartes sur le plateau des deux joueurs. </summary>
         ///<param name="players"> Un tableau contenant tous les joueurs. </param>
         ///<param name="playerTurn"> L'index du joueur à qui c'est le tour. </param>
@@ -363,10 +364,14 @@ namespace Miniville
                                 if (show)
                                 {
                                     Console.Write("|");
-                                    if (c.dieCondition[0] == c.dieCondition[1]) WriteInColor($"  {c.dieCondition[0]}  ", ConsoleColor.White);
+                                    if (c.dieCondition[0] == c.dieCondition[1])
+                                    {
+                                        if (c.dieCondition[0] < 10) Console.Write(" ");
+                                        WriteInColor($" {c.dieCondition[0]}  ", ConsoleColor.White);
+                                    }
                                     else
                                     {
-                                        if(c.dieCondition[0] < 10) Console.Write(" ");
+                                        if (c.dieCondition[0] < 10) Console.Write(" ");
                                         WriteInColor($"{c.dieCondition[0]}-{c.dieCondition[1]}", ConsoleColor.White);
                                         if (c.dieCondition[1] < 10) Console.Write(" ");
                                     }
@@ -523,8 +528,6 @@ namespace Miniville
             Console.ForegroundColor = writingColor;
             Console.WriteLine("\n\n\n Si vous ne souhaitez pas acheter de bâtiments appuyez sur Suppr/Delete");
         }
-
-        #endregion Affichage de cartes
         
         #region Affichage de messages
 
@@ -589,7 +592,6 @@ namespace Miniville
                 Console.WriteLine(".");
             }
         }
-
         /// <summary> Permet d'afficher ce que l'IA </summary>
         /// <param name="card"> La carte piochée par l'IA. </param>
         public void DisplayIADraw(Card card)
@@ -648,13 +650,13 @@ namespace Miniville
         }
         /// <summary> Permet d'afficher le menu du choix du mode de jeu. </summary>
         /// <param name="selection"> Le menu actuellement sélectionné. </param>
-        private void DisplayGamemodeMenu(int selection)
+        private void DisplayMenu(int selection, List<string[]> items)
         {
             string sep = "+---------------------+";
-            string space = "|                     |";
-            for (int i=0; i<10; i++)
+
+            for (int i=0; i < items[0].Length+3; i++)
             {
-                for(int j=0; j<2; j++)
+                for(int j=0; j<items.Count; j++)
                 {
                     if (selection == j)
                     {
@@ -662,332 +664,29 @@ namespace Miniville
                         Console.ForegroundColor = writingColor;
                     }
 
-                    switch (i)
+                    if (i == 0 || i == 2 || i == items[0].Length + 2) Console.Write(sep);
+                    else if(i == 1)
                     {
-                        case 0: Console.Write(sep); break;
-                        case 1:
-                            if (j == 0)
-                            {
-                                Console.Write("|    ");
-                                if (selection == j) WriteInColor("Mode Standard", ConsoleColor.Yellow);
-                                else Console.Write("Mode Standard");
-                                Console.Write("    |");
-                            }
-                            else
-                            {
-                                Console.Write("|  ");
-                                if (selection == j) WriteInColor("Mode Personnalisé", ConsoleColor.Yellow);
-                                else Console.Write("Mode Personnalisé");
-                                Console.Write("  |");
-                            }
-                            break;
-                        case 2: Console.Write(sep); break;
-                        case 3:
-                            if (j == 0)
-                            {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("Mode de jeu sans", ConsoleColor.White);
-                                else Console.Write("Mode de jeu sans");
-                                Console.Write("  |");
-                            }
-                            else
-                            {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("Mode de jeu avec", ConsoleColor.White);
-                                else Console.Write("Mode de jeu avec");
-                                Console.Write("  |");
-                            }
-                            break;
-                        case 4:
-                            if (j == 0)
-                            {
-                                Console.Write("|     ");
-                                if (selection == j) WriteInColor("aucun bonus.", ConsoleColor.White);
-                                else Console.Write("aucun bonus.");
-                                Console.Write("    |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("de nouvelles cartes", ConsoleColor.White);
-                                else Console.Write("de nouvelles cartes");
-                                Console.Write(" |");
-                            }
-                            break;
-
-                        case 5:
-                            if (j == 0) Console.Write(space);
-                            else
-                            {
-                                Console.Write("|   ");
-                                if (selection == j) WriteInColor("et un dé en plus.", ConsoleColor.White);
-                                else Console.Write("et un dé en plus.");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 6: Console.Write(sep); break;
+                        Console.Write("|");
+                        if (selection == j) WriteInColor(items[j][0], ConsoleColor.Yellow);
+                        else Console.Write(items[j][0]);
+                        Console.Write("|");
                     }
-                    writingColor = ConsoleColor.Gray;
-                    Console.ForegroundColor = writingColor;
-                    Console.Write(" ");
-                }
-                Console.WriteLine();
-            } 
-        }
-        /// <summary> Permet d'afficher le menu de choix de la difficulté. </summary>
-        /// <param name="selection"> Le menu actuellement sélectionné. </param>
-        private void DisplayDifficultyMenu(int selection)
-        {
-            string sep = "+---------------------+";
-            string space = "|                     |";
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (selection == j)
+                    else
                     {
-                        writingColor = ConsoleColor.Green;
-                        Console.ForegroundColor = writingColor;
+                        Console.Write("|");
+                        if (selection == j) WriteInColor(items[j][i-2], ConsoleColor.White);
+                        else Console.Write(items[j][i-2]);
+                        Console.Write("|");
                     }
 
-                    switch (i)
-                    {
-                        case 0: Console.Write(sep); break;
-                        case 1:
-                            if (j == 0)
-                            {
-                                Console.Write("|    ");
-                                if (selection == j) WriteInColor("   Facile    ", ConsoleColor.Yellow);
-                                else Console.Write("   Facile    ");
-                                Console.Write("    |");
-                            }
-                            else if (j == 1)
-                            {
-                                Console.Write("|    ");
-                                if (selection == j) WriteInColor("    Moyen    ", ConsoleColor.Yellow);
-                                else Console.Write("    Moyen    ");
-                                Console.Write("    |");
-                            }
-                            else
-                            {
-                                Console.Write("|    ");
-                                if (selection == j) WriteInColor("  Difficile  ", ConsoleColor.Yellow);
-                                else Console.Write("  Difficile  ");
-                                Console.Write("    |");
-                            }
-                            break;
-                        case 2: Console.Write(sep); break;
-                        case 3:
-                            if (j == 0) Console.Write(space);
-                            else if(j == 1)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("   L'IA aura un    ", ConsoleColor.White);
-                                else Console.Write("   L'IA aura un    ");
-                                Console.Write(" |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" L'IA sera capable ", ConsoleColor.White);
-                                else Console.Write(" L'IA sera capable ");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 4:
-                            if (j == 0)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("   L'IA fera des   ", ConsoleColor.White);
-                                else Console.Write("   L'IA fera des   ");
-                                Console.Write(" |");
-                            }
-                            else if (j == 1)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("comportement qui ne", ConsoleColor.White);
-                                else Console.Write("comportement qui ne");
-                                Console.Write(" |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" de s'adapter à la ", ConsoleColor.White);
-                                else Console.Write(" de s'adapter à la ");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 5:
-                            if (j == 0)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" choix aléatoires. ", ConsoleColor.White);
-                                else Console.Write(" choix aléatoires. ");
-                                Console.Write(" |");
-                            }
-                            else if(j == 1)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" changera pas tout ", ConsoleColor.White);
-                                else Console.Write(" changera pas tout ");
-                                Console.Write(" |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" situation afin de ", ConsoleColor.White);
-                                else Console.Write(" situation afin de ");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 6:
-                            if (j == 0) Console.Write(space);
-                            else if (j == 1)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("  au long du jeu.  ", ConsoleColor.White);
-                                else Console.Write("  au long du jeu.  ");
-                                Console.Write(" |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor(" gérer vos actions ", ConsoleColor.White);
-                                else Console.Write(" gérer vos actions ");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 7: Console.Write(sep); break;
-                    }
                     writingColor = ConsoleColor.Gray;
                     Console.ForegroundColor = writingColor;
                     Console.Write(" ");
                 }
                 Console.WriteLine();
             }
-        }
-        /// <summary> Permet d'afficher le menu du choix de la condition de victoire. </summary>
-        /// <param name="selection"> Le menu actuellement sélectionné. </param>
-        private void DisplayWinConditionsMenu(int selection)
-        {
-            string sep = "+---------------------+";
-            string space = "|                     |";
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 4; j++)
-                {
-                    if (selection == j)
-                    {
-                        writingColor = ConsoleColor.Green;
-                        Console.ForegroundColor = writingColor;
-                    }
-
-                    switch (i)
-                    {
-                        case 0: Console.Write(sep); break;
-                        case 1:
-                            switch(j)
-                            {
-                                case 0:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor("       Rapide      ", ConsoleColor.Yellow);
-                                    else Console.Write("       Rapide      ");
-                                    Console.Write(" |");
-                                    break;
-                                case 1:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor("       Normal      ", ConsoleColor.Yellow);
-                                    else Console.Write("       Normal      ");
-                                    Console.Write(" |");
-                                    break;
-                                case 2:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor("       Longue      ", ConsoleColor.Yellow);
-                                    else Console.Write("       Longue      ");
-                                    Console.Write(" |");
-                                    break;
-                                case 3:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor("       Expert      ", ConsoleColor.Yellow);
-                                    else Console.Write("       Expert      ");
-                                    Console.Write(" |");
-                                    break;
-                            }
-                            break;
-                        case 2: Console.Write(sep); break;
-                        case 3:
-                            if (j != 3) Console.Write(space);
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("Pour gagner il faut", ConsoleColor.White);
-                                else Console.Write("Pour gagner il faut");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 4:
-                            if( j!= 3)
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("Pour gagner il faut", ConsoleColor.White);
-                                else Console.Write("Pour gagner il faut");
-                                Console.Write(" |");
-                            }
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("avoir amassé 20$ et", ConsoleColor.White);
-                                else Console.Write("avoir amassé 20$ et");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 5:
-                            switch(j)
-                            {
-                                case 0:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor(" avoir amassé 10$. ", ConsoleColor.White);
-                                    else Console.Write(" avoir amassé 10$. ");
-                                    Console.Write(" |");
-                                    break;
-                                case 1:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor(" avoir amassé 20$. ", ConsoleColor.White);
-                                    else Console.Write(" avoir amassé 20$. ");
-                                    Console.Write(" |");
-                                    break;
-                                case 2:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor(" avoir amassé 30$. ", ConsoleColor.White);
-                                    else Console.Write(" avoir amassé 30$. ");
-                                    Console.Write(" |");
-                                    break;
-                                case 3:
-                                    Console.Write("| ");
-                                    if (selection == j) WriteInColor(" avoir chaque type ", ConsoleColor.White);
-                                    else Console.Write(" avoir chaque type ");
-                                    Console.Write(" |");
-                                    break;
-                            }
-                            break;
-                        case 6:
-                            if (j != 3) Console.Write(space);
-                            else
-                            {
-                                Console.Write("| ");
-                                if (selection == j) WriteInColor("  de carte du jeu. ", ConsoleColor.White);
-                                else Console.Write("  de carte du jeu. ");
-                                Console.Write(" |");
-                            }
-                            break;
-                        case 7: Console.Write(sep); break;
-                    }
-                    writingColor = ConsoleColor.Gray;
-                    Console.ForegroundColor = writingColor;
-                    Console.Write(" ");
-                }
-                Console.WriteLine();
-            }
+            
         }
 
         #endregion Affichage des menus
