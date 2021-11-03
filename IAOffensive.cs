@@ -7,9 +7,18 @@ namespace Miniville
     public class IAOffensive : IA
     {
         private bool expert;
-        public IAOffensive(Player _player, bool _expert) : base(_player)
+        private int moneyToWin;
+        public IAOffensive(Player _player, int _mode) : base(_player)
         {
-            expert = _expert;
+            expert = _mode == 3;
+            if (expert)
+            {
+                moneyToWin = 20;
+            }
+            else
+            {
+                moneyToWin = (_mode + 1) * 10;
+            }
         }
 
         public override int IANbDice()

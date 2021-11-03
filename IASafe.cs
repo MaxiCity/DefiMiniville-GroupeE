@@ -4,9 +4,18 @@ namespace Miniville
     public class IASafe : IA
     {
         private bool expert;
-        public IASafe(Player _player, bool _expert) : base(_player)
+        private int moneyToWin;
+        public IASafe(Player _player, int _mode) : base(_player)
         {
-            expert = _expert;
+            expert = _mode == 3;
+            if (expert)
+            {
+                moneyToWin = 20;
+            }
+            else
+            {
+                moneyToWin = (_mode + 1) * 10;
+            }
         }
 
         public override int IANbDice()

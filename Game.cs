@@ -197,10 +197,10 @@ namespace Miniville
                     adversaire = new IARandom(ia);
                     break;
                 case 1 :
-                    adversaire = new IASafe(ia, winCondition == 3);
+                    adversaire = new IASafe(ia, winCondition);
                     break;
                 case 2:
-                    adversaire = new IAOffensive(ia, winCondition == 3);
+                    adversaire = new IAOffensive(ia, winCondition);
                     break;
             }
             
