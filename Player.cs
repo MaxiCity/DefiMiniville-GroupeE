@@ -7,12 +7,7 @@ namespace Miniville
     public class Player
     {
         #region Private
-
-        /// <summary>
-        /// Afficher le nom du joueur 
-        /// </summary>
-        private string PlayerName;
-
+        
         /// <summary>
         /// Nombre de pieces du joueur
         /// </summary>
@@ -25,14 +20,7 @@ namespace Miniville
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Propriété en accès public, modification privée
-        /// </summary>
-        public string playerName
-        {
-            get { return PlayerName;}
-            private set {PlayerName = value;} 
-        }
+
         
         /// <summary>
         /// Propriété en accès public, modification privée

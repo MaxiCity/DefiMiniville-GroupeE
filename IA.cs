@@ -5,73 +5,22 @@ using System.Linq;
 namespace Miniville
 {
     /** Classe qui gère les comportements et les choix du joueur IA. */
-    public class IA
+    public abstract class IA
     {
-        /// <summary> Différents comportements que peux prendre l'IA. </summary>
-        private enum PlayStyle
-        {
-            Random,
-            Safe,
-            Offensive,
-        }
-
-        /// <summary> Le comportement actuel de l'IA. </summary>
-        private PlayStyle difficulty = PlayStyle.Safe;
         /// <summary> La référence aux informations de player de l'IA. </summary>
         public Player player;
-        private Random random = new Random();
+        protected Random random = new Random();
 
-        /// <summary>  </summary>
+        /// <summary>  Le constructeur de l'IA. </summary>
         /// <param name="_player"> Le joueur que va contrôler l'IA. </param>
         public IA(Player _player)
         {
             player = _player;
         }
-        /// <summary>  Le constructeur de l'IA. </summary>
-        /// <param name="_player"> Le joueur que va contrôler l'IA. </param>
-        /// <param name="_difficulty"> Le niveau de difficulté qui donnera le comportement de l'IA pendant la partie. </param>
-        public IA(Player _player, int _difficulty)
-        {
-            difficulty = (PlayStyle)_difficulty;
-            player = _player;
-        }
 
         /// <summary> Représente le choix de l'IA de lancer 1 ou 2 dés. </summary>
         /// <returns> Le nombre de dé que l'IA va lancer. </returns>
-        public int IANbDice()
-        {
-            int oneDiceScore = 0;
-            int twoDiceScore = 0;
-            int nbDice;
-            
-            //Si la difficulté est random, choisir aléatoirement entre 1 ou 2 dé
-            if (difficulty == PlayStyle.Random)
-            {
-                nbDice = random.Next(1, 3);
-            }
-            else
-            {
-                foreach (Card card in player.city)
-                {
-                    foreach (int i in card.dieCondition)
-                    {
-                        
-                        //Si inférieur 
-                        if (i < 7)
-                        {
-                            //Si la difficulté est offensive, prendre en compte le gain pour le score du choix
-                            oneDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
-                        }
-                        else
-                        {
-                            twoDiceScore += difficulty == PlayStyle.Offensive ? card.moneyToEarn : 1;
-                        }
-                    }
-                }
-                nbDice = oneDiceScore > twoDiceScore ? 1 : 2; 
-            }
-            return nbDice;
-        }
+        public abstract int IANbDice();
 
         /// <summary> Représente la pioche et l'achat des cartes. </summary>
         /// <param name="_piles"> La liste des piles de cartes. </param>
@@ -109,79 +58,14 @@ namespace Miniville
         /// <summary> Représente le choix de l'IA parmi les piles disponibles. </summary>
         /// <param name="_possiblePiles"> La liste des piles dans lesquelles l'IA peut piocher. </param>
         /// <returns> La pile choisie par l'IA pour piocher. </returns>
-        public Pile Choose(List<Pile> _possiblePiles)
-        {
-            Pile choice = null;
-            
-            switch (difficulty)
-            {
-                default:
-                    //1 chance sur 4 de ne rien piocher du tout
-                    if (random.Next(0,4)==0)
-                    {
-                        return null;
-                    }
-                    //choisir une pile aléatoire parmi la liste des choix possibles
-                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
-                    break;
-                
-                case PlayStyle.Safe:
-                    //Si on a plus de 13 pièces, économiser
-                    if (player.pieces > 14)
-                    {
-                        return null;
-                    }
-                    
-                    foreach (Pile pile in _possiblePiles)
-                    {
-                        foreach (int i in pile.card.dieCondition)
-                        {
-                            //Si on ne couvre pas le lancé de dé, choisir cette pile
-                            //(Choisira la dernière pile dont on ne couvre pas la valeur)
-                            if (CoveredDiceRoll()[i-1] == 0)
-                            {
-                                return pile;
-                            }
-                        }
-                    }
-                    break;
-                
-                case PlayStyle.Offensive:
-                    //Si on a plus de 17 pièces, économiser
-                    if (player.pieces > 17)
-                    {
-                        return null;
-                    }
-                    foreach (Pile pile in _possiblePiles)
-                    {
-                        foreach (int i in pile.card.dieCondition)
-                        {
-                            //Si on ne couvre pas le lancé de dé, choisir cette pile
-                            //(Retourne directement cette pile)
-                            if (CoveredDiceRoll()[i-1] == 0)
-                            {
-                                return pile;
-                            }
-                        }
-                    }
-                    if (random.Next(0,2)==0)
-                    {
-                        return null;
-                    }
-                    
-                    //S'il n'y a pas eu de retour précédent, acheter une carte aléatoire
-                    choice = _possiblePiles[random.Next(_possiblePiles.Count)];
-                    break;
-            }
-            
-            //Retourner le choix
-            return choice;
-        }
+        protected abstract Pile Choose(List<Pile> _possiblePiles);
+
+    
 
         /// <summary> Permet de savoir quelles piles sont actuellement disponible à la pioche pour l'IA. </summary>
         /// <param name="_piles"> Toutes les piles de cartes. </param>
         /// <returns> une liste des piles disponibles. </returns>
-        private List<Pile> SelectPossiblePiles(Pile[] _piles)
+        protected List<Pile> SelectPossiblePiles(Pile[] _piles)
         {
             List<Pile> possiblePile = new List<Pile>();
             
@@ -200,7 +84,7 @@ namespace Miniville
 
         /// <summary> Permet de savoir quelles coûts d'activations sont présents sur les cartes de l'IA. </summary>
         /// <returns> Un tableau contenant tous les coûts des cartes de l'IA. </returns>
-        private int[] CoveredDiceRoll()
+        protected int[] CoveredDiceRoll()
         {
             int[] coveredDiceRoll = new int[12];
             foreach (Card card in player.city)
