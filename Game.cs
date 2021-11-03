@@ -280,21 +280,52 @@ namespace Miniville
         
         
         /// <summary>
-        /// Fonction vérifiant la fin du jeu à 20 pièces
+        /// Fonction vérifiant la fin du jeu selon la win condition choisie
         /// </summary>
         /// <param name="actualPlayer"></param>
         /// <returns>Bool qui si est true met fin au jeu</returns>
         private bool EndGame(Player actualPlayer)
         {
-            if (actualPlayer.pieces >= 20)
-            {
-                endGame = true;
-            }
-            else
-            {
-                endGame = false;
-            }
+            endGame = false;
 
+            switch (winCondition)
+            {
+                case  0 :
+                    if (actualPlayer.pieces >= 10)
+                    {
+                        endGame = true;
+                    }
+                    break;
+                    
+                case  1 :
+                    if (actualPlayer.pieces >= 20)
+                    {
+                        endGame = true;
+                    }
+                    break;
+                
+                case  2 :
+                    if (actualPlayer.pieces >= 30)
+                    {
+                        endGame = true;
+                    }
+                    break;
+                
+                case  3 :
+                    if (actualPlayer.pieces >= 20)
+                    {
+                        foreach ( Card card in currentDeck)
+                        {
+                            if (actualPlayer.city.Contains(card) == false)
+                            {
+                                return (endGame);
+                            }
+                        }
+                        endGame = true;
+                    }
+                    break;
+            }
+            
             return(endGame);
         }
     }
