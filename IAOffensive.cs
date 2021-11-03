@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 
 namespace Miniville
 {
@@ -35,12 +35,14 @@ namespace Miniville
         protected override Pile Choose(List<Pile> _possiblePiles)
         {
             //Si on a plus de 17 pièces, économiser
-            if (player.pieces > 17)
-            {
+            if (player.pieces > 17 && !expert)
                 return null;
-            }
+            
             foreach (Pile pile in _possiblePiles)
             {
+                if (!player.city.Contains(pile.card) && expert)
+                    return pile;
+
                 foreach (int i in pile.card.dieCondition)
                 {
                     //Si on ne couvre pas le lancé de dé, choisir cette pile

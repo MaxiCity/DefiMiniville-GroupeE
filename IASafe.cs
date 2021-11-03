@@ -32,11 +32,14 @@ namespace Miniville
         protected override Pile Choose(List<Pile> _possiblePiles)
         {
             //Si on a plus de 14 pièces, économiser
-            if (player.pieces > 14)
+            if (player.pieces > 14 && !expert)
                 return null;
 
             foreach (Pile pile in _possiblePiles)
             {
+                if (!player.city.Contains(pile.card) && expert)
+                    return pile;
+                
                 foreach (int i in pile.card.dieCondition)
                 {
                     //Si on ne couvre pas le lancé de dé, choisir cette pile
