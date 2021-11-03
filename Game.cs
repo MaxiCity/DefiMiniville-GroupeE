@@ -142,7 +142,19 @@ namespace Miniville
             
             
             Player ia = new Player();
-            adversaire = new IA(ia,difficulty);
+            switch (difficulty)
+            {
+                default:
+                    adversaire = new IA(ia);
+                    break;
+                case 1 :
+                    adversaire = new IASafe(ia, winCondition == 3);
+                    break;
+                case 2:
+                    adversaire = new IAOffensive(ia, winCondition == 3);
+                    break;
+            }
+            
             adversaire.player.city.Add(currentDeck[0]);
             adversaire.player.city.Add(currentDeck[1]);
             adversaire.player.UpdateMoney(3);
