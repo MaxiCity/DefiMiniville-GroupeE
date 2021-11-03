@@ -26,13 +26,11 @@ namespace Miniville
         /// Tableau des joueurs
         /// </summary>
         private Player[] players = new Player[2];
-
-        private IA adversaire;
         
         /// <summary>
-        /// Pou gérer le dés
+        /// Déclaration de l'adversaire IA
         /// </summary>
-        private Die die = new Die();
+        private IA adversaire;
 
         /// <summary>
         /// int indiquant l'index du joueur dont c'est le tour
@@ -48,13 +46,27 @@ namespace Miniville
         /// bool arrêtant la boucle de jeu
         /// </summary>
         private bool endGame;
-
+        
+        /// <summary>
+        /// Bool pour le gamemode vanilla ou custom
+        /// </summary>
         private bool gamemode;
+        
+        /// <summary>
+        /// Indique la difficulté de l'IA
+        /// </summary>
         public int difficulty { get; private set; }
+        
+        /// <summary>
+        /// Indique la condition de victoire choisie
+        /// </summary>
         public int winCondition { get; private set; }
 
         #endregion
         
+        /// <summary>
+        /// gère la créatioon des piles selon le gamemode choisi, la difficulté ainsi que la conditon de victorie et lance le jeu
+        /// </summary>
         public Game()
         {
             display = new HMICUI(this);
@@ -62,7 +74,7 @@ namespace Miniville
             gamemode = display.ChooseMenu(0) == 0;
             if (gamemode)
             {
-                //Piles de cartes du jeu de base
+                //liste de cartes du jeu de base
                 List<Card> vanillaDeck = new()
                 {
                     new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
@@ -79,6 +91,7 @@ namespace Miniville
             }
             else
             {
+                //Liste des cartes custom
                 List<Card> customDeck = new()
                 {
                     new Card("Champs de blé", 1, new int[]{1,1}, 1, ConsoleColor.Cyan),
@@ -96,10 +109,11 @@ namespace Miniville
 
                 currentDeck = customDeck;
             }
-
+            
             difficulty = display.ChooseMenu(1);
 
             winCondition = display.ChooseMenu(2);
+            
             //Création du tableau des piles de carte
             piles = new Pile[currentDeck.Count];
 
@@ -114,7 +128,7 @@ namespace Miniville
         }
         
         /// <summary>
-        /// Méthode créant les cartes, les piles, les joueurs, donnant les cartes de départ
+        /// Méthode créant les cartes, les piles, les joueurs et donnant les cartes de départ
         /// </summary>
         private void startGame()
         {
@@ -147,18 +161,55 @@ namespace Miniville
             
             return;
         }
-        //Un tour de joueur
+        
+        /// <summary>
+        /// Méthode qui gère les tours successifs du joueur et de l'IA
+        /// </summary>
+        private void RunGame()
+        {
+            while (!endGame)
+            {
+                //On lance le tour du joueur 
+                PlayNextTurn();
+                
+                //test des conditions de victoire joueur et affichage du message de victoire
+                if (EndGame(players[0]))
+                {
+                    display.DisplayEndingMessage(true);
+                    Console.ReadLine();
+                    break;
+                }
+            
+                //playnextturn IA
+                PlayNextTurn();
+               
+                //test des conditions de victoire IA et affichage du message de défaite
+                if (EndGame(players[1]))
+                {
+                    display.DisplayEndingMessage(false);
+                    Console.ReadLine();
+                    break;
+                }
+            }
+            
+        }
+        
+        
+        /// <summary>
+        /// Tour d'un joueur
+        /// </summary>
         private void PlayNextTurn()
         {
             actualPlayer = actualPlayer == 0 ? 1 : 0;
             otherplayer = otherplayer == 1 ? 0 : 1;
-
+            
             bool humanPlayer = actualPlayer == 0;
             int dieResult;
             int[] dieRolls;
             dieRolls = new int[2];
             
-            if(gamemode) dieResult = Die.Lancer();
+            //On gère le dé selon le mode de jeu (1 ou 2 dés)
+            if (gamemode) dieResult = Die.Lancer();
             else
             {
                 int nbDice; 
@@ -169,7 +220,6 @@ namespace Miniville
                 dieResult = dieRolls[0] + dieRolls[1];
             }
             Console.Clear();
-            //Début du tour lancer de dés
 
             //Résolution des effets de cartes
             int[] resultActualPlayer = players[actualPlayer].UseCards(true, dieResult);
@@ -205,9 +255,9 @@ namespace Miniville
             }
 
             //Affiche et permet de choisir parmi toutes les piles
-
             Card cardChoice = null; 
             
+            //Choix du joueur humain
             if (actualPlayer == 0)
             {
                 int selection = display.Choose(piles,players[0]);
@@ -215,7 +265,8 @@ namespace Miniville
                 if (selection >= 0)
                 {
                     Card choosedCard = currentDeck[selection];
-
+                    
+                    //Boucle tant que le joueur choisis une carte trop chère
                     while (choosedCard.cost > players[0].pieces)
                     {
                         Console.Clear();
@@ -238,6 +289,7 @@ namespace Miniville
                 }
             }
             
+            //Choix de l'IA
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
@@ -251,34 +303,6 @@ namespace Miniville
             return;
         }
 
-        private void RunGame()
-        {
-            while (!endGame)
-            {
-                //On lance le tour du joueur 
-                PlayNextTurn();
-
-                if (EndGame(players[0]))
-                {
-                    display.DisplayEndingMessage(true);
-                    Console.ReadLine();
-                    break;
-                }
-            
-                //playnextturn IA
-                PlayNextTurn();
-               
-                if (EndGame(players[1]))
-                {
-                    display.DisplayEndingMessage(false);
-                    Console.ReadLine();
-                    break;
-                }
-            }
-            
-        }
-        
-        
         /// <summary>
         /// Fonction vérifiant la fin du jeu selon la win condition choisie
         /// </summary>
