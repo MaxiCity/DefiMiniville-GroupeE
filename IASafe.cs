@@ -41,7 +41,7 @@ namespace Miniville
         protected override Pile Choose(List<Pile> _possiblePiles)
         {
             //Si on a plus de 14 pièces, économiser
-            if (player.pieces > 14 && !expert)
+            if (player.pieces > moneyToWin*0.7 && !expert)
                 return null;
 
             foreach (Pile pile in _possiblePiles)
