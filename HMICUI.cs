@@ -164,14 +164,14 @@ namespace Miniville
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
-                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                    case ConsoleKey.RightArrow or ConsoleKey.D: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
                         if (selection == nbItems-1) selection = 0;
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         break;
 
-                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                    case ConsoleKey.LeftArrow or ConsoleKey.Q: // Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
                         if (selection == 0) selection = nbItems-1;
                         // Sinon il passe simplement à gauche.
@@ -230,7 +230,7 @@ namespace Miniville
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
-                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                    case ConsoleKey.RightArrow or ConsoleKey.D: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
                         if (selection == piles.Length - 1) selection = 0;
                         // Sinon il passe simplement à droite.
@@ -243,7 +243,7 @@ namespace Miniville
                         }
                         break;
 
-                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                    case ConsoleKey.LeftArrow or ConsoleKey.Q:// Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
                         if (selection == 0) selection = piles.Length - 1;
                         // Sinon il passe simplement à gauche.
