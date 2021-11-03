@@ -28,11 +28,6 @@ namespace Miniville
         private Player[] players = new Player[2];
 
         private IA adversaire;
-        
-        /// <summary>
-        /// Pou gérer le dés
-        /// </summary>
-        private Die die = new Die();
 
         /// <summary>
         /// int indiquant l'index du joueur dont c'est le tour
@@ -58,6 +53,10 @@ namespace Miniville
         public Game()
         {
             display = new HMICUI(this);
+
+            display.DisplayTitle();
+            Console.ReadLine();
+            Console.Clear();
 
             gamemode = display.ChooseMenu(0) == 0;
             if (gamemode)
