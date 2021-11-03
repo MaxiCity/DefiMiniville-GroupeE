@@ -1,8 +1,9 @@
 namespace Miniville
 {
+    /** Classe représentant une pile de carte dans laquelle on peut piocher un seul type de carte. */
     public class Pile
     {
-        //Carte de la pile
+        /// <summary> </summary>
         public Card card { get; private set; }
         
         //Nombre de carte de la pile, 6 par défaut;
