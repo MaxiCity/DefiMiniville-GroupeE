@@ -5,7 +5,7 @@ using System.Linq;
 namespace Miniville
 {
     /** Classe qui gère les comportements et les choix du joueur IA. */
-    public class IA
+    public abstract class IA
     {
         /// <summary> La référence aux informations de player de l'IA. </summary>
         public Player player;
@@ -20,11 +20,7 @@ namespace Miniville
 
         /// <summary> Représente le choix de l'IA de lancer 1 ou 2 dés. </summary>
         /// <returns> Le nombre de dé que l'IA va lancer. </returns>
-        public int IANbDice()
-        {
-            int nbDice = random.Next(1, 3);
-            return nbDice;
-        }
+        public abstract int IANbDice();
 
         /// <summary> Représente la pioche et l'achat des cartes. </summary>
         /// <param name="_piles"> La liste des piles de cartes. </param>
@@ -62,16 +58,8 @@ namespace Miniville
         /// <summary> Représente le choix de l'IA parmi les piles disponibles. </summary>
         /// <param name="_possiblePiles"> La liste des piles dans lesquelles l'IA peut piocher. </param>
         /// <returns> La pile choisie par l'IA pour piocher. </returns>
-        protected Pile Choose(List<Pile> _possiblePiles)
-        {
-            if (random.Next(0,4)==0)
-            {
-                return null;
-            }
-            //choisir une pile aléatoire parmi la liste des choix possibles
-            Pile choice = _possiblePiles[random.Next(_possiblePiles.Count)];
-            return choice;
-        }
+        protected abstract Pile Choose(List<Pile> _possiblePiles);
+
     
 
         /// <summary> Permet de savoir quelles piles sont actuellement disponible à la pioche pour l'IA. </summary>

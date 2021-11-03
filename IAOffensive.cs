@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Miniville
 {
@@ -10,7 +12,7 @@ namespace Miniville
             expert = _expert;
         }
 
-        public new int IANbDice()
+        public override int IANbDice()
         {
             int oneDiceScore = 0;
             int twoDiceScore = 0;
@@ -30,7 +32,7 @@ namespace Miniville
             return nbDice;
         }
 
-        protected new Pile Choose(List<Pile> _possiblePiles)
+        protected override Pile Choose(List<Pile> _possiblePiles)
         {
             //Si on a plus de 17 pièces, économiser
             if (player.pieces > 17)
