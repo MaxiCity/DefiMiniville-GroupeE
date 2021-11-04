@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Miniville
@@ -25,14 +25,14 @@ namespace Miniville
             {
                 "    __ ", //1 : Boulangerie.
                 "  __|| ",
-                @" /Pain\",
+               @" /Pain\",
                 " [()__]"
             },
             new string[]
             {
                 "       ", //2 : Ferme.
                 " __ ( )",
-                @"/  \| |",
+               @"/  \| |",
                 "|__||_|"
             },
             new string[]
@@ -45,7 +45,7 @@ namespace Miniville
             new string[]
             {
                 " _____ ", //4 : Superette.
-                @"/  $  \",
+               @"/  $  \",
                 "|-+   |",
                 "|_]___|"
             },
@@ -60,14 +60,14 @@ namespace Miniville
             {
                 " _____ ", //6 : Stade.
                 "(Stade)",
-                @"\  _  /",
+               @"\  _  /",
                 "|_(_)_|"
             },
             new string[]
             {
                 " _____ ", //7 : PMU.
-                @"/ PMU \",
-                "| +-+ |",
+               @"/ PMU \",
+                "| +▲+ |",
                 "|_|_|_|"
             },
             new string[]
@@ -87,7 +87,7 @@ namespace Miniville
             new string[]
             {
                 " _____ ", //10 : Strip-club.
-                @"/Strip\",
+               @"/Strip\",
                 "|___$_|",
                 "|[|___|"
             }
