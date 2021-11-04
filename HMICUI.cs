@@ -487,26 +487,26 @@ namespace Miniville
                         {
                             Console.Write("      Vos pièces : ");
                             if (players[0].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
-                            WriteInColor($"{players[0].pieces } / {nbPiecesToWin}$ ", tmpColor);
+                            WriteInColor($"{players[0].pieces }$ / {nbPiecesToWin} ", tmpColor);
                             if (expertMode)
                             {
                                 if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
                                 else tmpColor = writingColor;
-
-                                WriteInColor($"{playerCardTypes} / {nbCardTypes} cartes",tmpColor);
+                                Console.Write("|");
+                                WriteInColor($" {playerCardTypes} / {nbCardTypes} cartes",tmpColor);
                             }
                         }
                         else
                         {
                             Console.Write("      Les pièces adverses : ");
                             if (players[1].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
-                            WriteInColor($"{players[1].pieces } / {nbPiecesToWin}$ ", tmpColor);
+                            WriteInColor($"{players[1].pieces }$ / {nbPiecesToWin} ", tmpColor);
                             if (expertMode)
                             {
-                                if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
+                                if (IACardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
                                 else tmpColor = writingColor;
-
-                                WriteInColor($"{IACardTypes} / {nbCardTypes} cartes", tmpColor);
+                                Console.Write("|");
+                                WriteInColor($" {IACardTypes} / {nbCardTypes} cartes", tmpColor);
                             }
                         }
                     }
