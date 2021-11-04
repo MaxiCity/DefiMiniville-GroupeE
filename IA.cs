@@ -87,12 +87,12 @@ namespace Miniville
         protected int[] CoveredDiceRoll()
         {
             int[] coveredDiceRoll = new int[12];
+            int verifDualCondition;
             foreach (Card card in player.city)
             {
-                foreach (int i in card.dieCondition)
-                {
-                    coveredDiceRoll[i - 1]++;
-                }
+                coveredDiceRoll[card.dieCondition[0] - 1]++;
+                if (card.dieCondition[0] != card.dieCondition[1])
+                    coveredDiceRoll[card.dieCondition[1] - 1]++;
             }
             return coveredDiceRoll;
         }

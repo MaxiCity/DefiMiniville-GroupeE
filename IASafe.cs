@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 namespace Miniville
 {
     public class IASafe : IA
@@ -22,19 +23,18 @@ namespace Miniville
         {
             int oneDiceScore = 0;
             int twoDiceScore = 0;
-            int nbDice;
-            foreach (Card card in player.city)
-            { 
-                foreach (int i in card.dieCondition)
-                {
-                    //Si inférieur à , renforcer le score de choix pour un dé, sinon pour 2
-                    if (i < 7)
-                        oneDiceScore++;
-                    else
-                        twoDiceScore++;
-                }
+            
+            int[] cover = CoveredDiceRoll();
+            for(int i =0; i < cover.Length; i++)
+            {
+                //Pour les index 0 à 5, renforcer le score de choix pour un dé, sinon pour 2
+                if (i < 6) 
+                    oneDiceScore+=cover[i];
+                else 
+                    twoDiceScore+=cover[i];
+
             }
-            nbDice = oneDiceScore > twoDiceScore ? 1 : 2;
+            int nbDice = oneDiceScore > twoDiceScore ? 1 : 2;
             return nbDice;
         }
 
@@ -46,6 +46,7 @@ namespace Miniville
 
             foreach (Pile pile in _possiblePiles)
             {
+                //Si on n'a pas la carte et qu'on n'est pas en expert, l'acheter
                 if (!player.city.Contains(pile.card) && expert)
                     return pile;
                 
