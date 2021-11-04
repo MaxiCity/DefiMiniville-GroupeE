@@ -143,8 +143,6 @@ namespace Miniville
         /// </summary>
         public int winCondition { get; private set; }
 
-        public int nbCardWinExpert = 2;
-
         #endregion
 
         /// <summary>
@@ -152,7 +150,7 @@ namespace Miniville
         /// </summary>
         public Game()
         {
-            display = new HMICUI(this);
+            display = new HMICUI();
 
             display.DisplayTitle();
             Console.ReadLine();
@@ -271,24 +269,8 @@ namespace Miniville
                 //On lance le tour du joueur 
                 PlayNextTurn();
 
-                //test des conditions de victoire joueur et affichage du message de victoire
-                if (EndGame(players[0]))
-                {
-                    display.DisplayEndingMessage(true);
-                    Console.ReadLine();
-                    break;
-                }
-
                 //playnextturn IA
                 PlayNextTurn();
-
-                //test des conditions de victoire IA et affichage du message de défaite
-                if (EndGame(players[1]))
-                {
-                    display.DisplayEndingMessage(false);
-                    Console.ReadLine();
-                    break;
-                }
             }
 
         }
@@ -385,6 +367,10 @@ namespace Miniville
                     {
                         players[0].city.Add(piles[selection].Draw());
                         players[0].UpdateMoney(-choosedCard.cost);
+                        if (EndGame(players[0]))
+                        {
+                            return;
+                        }
                     }
                 }
             }
@@ -393,6 +379,10 @@ namespace Miniville
             else if (actualPlayer == 1)
             {
                 cardChoice = adversaire.IAPlay(piles);
+                if (EndGame(players[1]))
+                {
+                    return;
+                }
             }
 
             //Affichage des villes des deux joueurs
@@ -411,7 +401,7 @@ namespace Miniville
         private bool EndGame(Player actualPlayer)
         {
             endGame = false;
-            nbCardWinExpert = 0;
+            int tempTypeCard = 0;
 
             switch (winCondition)
             {
@@ -440,25 +430,28 @@ namespace Miniville
                     break;
 
                 case 3:
-                    if (actualPlayer.pieces >= 20)
-                    {
+                    
                         foreach (Card card in currentDeck)
                         {
                             if (actualPlayer.city.Contains(card))
                             {
-                                nbCardWinExpert++;
+                                tempTypeCard++;
                             }
                         }
+                        
+                    display.SetWinConditionsState(tempTypeCard);
 
-                        if (nbCardWinExpert == currentDeck.Count)
+                        if ( tempTypeCard == currentDeck.Count && actualPlayer.pieces >= 20)
                         {
                             endGame = true;
                         }
 
-                        return endGame;
-                    }
-
                     break;
+            }
+
+            if (endGame)
+            {
+                display.DisplayEndingMessage(actualPlayer.Equals(players[0]));
             }
 
             return endGame;

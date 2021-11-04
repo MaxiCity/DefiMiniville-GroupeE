@@ -126,8 +126,8 @@ namespace Miniville
         /// <summary> Enregistre la référence du contrôleur et initialise la taille de la console. </summary>
         public HMICUI()
         {
-            Console.BufferWidth = totalLength * 12;
-            Console.WindowWidth = totalLength * 12;
+            Console.BufferWidth = totalLength * 10;
+            Console.WindowWidth = totalLength * 10;
             Console.BufferHeight = 50;
             Console.WindowHeight = 50;
             Console.CursorVisible = false;
@@ -898,7 +898,6 @@ namespace Miniville
         {
             if(humanPlayer) playerCardTypes = "" + _playerCardTypes;
             else IACardTypes = "" + _playerCardTypes;
-
             humanPlayer = !humanPlayer;
         }
     }
