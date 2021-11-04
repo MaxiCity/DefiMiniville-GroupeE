@@ -99,10 +99,10 @@ namespace Miniville
         /// <summary> Les lignes qui composent la description des règles. </summary>
         private string[] ruleLines = new string[] { "Le but de MaxiCity est de construire une ville qui soit rentable.",
                                                     "Le joueur qui atteint un nombre de pièces donné en premier gagne la partie.",
-                                                    "Le nombre de pièce changera en fonction de la longueur de jeu souhaitée et la",
+                                                    "Le nombre de pièces changera en fonction de la longueur de jeu souhaitée et la",
                                                     "partie pourra être plus difficile en fonction de l'adversaire IA choisi.", " ",
                                                     "Pour faire fortune dans l'immobilier, chaque joueur va pouvoir acheter des",
-                                                    "bâtiments avec des pièces sous forme de cartes qu'il ajoutera à sa ville tout",
+                                                    "avec ses pièces des bâtiments sous forme de cartes qu'il ajoutera à sa ville tout",
                                                     "au long de la partie. Ces bâtiments produiront des pièces lorsque leur valeur",
                                                     "de dé sera activée, c'est à dire quand le dé de l'un des joueur tombe sur la ",
                                                     "face égale à cette valeur.", " ",
@@ -164,14 +164,14 @@ namespace Miniville
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
-                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                    case ConsoleKey.RightArrow or ConsoleKey.D: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
                         if (selection == nbItems-1) selection = 0;
                         // Sinon il passe simplement à droite.
                         else selection += 1;
                         break;
 
-                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                    case ConsoleKey.LeftArrow or ConsoleKey.Q: // Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
                         if (selection == 0) selection = nbItems-1;
                         // Sinon il passe simplement à gauche.
@@ -230,7 +230,7 @@ namespace Miniville
                 ConsoleKeyInfo keyPressed = Console.ReadKey();
                 switch (keyPressed.Key)
                 {
-                    case ConsoleKey.RightArrow: // Fait passer le curseur vers la droite.
+                    case ConsoleKey.RightArrow or ConsoleKey.D: // Fait passer le curseur vers la droite.
                         // Si le curseur est tout à droite il revient en première position à gauche.
                         if (selection == piles.Length - 1) selection = 0;
                         // Sinon il passe simplement à droite.
@@ -243,7 +243,7 @@ namespace Miniville
                         }
                         break;
 
-                    case ConsoleKey.LeftArrow: // Fait passer le curseur vers la gauche.
+                    case ConsoleKey.LeftArrow or ConsoleKey.Q:// Fait passer le curseur vers la gauche.
                         // Si le curseur est tout à gauche il va en dernière position à droite.
                         if (selection == 0) selection = piles.Length - 1;
                         // Sinon il passe simplement à gauche.
@@ -662,7 +662,7 @@ namespace Miniville
             }
             Console.WriteLine(sep);
             Console.Write("| ");
-            WriteInColor(AlignString("Appuyez sur Entrer pour continuer ->", longestLength), ConsoleColor.Yellow);
+            WriteInColor(AlignString("Appuyez sur Entrée pour continuer ->", longestLength), ConsoleColor.Yellow);
             Console.WriteLine(" |");
             Console.WriteLine(sep);
         }
