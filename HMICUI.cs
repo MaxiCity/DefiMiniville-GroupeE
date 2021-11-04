@@ -29,6 +29,8 @@ namespace Miniville
         private const int innerLength = 15;
         ///<summary> Le nombre de caractères composant une carte. </summary>
         private const int totalLength = 18;
+        ///<summary> Nombre maximum de cartes affichée par rangées dans les villes. </summary>
+        private const int maxNbBuildingsPerLine = 20;
         ///<summary> Les nombres de lignes lorsqu'on affiche les piles de cartes. </summary>
         private int nbLines = 14;
         ///<summary> Les nombres de lignes lorsqu'on affiche les villes. </summary>
@@ -203,7 +205,7 @@ namespace Miniville
                         nbPiecesToWin = "20";
                         expertMode = true;
                     }
-                    else nbPiecesToWin = " " + (selection + 1) * 10;
+                    else nbPiecesToWin = "" + (selection + 1) * 10;
                     break;
             }
 
@@ -400,125 +402,144 @@ namespace Miniville
             bool show;
             for (int playerIndex = 1; playerIndex >= 0; playerIndex--)
             {
-                // Si on doit afficher la ville de l'IA.
-                if(playerIndex == 0)
+                for(int layer = 0; layer <= players[playerIndex].city.Count / maxNbBuildingsPerLine; layer++)
                 {
-                    for(int i=0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    // Si on doit afficher la ville du joueur.
+                    if (playerIndex == 0)
                     {
-                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        for (int i = 0; i < players[playerIndex].city[0].artwork.Length; i++)
+                        {
+                            for(int j = maxNbBuildingsPerLine * layer; j < maxNbBuildingsPerLine * (layer + 1); j++)
+                            {
+                                if(j < players[playerIndex].city.Count) WriteInColor(players[playerIndex].city[j].artwork[i] + " ", players[playerIndex].city[j].color);
+                            }
+                            Console.WriteLine();
+                        }
                         Console.WriteLine();
                     }
-                    Console.WriteLine();
-                }
-
-                for (int i = 0; i < nbLinesCity; i++)
-                {
-                    foreach (Card c in players[playerIndex].city)
+                    for (int i = 0; i < nbLinesCity; i++)
                     {
-                        writingColor = c.color;
-                        Console.ForegroundColor = writingColor;
-                        
-                        // Condition selon laquelle on montre l'effet d'une carte ou non.
-                        show = dieResult == 0 ||
-                              ((dieResult == c.dieCondition[0] || dieResult == c.dieCondition[1]) && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green) 
-                              || c.color.Equals(ConsoleColor.Cyan))|| (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
-                        switch (i)
+                        for (int j = maxNbBuildingsPerLine * layer; j < maxNbBuildingsPerLine * (layer + 1); j++)
                         {
-                            case 0: Console.Write(sep); break;
-                            case 1:
-                                if (show)
-                                {
-                                    Console.Write("|");
-                                    if (c.dieCondition[0] == c.dieCondition[1])
-                                    {
-                                        if (c.dieCondition[0] < 10) Console.Write(" ");
-                                        WriteInColor($" {c.dieCondition[0]}  ", ConsoleColor.White);
-                                    }
-                                    else
-                                    {
-                                        if (c.dieCondition[0] < 10) Console.Write(" ");
-                                        WriteInColor($"{c.dieCondition[0]}-{c.dieCondition[1]}", ConsoleColor.White);
-                                        if (c.dieCondition[1] < 10) Console.Write(" ");
-                                    }
-                                    Console.Write("|");
-                                }
-                                else Console.Write(space);
-                                break;
-                            case 2:
-                                Console.Write("| ");
-                                WriteInColor(c.name.Substring(0, 3), ConsoleColor.White);
-                                Console.Write(" |");
-                                break;
-                            case 3:
-                                if (show)
-                                {
-                                    Console.Write("| ");
-                                    if (c.color.Equals(ConsoleColor.Red)) WriteInColor($"-{c.moneyToEarn}$", ConsoleColor.Yellow);
-                                    else WriteInColor($"+{c.moneyToEarn}$", ConsoleColor.Yellow);
-                                    Console.Write(" |");
-                                }
-                                else Console.Write(space);
-                                break;
-                            case 4: Console.Write(sep); break;
-                        }
-                        Console.Write(" ");
-                    }
-                    if (playerIndex == playerTurn && dieResult > 0)
-                    {
-                        writingColor = ConsoleColor.White;
-                        Console.ForegroundColor = writingColor;
-
-                        if (dieRolls[1] != 0)
-                        {
-                            Console.Write("          " + asciiDiceFaces[dieRolls[0] - 1][i]);
-                            Console.Write("  " + asciiDiceFaces[dieRolls[1] - 1][i]);
-                        }
-                        else Console.Write("          " + asciiDiceFaces[dieResult - 1][i]);
-
-                    }
-                    if (i == nbLinesCity - 1 && dieResult == 0)
-                    {
-                        writingColor = ConsoleColor.Gray;
-                        Console.ForegroundColor = writingColor;
-                        ConsoleColor tmpColor = ConsoleColor.Yellow;
-                        if (playerTurn == playerIndex)
-                        {
-                            Console.Write("      Vos pièces : ");
-                            if (players[0].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
-                            WriteInColor($"{players[0].pieces }$ / {nbPiecesToWin} ", tmpColor);
-                            if (expertMode)
+                            if (j < players[playerIndex].city.Count)
                             {
-                                if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
-                                else tmpColor = writingColor;
-                                Console.Write("|");
-                                WriteInColor($" {playerCardTypes} / {nbCardTypes} cartes",tmpColor);
+                                Card c = players[playerIndex].city[j];
+                                writingColor = c.color;
+                                Console.ForegroundColor = writingColor;
+
+                                // Condition selon laquelle on montre l'effet d'une carte ou non.
+                                show = dieResult == 0 ||
+                                      ((dieResult == c.dieCondition[0] || dieResult == c.dieCondition[1]) && (playerTurn == playerIndex && (c.color.Equals(ConsoleColor.Green)
+                                      || c.color.Equals(ConsoleColor.Cyan)) || (playerTurn != playerIndex && (c.color.Equals(ConsoleColor.Red) || c.color.Equals(ConsoleColor.Cyan)))));
+                                switch (i)
+                                {
+                                    case 0: Console.Write(sep); break;
+                                    case 1:
+                                        if (show)
+                                        {
+                                            Console.Write("|");
+                                            if (c.dieCondition[0] == c.dieCondition[1])
+                                            {
+                                                if (c.dieCondition[0] < 10) Console.Write(" ");
+                                                WriteInColor($" {c.dieCondition[0]}  ", ConsoleColor.White);
+                                            }
+                                            else
+                                            {
+                                                if (c.dieCondition[0] < 10) Console.Write(" ");
+                                                WriteInColor($"{c.dieCondition[0]}-{c.dieCondition[1]}", ConsoleColor.White);
+                                                if (c.dieCondition[1] < 10) Console.Write(" ");
+                                            }
+                                            Console.Write("|");
+                                        }
+                                        else Console.Write(space);
+                                        break;
+                                    case 2:
+                                        Console.Write("| ");
+                                        WriteInColor(c.name.Substring(0, 3), ConsoleColor.White);
+                                        Console.Write(" |");
+                                        break;
+                                    case 3:
+                                        if (show)
+                                        {
+                                            Console.Write("| ");
+                                            if (c.color.Equals(ConsoleColor.Red)) WriteInColor($"-{c.moneyToEarn}$", ConsoleColor.Yellow);
+                                            else WriteInColor($"+{c.moneyToEarn}$", ConsoleColor.Yellow);
+                                            Console.Write(" |");
+                                        }
+                                        else Console.Write(space);
+                                        break;
+
+                                    case 4: Console.Write(sep); break;
+                                }
+                                Console.Write(" ");
                             }
                         }
-                        else
+                        if(layer == players[playerIndex].city.Count / maxNbBuildingsPerLine)
                         {
-                            Console.Write("      Les pièces adverses : ");
-                            if (players[1].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
-                            WriteInColor($"{players[1].pieces }$ / {nbPiecesToWin} ", tmpColor);
-                            if (expertMode)
+                            if (playerIndex == playerTurn && dieResult > 0)
                             {
-                                if (IACardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
-                                else tmpColor = writingColor;
-                                Console.Write("|");
-                                WriteInColor($" {IACardTypes} / {nbCardTypes} cartes", tmpColor);
+                                writingColor = ConsoleColor.White;
+                                Console.ForegroundColor = writingColor;
+
+                                if (dieRolls[1] != 0)
+                                {
+                                    Console.Write("          " + asciiDiceFaces[dieRolls[0] - 1][i]);
+                                    Console.Write("  " + asciiDiceFaces[dieRolls[1] - 1][i]);
+                                }
+                                else Console.Write("          " + asciiDiceFaces[dieResult - 1][i]);
+
+                            }
+                            if (i == nbLinesCity - 1 && dieResult == 0)
+                            {
+                                writingColor = ConsoleColor.Gray;
+                                Console.ForegroundColor = writingColor;
+                                ConsoleColor tmpColor = ConsoleColor.Yellow;
+                                if (playerTurn == playerIndex)
+                                {
+                                    Console.Write("      Vos pièces : ");
+                                    if (players[0].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
+                                    WriteInColor($"{players[0].pieces }$ / {nbPiecesToWin} ", tmpColor);
+                                    if (expertMode)
+                                    {
+                                        if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
+                                        else tmpColor = writingColor;
+                                        Console.Write("|");
+                                        WriteInColor($" {playerCardTypes} / {nbCardTypes} cartes", tmpColor);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.Write("      Les pièces adverses : ");
+                                    if (players[1].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
+                                    WriteInColor($"{players[1].pieces }$ / {nbPiecesToWin} ", tmpColor);
+                                    if (expertMode)
+                                    {
+                                        if (IACardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
+                                        else tmpColor = writingColor;
+                                        Console.Write("|");
+                                        WriteInColor($" {IACardTypes} / {nbCardTypes} cartes", tmpColor);
+                                    }
+                                }
                             }
                         }
+                        Console.WriteLine();
                     }
-                    Console.WriteLine();
-                }
-                // Si on doit afficher la ville de l'IA.
-                if (playerIndex == 1)
-                {
-                    for (int i = 0; i < players[playerIndex].city[0].artwork.Length; i++)
+                    // Si on doit afficher la ville de l'IA.
+                    if (playerIndex == 1)
                     {
-                        foreach (Card c in players[playerIndex].city) WriteInColor(c.artwork[i]+" ", c.color);
+                        for (int i = 0; i < players[playerIndex].city[0].artwork.Length; i++)
+                        {
+                            for (int j = maxNbBuildingsPerLine * layer; j < maxNbBuildingsPerLine * (layer + 1); j++)
+                            {
+                                if (j < players[playerIndex].city.Count) WriteInColor(players[playerIndex].city[j].artwork[i] + " ", players[playerIndex].city[j].color);
+                            }
+                            Console.WriteLine();
+                        }
                         Console.WriteLine();
                     }
                 }
+                
+                
 
                 Console.WriteLine("\n\n\n\n");
             }
