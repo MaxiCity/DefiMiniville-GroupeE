@@ -97,19 +97,19 @@ namespace Miniville
                                                     @"                                                                   $$    $$/ ",
                                                     @"                                                                    $$$$$$/  "};
         /// <summary> Les lignes qui composent la description des règles. </summary>
-        private string[] ruleLines = new string[] { "Le but de MaxiCity est de construire une ville qui soit rentable.",
-                                                    "Le joueur qui atteint un nombre de pièces donné en premier gagne la partie.",
-                                                    "Le nombre de pièces changera en fonction de la longueur de jeu souhaitée et la",
-                                                    "partie pourra être plus difficile en fonction de l'adversaire IA choisi.", " ",
-                                                    "Pour faire fortune dans l'immobilier, chaque joueur va pouvoir acheter des",
-                                                    "avec ses pièces des bâtiments sous forme de cartes qu'il ajoutera à sa ville tout",
-                                                    "au long de la partie. Ces bâtiments produiront des pièces lorsque leur valeur",
-                                                    "de dé sera activée, c'est à dire quand le dé de l'un des joueur tombe sur la ",
-                                                    "face égale à cette valeur.", " ",
-                                                    "Il existe plusieurs types de cartes, les types étant indiqués par la couleur",
-                                                    "de la carte. Les cartes vertes s'activent uniquement avec vos dés pendant",
-                                                    "votre tour, les rouges uniquement pendant le tour de votre adversaire et les",
-                                                    "bleues peuvent être activées à tous les tours.", " " };
+        private string[] ruleLines = new string[] {  "Le but de MaxiCity est de construire une ville qui soit rentable.",
+                                                     "Le joueur qui atteint un nombre de pièces donné en premier gagne la partie.",
+                                                     "Le nombre de pièces changera en fonction de la longueur de jeu souhaitée et",
+                                                     "la partie pourra être plus difficile en fonction de l'adversaire IA choisi.", " ",
+                                                     "Pour faire fortune dans l'immobilier, chaque joueur va pouvoir acheter des",
+                                                     "avec ses pièces des bâtiments sous forme de cartes qu'il ajoutera à sa ville",
+                                                     "tout au long de la partie. Ces bâtiments produiront des pièces lorsque leur",
+                                                     "valeur de dé sera activée, c'est à dire quand le dé de l'un des joueur tombe",
+                                                     "sur la face égale à cette valeur.", " ",
+                                                     "Il existe plusieurs types de cartes, les types étant indiqués par la couleur",
+                                                     "de la carte. Les cartes vertes s'activent uniquement avec vos dés pendant",
+                                                     "votre tour, les rouges uniquement pendant le tour de votre adversaire et les",
+                                                     "bleues peuvent être activées à tous les tours.", " " };
 
         #endregion Attributs
 
@@ -118,12 +118,10 @@ namespace Miniville
         public HMICUI(Game _ctrl)
         {
             ctrl = _ctrl;
-            Console.BufferWidth = totalLength * 11;
-            Console.WindowWidth = totalLength * 11;
+            Console.BufferWidth = totalLength * 12;
+            Console.WindowWidth = totalLength * 12;
             Console.BufferHeight = 50;
             Console.WindowHeight = 50;
-            
-            
             Console.CursorVisible = false;
         }
         
@@ -209,7 +207,7 @@ namespace Miniville
             {
                 writingColor = ConsoleColor.Red;
                 Console.ForegroundColor = writingColor;
-                Console.SetCursorPosition(cursorPositionX, 12);
+                Console.SetCursorPosition(cursorPositionX, cursorPositionY+2);
                 ErrorOverBudget(humanPlayer.pieces, piles[selection].card.cost);
                 Console.SetCursorPosition(0, 0);
             }
