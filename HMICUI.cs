@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,8 +21,6 @@ namespace Miniville
         private string nbCardTypes;
         ///<summary> Un booléen renseignant si le jeu est en mode expert ou non. </summary>
         private bool expertMode = false;
-        /// <summary> Un booléen permettant de savoir à quel joueur on doit mettre à jour les valeurs de condition de victoire. </summary>
-        private bool humanPlayer = true;
         /// <summary> Le nombre de cartes différentes que possède le joueur. </summary>
         private string playerCardTypes = "2";
         /// <summary> Le nombre de cartes différentes que possède l'IA. </summary>
@@ -484,22 +482,31 @@ namespace Miniville
                     {
                         writingColor = ConsoleColor.Gray;
                         Console.ForegroundColor = writingColor;
+                        ConsoleColor tmpColor = ConsoleColor.Yellow;
                         if (playerTurn == playerIndex)
                         {
                             Console.Write("      Vos pièces : ");
-                            WriteInColor($"{players[0].pieces } / {nbPiecesToWin}$ ", ConsoleColor.Yellow);
+                            if (players[0].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
+                            WriteInColor($"{players[0].pieces } / {nbPiecesToWin}$ ", tmpColor);
                             if (expertMode)
                             {
-                                Console.Write($"{playerCardTypes} / {nbCardTypes} cartes");
+                                if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
+                                else tmpColor = writingColor;
+
+                                WriteInColor($"{playerCardTypes} / {nbCardTypes} cartes",tmpColor);
                             }
                         }
                         else
                         {
                             Console.Write("      Les pièces adverses : ");
-                            WriteInColor($"{players[1].pieces } / {nbPiecesToWin}$ ", ConsoleColor.Yellow);
+                            if (players[1].pieces >= int.Parse(nbPiecesToWin)) tmpColor = ConsoleColor.Green;
+                            WriteInColor($"{players[1].pieces } / {nbPiecesToWin}$ ", tmpColor);
                             if (expertMode)
                             {
-                                Console.Write($"{IACardTypes} / {nbCardTypes} cartes");
+                                if (playerCardTypes == nbCardTypes) tmpColor = ConsoleColor.Green;
+                                else tmpColor = writingColor;
+
+                                WriteInColor($"{IACardTypes} / {nbCardTypes} cartes", tmpColor);
                             }
                         }
                     }
@@ -894,11 +901,10 @@ namespace Miniville
 
         #endregion Méthodes utilitaires
 
-        public void SetWinConditionsState(int _playerCardTypes)
+        public void SetWinConditionsState(int _playerCardTypes, bool isPlayer)
         {
-            if(humanPlayer) playerCardTypes = "" + _playerCardTypes;
+            if(isPlayer) playerCardTypes = "" + _playerCardTypes;
             else IACardTypes = "" + _playerCardTypes;
-            humanPlayer = !humanPlayer;
         }
     }
 }
