@@ -40,15 +40,15 @@ namespace Miniville
 
         protected override Pile Choose(List<Pile> _possiblePiles)
         {
-            //Si on a plus de 14 pièces, économiser
-            if (player.pieces > moneyToWin*0.7 && !expert)
-                return null;
-
             foreach (Pile pile in _possiblePiles)
             {
-                //Si on n'a pas la carte et qu'on n'est pas en expert, l'acheter
+                //Si on n'a pas la carte et qu'on est en expert, l'acheter
                 if (!player.city.Contains(pile.card) && expert)
                     return pile;
+                
+                //Sinon, si on a beaucoup d'argent, économiser
+                else if (player.pieces >= moneyToWin*0.65f)
+                    return null;
                 
                 foreach (int i in pile.card.dieCondition)
                 {

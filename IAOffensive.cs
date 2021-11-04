@@ -49,8 +49,8 @@ namespace Miniville
 
         protected override Pile Choose(List<Pile> _possiblePiles)
         {
-            //Si on a beaucoup d'argent et qu'on n'est pas en expert, économiser
-            if (player.pieces > moneyToWin*0.8f && !expert)
+            //1 chance sur 5 de ne pas acheter
+            if (random.Next(0,5)==0)
                 return null;
             
             foreach (Pile pile in _possiblePiles)
@@ -58,7 +58,11 @@ namespace Miniville
                 //Si on n'a pas la carte et qu'on est en expert, l'acheter
                 if (!player.city.Contains(pile.card) && expert)
                     return pile;
-
+                
+                //Sinon si on a beaucoup d'argent, économiser
+                if (player.pieces > moneyToWin*0.7f && !expert)
+                    return null;
+                
                 foreach (int i in pile.card.dieCondition)
                 {
                     //Si on ne couvre que peu le lancé de dé, choisir cette pile
@@ -68,12 +72,6 @@ namespace Miniville
                     }
                 }
             }
-            //Une chance sur 2 de ne pas acheter
-            if (random.Next(0,2)==0)
-            {
-                return null;
-            }
-                    
             //S'il n'y a pas eu de retour précédent, acheter une carte aléatoire
             return _possiblePiles[random.Next(_possiblePiles.Count)];
         }
