@@ -27,8 +27,8 @@ namespace Miniville
             int[] cover = CoveredDiceRoll();
             for(int i =0; i < cover.Length; i++)
             {
-                //Pour les index 0 à 5, renforcer le score de choix pour un dé, sinon pour 2
-                if (i < 6) 
+                //Pour les index 0 à 4, renforcer le score de choix pour un dé, sinon pour 2
+                if (i < 5) 
                     oneDiceScore+=cover[i];
                 else 
                     twoDiceScore+=cover[i];

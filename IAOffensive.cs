@@ -33,8 +33,8 @@ namespace Miniville
                 {
                     if (saveFirstCond != i)
                     {
-                        //Si inférieur ou égal à 6, renforcer le score de choix pour un dé selon le gain possible, sinon pour 2
-                        if (i <= 6)
+                        //Si inférieur ou égal à 5, renforcer le score de choix pour un dé selon le gain possible, sinon pour 2
+                        if (i <= 5)
                             oneDiceScore += card.moneyToEarn;
                         else
                             twoDiceScore += card.moneyToEarn;
