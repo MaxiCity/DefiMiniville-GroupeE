@@ -11,11 +11,22 @@ namespace Miniville
     class HMICUI
     {
         #region Attributs
-        ///<summary> Référence du contrôleur de l'application. </summary>
-        private Game ctrl;
-        ///<summary> Le nom du joueur à aff </summary>
+        ///<summary> Le nom du joueur à afficher. </summary>
         private string playerName;
-
+        ///<summary> Le nom de l'IA à afficher. </summary>
+        private string IAName;
+        /// <summary> Le nombre de pièces à ammasser pour gagner. </summary>
+        private string nbPiecesToWin = "20";
+        /// <summary> Le nombre de types différents de carte dans la partie. </summary>
+        private string nbCardTypes;
+        ///<summary> Un booléen renseignant si le jeu est en mode expert ou non. </summary>
+        private bool expertMode = false;
+        /// <summary> Un booléen permettant de savoir à quel joueur on doit mettre à jour les valeurs de condition de victoire. </summary>
+        private bool humanPlayer = true;
+        /// <summary> Le nombre de cartes différentes que possède le joueur. </summary>
+        private string playerCardTypes = "2";
+        /// <summary> Le nombre de cartes différentes que possède l'IA. </summary>
+        private string IACardTypes = "2";
         ///<summary> Le nombre de caractères à l'intérieur d'une carte. </summary>
         private const int innerLength = 15;
         ///<summary> Le nombre de caractères composant une carte. </summary>
@@ -28,7 +39,6 @@ namespace Miniville
         private ConsoleColor writingColor = ConsoleColor.Gray;
         ///<summary> La liste des noms féminins parmi les cartes. </summary>
         private string[] femNames = { "Ferme", "Forêt", "Superette", "Boulangerie" };
-
         ///<summary> Les lignes qui composent les différentes faces d'un dé en ascii art. </summary>
         private List<string[]> asciiDiceFaces = new List<string[]>() { new string[] { "+-------+",
                                                                                       "|       |",
@@ -114,10 +124,8 @@ namespace Miniville
         #endregion Attributs
 
         /// <summary> Enregistre la référence du contrôleur et initialise la taille de la console. </summary>
-        /// <param name="_ctrl"> La référence au contrôleur. </param>
-        public HMICUI(Game _ctrl)
+        public HMICUI()
         {
-            ctrl = _ctrl;
             Console.BufferWidth = totalLength * 12;
             Console.WindowWidth = totalLength * 12;
             Console.BufferHeight = 50;
@@ -132,7 +140,6 @@ namespace Miniville
         public int ChooseMenu(int menuId)
         {
             int selection = 0;
-            int nbItems = 0;
 
             bool choice = false;
             List<string[]> items;
@@ -153,7 +160,7 @@ namespace Miniville
                 default: items = new List<string[]>(); break;
             }
 
-            nbItems = items.Count;
+            int nbItems = items.Count;
 
             do
             {
@@ -182,6 +189,27 @@ namespace Miniville
                 }
             }
             while (!choice);
+
+            switch(menuId)
+            {
+                case 0: nbCardTypes = selection == 0? "8":"11"; break;
+                case 1:
+                    switch (selection)
+                    {
+                        case 0: IAName = "Billy"; break;
+                        case 1: IAName = "Gertrude"; break;
+                        case 2: IAName = "Donatien"; break;
+                    }
+                    break;
+                case 2:
+                    if (selection == 3)
+                    {
+                        nbPiecesToWin = "20";
+                        expertMode = true;
+                    }
+                    else nbPiecesToWin = " " + (selection + 1) * 10;
+                    break;
+            }
 
             return selection;
         }
@@ -459,12 +487,20 @@ namespace Miniville
                         if (playerTurn == playerIndex)
                         {
                             Console.Write("      Vos pièces : ");
-                            WriteInColor($"{players[0].pieces }$", ConsoleColor.Yellow);
+                            WriteInColor($"{players[0].pieces } / {nbPiecesToWin}$ ", ConsoleColor.Yellow);
+                            if (expertMode)
+                            {
+                                Console.Write($"{playerCardTypes} / {nbCardTypes} cartes");
+                            }
                         }
                         else
                         {
                             Console.Write("      Les pièces adverses : ");
-                            WriteInColor($"{players[1].pieces }$", ConsoleColor.Yellow);
+                            WriteInColor($"{players[1].pieces } / {nbPiecesToWin}$ ", ConsoleColor.Yellow);
+                            if (expertMode)
+                            {
+                                Console.Write($"{IACardTypes} / {nbCardTypes} cartes");
+                            }
                         }
                     }
                     Console.WriteLine();
@@ -710,7 +746,7 @@ namespace Miniville
             if (IATotal == 0)
             {
                 Console.Write(entryMsg);
-                WriteInColor("l'IA", ConsoleColor.DarkRed);
+                WriteInColor(IAName, ConsoleColor.DarkRed);
                 Console.WriteLine(" n'a rien gagné ni perdu. ");
             }
             else
@@ -719,7 +755,7 @@ namespace Miniville
                 else msg = " a perdu";
 
                 Console.Write(entryMsg);
-                WriteInColor("l'IA", ConsoleColor.DarkRed);
+                WriteInColor(IAName, ConsoleColor.DarkRed);
                 Console.Write(msg);
                 WriteInColor((""+IATotal).Replace('-',' ') + "$", ConsoleColor.Yellow);
                 Console.WriteLine(".");
@@ -730,7 +766,7 @@ namespace Miniville
         public void DisplayIADraw(Card card)
         {
             Console.Write("Ce tour ci, ");
-            WriteInColor("l'IA", ConsoleColor.DarkRed);
+            WriteInColor(IAName, ConsoleColor.DarkRed);
 
             if (card != null)
             {
@@ -857,5 +893,13 @@ namespace Miniville
         }
 
         #endregion Méthodes utilitaires
+
+        public void SetWinConditionsState(int _playerCardTypes)
+        {
+            if(humanPlayer) playerCardTypes = "" + _playerCardTypes;
+            else IACardTypes = "" + _playerCardTypes;
+
+            humanPlayer = !humanPlayer;
+        }
     }
 }
