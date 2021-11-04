@@ -48,3 +48,7 @@ bin/Debug/net5.0/ref/Miniville.dll
 obj/Debug/net5.0/
 
 .idea/.idea.Miniville/.idea/
+
+bin/Release/net5.0/
+
+obj/Release/net5.0/

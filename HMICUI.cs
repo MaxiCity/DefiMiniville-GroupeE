@@ -99,10 +99,10 @@ namespace Miniville
         /// <summary> Les lignes qui composent la description des règles. </summary>
         private string[] ruleLines = new string[] { "Le but de MaxiCity est de construire une ville qui soit rentable.",
                                                     "Le joueur qui atteint un nombre de pièces donné en premier gagne la partie.",
-                                                    "Le nombre de pièce changera en fonction de la longueur de jeu souhaitée et la",
+                                                    "Le nombre de pièces changera en fonction de la longueur de jeu souhaitée et la",
                                                     "partie pourra être plus difficile en fonction de l'adversaire IA choisi.", " ",
                                                     "Pour faire fortune dans l'immobilier, chaque joueur va pouvoir acheter des",
-                                                    "bâtiments avec des pièces sous forme de cartes qu'il ajoutera à sa ville tout",
+                                                    "avec ses pièces des bâtiments sous forme de cartes qu'il ajoutera à sa ville tout",
                                                     "au long de la partie. Ces bâtiments produiront des pièces lorsque leur valeur",
                                                     "de dé sera activée, c'est à dire quand le dé de l'un des joueur tombe sur la ",
                                                     "face égale à cette valeur.", " ",
@@ -662,7 +662,7 @@ namespace Miniville
             }
             Console.WriteLine(sep);
             Console.Write("| ");
-            WriteInColor(AlignString("Appuyez sur Entrer pour continuer ->", longestLength), ConsoleColor.Yellow);
+            WriteInColor(AlignString("Appuyez sur Entrée pour continuer ->", longestLength), ConsoleColor.Yellow);
             Console.WriteLine(" |");
             Console.WriteLine(sep);
         }
