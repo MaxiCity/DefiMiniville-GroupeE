@@ -439,7 +439,7 @@ namespace Miniville
                             }
                         }
                         
-                    display.SetWinConditionsState(tempTypeCard);
+                    display.SetWinConditionsState(tempTypeCard,actualPlayer.Equals(players[0]));
 
                         if ( tempTypeCard == currentDeck.Count && actualPlayer.pieces >= 20)
                         {
